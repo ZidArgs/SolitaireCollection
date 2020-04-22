@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="60"
+   height="90"
+   viewBox="0 0 15.875 23.8125"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="front_clubs_4.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="7.9195959"
+     inkscape:cx="-45.620931"
+     inkscape:cy="31.137229"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg8"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1137"
+     inkscape:window-x="1272"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="playing card"
+     id="layer1"
+     transform="translate(0,-273.1875)">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458333;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect812"
+       width="15.614042"
+       height="23.551542"
+       x="0.13047895"
+       y="273.31796"
+       ry="1.3877878"
+       inkscape:label="background" />
+    <path
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59403473;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 7.9374999,284.07418 a 2.1452343,2.1452343 0 0 0 -2.1456054,2.1456 2.1452343,2.1452343 0 0 0 0.8567951,1.71153 2.1452343,2.1452343 0 0 0 -0.8567951,-0.17932 2.1452343,2.1452343 0 0 0 -2.1450888,2.1456 2.1452343,2.1452343 0 0 0 2.1450888,2.14458 2.1452343,2.1452343 0 0 0 1.378727,-0.50178 l -0.064079,0.45733 -1.3141317,1.40199 2.144572,-0.23306 2.1456062,0.23306 -1.3420378,-1.44023 -0.059945,-0.44235 a 2.1452343,2.1452343 0 0 0 1.4019818,0.52504 2.1452343,2.1452343 0 0 0 2.145605,-2.14458 2.1452343,2.1452343 0 0 0 -2.145605,-2.1456 2.1452343,2.1452343 0 0 0 -0.8604128,0.18293 2.1452343,2.1452343 0 0 0 0.8604128,-1.71514 2.1452343,2.1452343 0 0 0 -2.1450881,-2.1456 z"
+       id="path845"
+       inkscape:connector-curvature="0"
+       inkscape:label="suit" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76746655px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.19418664"
+       x="7.9412928"
+       y="282.30154"
+       id="text921"
+       inkscape:label="value"><tspan
+         sodipodi:role="line"
+         id="tspan919"
+         x="7.9412928"
+         y="282.30154"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.19418664">4</tspan></text>
+  </g>
+</svg>

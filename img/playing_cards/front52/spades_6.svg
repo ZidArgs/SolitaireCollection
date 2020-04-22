@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="60"
+   height="90"
+   viewBox="0 0 15.875 23.8125"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="front_spades_6.svg"
+   inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="6.6939442"
+     inkscape:cx="16.026271"
+     inkscape:cy="45.307357"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg8"
+     showgrid="false"
+     units="px"
+     inkscape:window-width="1920"
+     inkscape:window-height="1137"
+     inkscape:window-x="1272"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     showguides="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="playing card"
+     id="layer1"
+     transform="translate(0,-273.1875)">
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458333;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect812"
+       width="15.614042"
+       height="23.551542"
+       x="0.13047895"
+       y="273.31796"
+       ry="1.3877878"
+       inkscape:label="background" />
+    <path
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59819502;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
+       d="m 7.9374999,284.07418 c 0,0 -2.9361175,2.45556 -3.72277,4.13515 -0.3264106,0.69692 -0.5962774,1.56339 -0.329179,2.28513 0.2478545,0.66973 0.917329,1.24649 1.6123047,1.41076 0.5910257,0.1397 1.2690507,-0.13118 1.7631997,-0.45888 l -0.1545124,0.55138 -1.3141317,1.40199 2.144572,-0.23281 2.1456058,0.23281 -1.3420374,-1.44023 -0.1441773,-0.52503 c 0.5278067,0.33408 1.1829825,0.61086 1.7807697,0.47077 0.69529,-0.16293 1.364525,-0.741 1.612305,-1.41076 0.267027,-0.72179 -0.0032,-1.58822 -0.329696,-2.28513 -0.786731,-1.67943 -3.7222531,-4.13515 -3.7222531,-4.13515 z"
+       id="path837"
+       inkscape:connector-curvature="0"
+       inkscape:label="suit"
+       sodipodi:nodetypes="caaacccccccaaac" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.76746655px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.19418664"
+       x="7.9412928"
+       y="282.30154"
+       id="text929"
+       inkscape:label="value"><tspan
+         sodipodi:role="line"
+         id="tspan927"
+         x="7.9412928"
+         y="282.30154"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.19418664">6</tspan></text>
+  </g>
+</svg>

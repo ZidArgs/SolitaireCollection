@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CardGameCollection</title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Track items and locations in 'The Legend of Zelda - Ocarina of Time Randomizer' (OOTR)">
+        <meta name="robots" content="nofollow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <meta name="theme-color" content="#cb9c3d">
+        <script src="index.js" type="module"></script>
+        <style>
+            body {
+                background: #00aa33;
+                display: grid;
+                grid-template-columns: repeat(9, 1fr);
+            }
+            cgc-playingcard {
+                margin: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <cgc-playingcard ref="back_red"></cgc-playingcard>
+        <cgc-playingcard ref="placeholder"></cgc-playingcard>
+    </body>
+</html>
