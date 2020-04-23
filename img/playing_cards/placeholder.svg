@@ -14,7 +14,7 @@
    viewBox="0 0 15.875 23.8125"
    version="1.1"
    id="svg8"
-   sodipodi:docname="blank.svg"
+   sodipodi:docname="placeholder.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs2" />
@@ -25,18 +25,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="11.764018"
-     inkscape:cy="45.853973"
+     inkscape:zoom="5.6"
+     inkscape:cx="24.011387"
+     inkscape:cy="47.16115"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1137"
-     inkscape:window-x="1272"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="1280"
+     inkscape:window-height="961"
+     inkscape:window-x="-8"
+     inkscape:window-y="159"
+     inkscape:window-maximized="1"
+     inkscape:pagecheckerboard="false" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -55,12 +56,12 @@
      id="layer1"
      transform="translate(0,-273.1875)">
     <rect
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.2609579;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.49803922;paint-order:markers stroke fill"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:#ffffff;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.49803922;paint-order:markers stroke fill"
        id="rect812"
-       width="15.614042"
-       height="23.551542"
-       x="0.13047895"
-       y="273.31796"
-       ry="1.3877878" />
+       width="15.345834"
+       height="23.283335"
+       x="0.26458335"
+       y="273.45212"
+       ry="1.5875" />
   </g>
 </svg>

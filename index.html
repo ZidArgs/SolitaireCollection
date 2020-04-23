@@ -12,15 +12,25 @@
             body {
                 background: #00aa33;
                 display: grid;
-                grid-template-columns: repeat(9, 1fr);
+                grid-template-columns: repeat(9, 9vw);
+                grid-gap: 1vw;
             }
+            cgc-playingcardplaceholder,
             cgc-playingcard {
-                margin: 4px;
+                width: 9vw;
+                height: 12vw;
             }
         </style>
     </head>
     <body>
+        <cgc-playingcardplaceholder id="clubs_stack"></cgc-playingcardplaceholder>
+        <cgc-playingcardplaceholder id="diamonds_stack"></cgc-playingcardplaceholder>
+        <cgc-playingcardplaceholder id="hearts_stack"></cgc-playingcardplaceholder>
+        <cgc-playingcardplaceholder id="spades_stack"></cgc-playingcardplaceholder>
+        <cgc-playingcardplaceholder></cgc-playingcardplaceholder>
         <cgc-playingcard ref="back_red"></cgc-playingcard>
-        <cgc-playingcard ref="placeholder"></cgc-playingcard>
+        <cgc-playingcard ref="back_red"></cgc-playingcard>
+        <cgc-playingcard ref="back_red"></cgc-playingcard>
+        <cgc-playingcard ref="back_red"></cgc-playingcard>
     </body>
 </html>

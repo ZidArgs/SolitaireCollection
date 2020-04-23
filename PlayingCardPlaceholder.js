@@ -14,13 +14,11 @@ const TPL = new Template(`
         div {
             width: 100%;
             height: 100%;
+            background-image: url("/img/playing_cards/placeholder.svg");
             background-repeat: no-repeat;
             background-size: contain;
             background-position: center;
             background-origin: content-box;
-        }
-        ::slotted(cgc-playingcard) {
-            top: 3vw;
         }
     </style>
     <div>
@@ -29,7 +27,7 @@ const TPL = new Template(`
     </div>
 `);
 
-export default class PlayingCard extends HTMLElement {
+export default class PlayingCardPlaceholder extends HTMLElement {
 
     constructor() {
         super();
@@ -37,28 +35,6 @@ export default class PlayingCard extends HTMLElement {
         this.shadowRoot.append(TPL.generate());
     }
 
-    get ref() {
-        return this.getAttribute('ref');
-    }
-
-    set ref(val) {
-        this.setAttribute('ref', val);
-    }
-
-    static get observedAttributes() {
-        return ['ref'];
-    }
-      
-    attributeChangedCallback(name, oldValue, newValue) {
-        switch (name) {
-            case 'ref':
-                if (oldValue != newValue) {
-                    this.shadowRoot.querySelector('div').style.backgroundImage = `url("/img/playing_cards/${newValue}.svg")`;
-                }
-                break;
-        }
-    }
-
 }
 
-customElements.define('cgc-playingcard', PlayingCard);
+customElements.define('cgc-playingcardplaceholder', PlayingCardPlaceholder);

@@ -14,7 +14,7 @@
    viewBox="0 0 15.875 23.8125"
    version="1.1"
    id="svg8"
-   sodipodi:docname="front_clubs_5.svg"
+   sodipodi:docname="clubs_5.svg"
    inkscape:version="0.92.4 (5da689c313, 2019-01-14)">
   <defs
      id="defs2" />
@@ -26,16 +26,16 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="7.9195959"
-     inkscape:cx="4.1720458"
-     inkscape:cy="31.137229"
+     inkscape:cx="34.051782"
+     inkscape:cy="26.086466"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
      showgrid="false"
      units="px"
-     inkscape:window-width="1920"
-     inkscape:window-height="1137"
-     inkscape:window-x="1272"
-     inkscape:window-y="-8"
+     inkscape:window-width="1280"
+     inkscape:window-height="961"
+     inkscape:window-x="-8"
+     inkscape:window-y="159"
      inkscape:window-maximized="1"
      showguides="false"
      inkscape:snap-bbox="true"
@@ -59,13 +59,13 @@
      id="layer1"
      transform="translate(0,-273.1875)">
     <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458333;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458332;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
        id="rect812"
-       width="15.614042"
-       height="23.551542"
-       x="0.13047895"
-       y="273.31796"
-       ry="1.3877878"
+       width="15.610416"
+       height="23.547916"
+       x="0.13229166"
+       y="273.31979"
+       ry="1.5875"
        inkscape:label="background" />
     <path
        style="display:inline;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59403473;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
