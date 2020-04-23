@@ -18,9 +18,9 @@ const TPL = new Template(`
             background-size: contain;
             background-position: center;
             background-origin: content-box;
-        }
-        ::slotted(cgc-playingcard) {
-            top: 3vw;
+            background-color: #fffffF;
+            border-radius: 1vw;
+            box-shadow: inset 0px 0px 2px black;
         }
     </style>
     <div>

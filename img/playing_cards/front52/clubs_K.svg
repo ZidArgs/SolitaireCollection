@@ -58,15 +58,6 @@
      inkscape:label="playing card"
      id="layer1"
      transform="translate(0,-273.1875)">
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458332;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="rect812"
-       width="15.610416"
-       height="23.547916"
-       x="0.13229166"
-       y="273.31979"
-       ry="1.5875"
-       inkscape:label="background" />
     <path
        style="display:inline;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.59403473;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
        d="m 7.9374999,284.07418 a 2.1452343,2.1452343 0 0 0 -2.1456054,2.1456 2.1452343,2.1452343 0 0 0 0.8567951,1.71153 2.1452343,2.1452343 0 0 0 -0.8567951,-0.17932 2.1452343,2.1452343 0 0 0 -2.1450888,2.1456 2.1452343,2.1452343 0 0 0 2.1450888,2.14458 2.1452343,2.1452343 0 0 0 1.378727,-0.50178 l -0.064079,0.45733 -1.3141317,1.40199 2.144572,-0.23306 2.1456062,0.23306 -1.3420378,-1.44023 -0.059945,-0.44235 a 2.1452343,2.1452343 0 0 0 1.4019818,0.52504 2.1452343,2.1452343 0 0 0 2.145605,-2.14458 2.1452343,2.1452343 0 0 0 -2.145605,-2.1456 2.1452343,2.1452343 0 0 0 -0.8604128,0.18293 2.1452343,2.1452343 0 0 0 0.8604128,-1.71514 2.1452343,2.1452343 0 0 0 -2.1450881,-2.1456 z"

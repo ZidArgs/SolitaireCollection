@@ -58,15 +58,6 @@
      inkscape:label="playing card"
      id="layer1"
      transform="translate(0,-273.1875)">
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:0.26458332;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       id="rect812"
-       width="15.610416"
-       height="23.547916"
-       x="0.13229166"
-       y="273.31979"
-       ry="1.5875"
-       inkscape:label="background" />
     <path
        style="display:inline;opacity:1;fill:#ff0000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.65640938;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill"
        d="m 7.9375002,293.3997 c 0,0 -1.031133,-2.03539 -1.8245465,-2.8288 -0.7934116,-0.79341 -2.8287949,-1.82454 -2.8287949,-1.82454 0,0 2.0353825,-1.03114 2.828795,-1.82455 0.7934111,-0.79341 1.8245462,-2.82879 1.8245462,-2.82879 0,0 1.0311355,2.03538 1.8245466,2.82879 0.7934124,0.79341 2.8287944,1.82455 2.8287944,1.82455 0,0 -2.035383,1.03113 -2.8287945,1.82454 -0.7934134,0.79341 -1.8245463,2.8288 -1.8245463,2.8288 z"

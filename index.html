@@ -10,6 +10,7 @@
         <script src="index.js" type="module"></script>
         <style>
             body {
+                margin: 5vw 2vw 0vw;
                 background: #00aa33;
                 display: grid;
                 grid-template-columns: repeat(9, 9vw);
@@ -17,8 +18,14 @@
             }
             cgc-playingcardplaceholder,
             cgc-playingcard {
-                width: 9vw;
+                width: 8vw;
                 height: 12vw;
+            }
+            cgc-playingcard > cgc-playingcard {
+                top: -.05vw;
+            }
+            cgc-playingcardplaceholder cgc-playingcard > cgc-playingcard {
+                top: 3vw;
             }
         </style>
     </head>
@@ -28,9 +35,9 @@
         <cgc-playingcardplaceholder id="hearts_stack"></cgc-playingcardplaceholder>
         <cgc-playingcardplaceholder id="spades_stack"></cgc-playingcardplaceholder>
         <cgc-playingcardplaceholder></cgc-playingcardplaceholder>
-        <cgc-playingcard ref="back_red"></cgc-playingcard>
-        <cgc-playingcard ref="back_red"></cgc-playingcard>
-        <cgc-playingcard ref="back_red"></cgc-playingcard>
-        <cgc-playingcard ref="back_red"></cgc-playingcard>
+        <cgc-playingcard id="stack_1" ref="back_red"></cgc-playingcard>
+        <cgc-playingcard id="stack_2" ref="back_red"></cgc-playingcard>
+        <cgc-playingcard id="stack_3" ref="back_red"></cgc-playingcard>
+        <cgc-playingcard id="stack_4" ref="back_red"></cgc-playingcard>
     </body>
 </html>
