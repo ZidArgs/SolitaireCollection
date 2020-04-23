@@ -14,11 +14,8 @@ const TPL = new Template(`
         div {
             width: 100%;
             height: 100%;
-            background-image: url("/img/playing_cards/placeholder.svg");
-            background-repeat: no-repeat;
-            background-size: contain;
-            background-position: center;
-            background-origin: content-box;
+            border-radius: 1vw;
+            box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
         }
     </style>
     <div>
