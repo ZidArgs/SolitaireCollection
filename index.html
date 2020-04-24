@@ -7,37 +7,33 @@
         <meta name="robots" content="nofollow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta name="theme-color" content="#cb9c3d">
-        <script src="index.js" type="module"></script>
+        <script src="/src/index.js" type="module"></script>
         <style>
-            body {
-                margin: 5vw 2vw 0vw;
-                background: #00aa33;
-                display: grid;
-                grid-template-columns: repeat(9, 9vw);
-                grid-gap: 1vw;
+            * {
+                position: relative;
+                box-sizing: border-box;
             }
-            cgc-playingcardplaceholder,
-            cgc-playingcard {
-                width: 8vw;
-                height: 12vw;
+            body {
+                display: flex;
+                background: #00aa33;
+                width: 100vw;
+                height: 100vh;
+                padding: 20px;
+                margin: 0;
+            }
+            body > * {
+                flex: 1;
             }
             cgc-playingcard > cgc-playingcard {
                 top: -.05vw;
             }
             cgc-playingcardplaceholder cgc-playingcard > cgc-playingcard {
-                top: 3vw;
+                counter-increment: step;
+                top: 2.5vw;
             }
         </style>
     </head>
     <body>
-        <cgc-playingcardplaceholder id="clubs_stack"></cgc-playingcardplaceholder>
-        <cgc-playingcardplaceholder id="diamonds_stack"></cgc-playingcardplaceholder>
-        <cgc-playingcardplaceholder id="hearts_stack"></cgc-playingcardplaceholder>
-        <cgc-playingcardplaceholder id="spades_stack"></cgc-playingcardplaceholder>
-        <cgc-playingcardplaceholder></cgc-playingcardplaceholder>
-        <cgc-playingcard id="stack_1" ref="back_red"></cgc-playingcard>
-        <cgc-playingcard id="stack_2" ref="back_red"></cgc-playingcard>
-        <cgc-playingcard id="stack_3" ref="back_red"></cgc-playingcard>
-        <cgc-playingcard id="stack_4" ref="back_red"></cgc-playingcard>
+        <cgc-freecell id="freecell"></cgc-freecell>
     </body>
 </html>
