@@ -4,13 +4,17 @@ const TPL = new Template(`
     <style>
         :host {
             position: relative;
-            display: grid;
-            justify-content: center;
-            grid-template-rows: repeat(20, 2.5vw);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             width: var(--card-width, 60px);
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;
+        }
+        ::slotted(cgc-playingcard) {
+            flex: 1;
+            max-height: 2.5vw;
         }
     </style>
     <slot>

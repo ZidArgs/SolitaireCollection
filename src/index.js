@@ -2,4 +2,7 @@ import "/src/games/FreeCell.js";
 
 let game = document.getElementById("freecell");
 
-game.startGame();
+!async function() {
+    await game.init();
+    game.startGame();
+}();

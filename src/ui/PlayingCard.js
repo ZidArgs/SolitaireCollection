@@ -22,8 +22,6 @@ const TPL = new Template(`
         }
     </style>
     <div id="face">
-        <slot>
-        </slot>
     </div>
 `);
 
@@ -35,23 +33,101 @@ export default class PlayingCard extends HTMLElement {
         this.shadowRoot.append(TPL.generate());
     }
 
-    get ref() {
-        return this.getAttribute('ref');
+    getStackUp() {
+        let idx = Array.from(this.parentNode.children).indexOf(this);
+        return this.parentElement.querySelectorAll(`cgc-playingcard:nth-child(n+${idx+1})`);
     }
 
-    set ref(val) {
-        this.setAttribute('ref', val);
+    getStackDown() {
+        let idx = Array.from(this.parentNode.children).indexOf(this);
+        return this.parentElement.querySelectorAll(`cgc-playingcard:nth-child(-n+${idx+1})`);
+    }
+
+    get back() {
+        return this.getAttribute('back');
+    }
+
+    set back(val) {
+        this.setAttribute('back', val);
+    }
+
+    get theme() {
+        return this.getAttribute('theme');
+    }
+
+    set theme(val) {
+        this.setAttribute('theme', val);
+    }
+
+    get suit() {
+        return this.getAttribute('suit');
+    }
+
+    set suit(val) {
+        this.setAttribute('suit', val);
+    }
+
+    get value() {
+        return this.getAttribute('value');
+    }
+
+    set value(val) {
+        this.setAttribute('value', val);
+    }
+
+    get revealed() {
+        return !!this.getAttribute('revealed') && this.getAttribute('revealed') != "false";
+    }
+
+    set revealed(val) {
+        this.setAttribute('revealed', !!val && val != "false");
     }
 
     static get observedAttributes() {
-        return ['ref'];
+        return ['back', 'theme', 'suit', 'value', 'revealed'];
     }
       
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case 'ref':
+            case 'back':
+                if (!this.revealed && oldValue != newValue) {
+                    if (this.back) {
+                        let src = `url("/img/playing_cards/back/${this.back}.svg")`;
+                        this.shadowRoot.getElementById("face").style.backgroundImage = src;
+                    } else {
+                        this.shadowRoot.getElementById("face").style.backgroundImage = "";
+                    }
+                }
+                break;
+            case 'theme':
+            case 'suit':
+            case 'value':
+                if (!!this.revealed && oldValue != newValue) {
+                    if (this.theme && this.suit && this.value) {
+                        let src = `url("/img/playing_cards/front/${this.theme}/${this.suit}_${this.value}.svg")`;
+                        this.shadowRoot.getElementById("face").style.backgroundImage = src;
+                    } else {
+                        this.shadowRoot.getElementById("face").style.backgroundImage = "";
+                    }
+                }
+                break;
+            case 'revealed':
                 if (oldValue != newValue) {
-                    this.shadowRoot.getElementById("face").style.backgroundImage = `url("/img/playing_cards/${newValue}.svg")`;
+                    if (!!this.revealed) {
+                        if (this.theme && this.suit && this.value) {
+                            let src = `url("/img/playing_cards/front/${this.theme}/${this.suit}_${this.value}.svg")`;
+                            this.shadowRoot.getElementById("face").style.backgroundImage = src;
+                        } else {
+                            this.shadowRoot.getElementById("face").style.backgroundImage = "";
+                        }
+                    } else {
+                        if (this.back) {
+                            let src = `url("/img/playing_cards/back/${this.back}.svg")`;
+                            this.shadowRoot.getElementById("face").style.backgroundImage = src;
+                        } else {
+                            this.shadowRoot.getElementById("face").style.backgroundImage = "";
+                        }
+                    }
                 }
                 break;
         }
