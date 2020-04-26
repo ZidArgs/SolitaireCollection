@@ -44,7 +44,7 @@ const TPL = new Template(`
             background-position: center;
             background-origin: content-box;
         }
-        #menu_wrapper {
+        .menu-wrapper {
             position: absolute;
             display: none;
             align-items: center;
@@ -56,16 +56,26 @@ const TPL = new Template(`
             background: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(2px);
         }
-        #menu_wrapper.open {
+        .menu-wrapper.open {
             display: flex;
         }
-        #menu {
+        .menu-box {
             display: inline-flex;
             flex-direction: column;
-            padding: 50px;
+            padding: 20px 50px;
             background: #a553c7;
             border-radius: calc(1vw * var(--card-scale, 1));
             box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
+        }
+        .menu-box .text {
+            display: flex;
+            padding: 10px;
+            margin-bottom: 4px;
+            justify-content: center;
+            font-weight: bold;
+            color: rgba(255,255,255,0.7);
+            cursor: default;
+            user-select: none;
         }
         button {
             padding: 10px;
@@ -77,6 +87,9 @@ const TPL = new Template(`
             border: none;
             -webkit-appearance: none;
             cursor: pointer;
+        }
+        button.hide {
+            display: none;
         }
         button:hover {
             background-color: rgba(255,255,255,0.2);
@@ -117,8 +130,9 @@ const TPL = new Template(`
             <cgc-playingcardcolumn id="col_7"></cgc-playingcardcolumn>
         </div>
     </div>
-    <div id="menu_wrapper">
-        <div id="menu">
+    <div id="menu_wrapper" class="menu-wrapper">
+        <div id="menu" class="menu-box">
+            <div id="menu_text" class="text">PAUSE</div>
             <button id="resume_game_button">RESUME</button>
             <button id="restart_game_button">RESTART</button>
             <button id="new_game_button">NEW GAME</button>
@@ -130,6 +144,7 @@ const TPL = new Template(`
 let SettingsStorage = new IDBStorage("settings");
 let GameStorage = new IDBStorage("games");
 
+const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
 const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const PLAYGROUND = [
@@ -164,6 +179,7 @@ export default class FreeCell extends HTMLElement {
         let dragDrop = new DragDrop();
         DRAG_DROP.set(this, dragDrop);
 
+        // on card starts to drop - return if possibe
         dragDrop.onDropCallback = function(target, stack) {
             if (target instanceof PlayingCardColumn) {
                 let last = target.lastElementChild;
@@ -203,6 +219,7 @@ export default class FreeCell extends HTMLElement {
             }
         }.bind(this);
 
+        // on card starts to drag - return if possibe
         dragDrop.onDragCallback = function(stack) {
             let buffer = Array.from(stack);
             let last = buffer.pop();
@@ -219,11 +236,21 @@ export default class FreeCell extends HTMLElement {
             return true;
         }.bind(this);
 
+        // on card changed place
         dragDrop.onDropChangedCallback = async function(source, target, stack) {
-            let savestate = await GameStorage.get("freecell");
-            savestate.steps.push(savestate.current);
-            savestate.current = this.getState();
-            await GameStorage.set("freecell", savestate);
+            this.autoStack();
+            if (this.checkWin()) {
+                await GameStorage.set("freecell", null);
+                this.shadowRoot.getElementById("menu_wrapper").classList.add('open');
+                this.shadowRoot.getElementById("menu_text").innerHTML = "WIN!";
+                this.shadowRoot.getElementById("restart_game_button").classList.add('hide');
+                this.shadowRoot.getElementById("resume_game_button").classList.add('hide');
+            } else {
+                let savestate = await GameStorage.get("freecell");
+                savestate.steps.push(savestate.current);
+                savestate.current = this.getState();
+                await GameStorage.set("freecell", savestate);
+            }
         }.bind(this);
 
         // create playground
@@ -235,13 +262,16 @@ export default class FreeCell extends HTMLElement {
 
         // buttons
         this.shadowRoot.getElementById("new_game_button").addEventListener("click", async function(event) {
-            if (await Dialog.confirm("New game?", "Do you want to start a new game?")) {
+            if (this.checkWin() || await Dialog.confirm("New game?", "Do you want to start a new game?")) {
                 await this.newGame();
                 this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
+                this.shadowRoot.getElementById("menu_text").innerHTML = "PAUSE";
+                this.shadowRoot.getElementById("restart_game_button").classList.remove('hide');
+                this.shadowRoot.getElementById("resume_game_button").classList.remove('hide');
             }
         }.bind(this));
         this.shadowRoot.getElementById("restart_game_button").addEventListener("click", async function(event) {
-            if (await Dialog.confirm("Restart game?", "Do you want to restart the current game?")) {
+            if (this.checkWin() || await Dialog.confirm("Restart game?", "Do you want to restart the current game?")) {
                 let savestate = await GameStorage.get("freecell");
                 if (!!savestate.steps.length) {
                     savestate.current = savestate.steps[0];
@@ -339,6 +369,54 @@ export default class FreeCell extends HTMLElement {
                 target.append(card);
             });
         }
+    }
+    
+    autoStack() {
+        let changed = false;
+        let goals = [];
+        for (let i of PLAYGROUND.slice(12,16)) {
+            goals.push(this.shadowRoot.getElementById(i));
+        }
+        for (let i of PLAYGROUND.slice(0,12)) {
+            let col = this.shadowRoot.getElementById(i);
+            let first = col.lastElementChild;
+            if (!!first) {
+                let target = goals[SUITS.indexOf(first.suit)];
+                let last = target.lastElementChild;
+                if (!last && VALUES.indexOf(first.value) == 0) {
+                    target.append(first);
+                    changed = true;
+                } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
+                    function checkGoals(goal) {
+                        if (!goal.lastElementChild) {
+                            return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
+                        } else {
+                            return VALUES.indexOf(first.value) <= VALUES.indexOf(goal.lastElementChild.value) + AUTOSTACK_DIFF;
+                        }
+                    }
+                    if (goals.every(checkGoals)) {
+                        target.append(first);
+                        changed = true;
+                    }
+                }
+            }
+        }
+        if (changed) {
+            this.autoStack();
+        }
+    }
+
+    checkWin() {
+        for (let i of PLAYGROUND.slice(0,12)) {
+            if (this.shadowRoot.getElementById(i).children.length != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    simulateTurn() {
+    
     }
 
 }

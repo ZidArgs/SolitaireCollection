@@ -32,7 +32,7 @@ const TPL = new Template(`
             border-radius: calc(1vw * var(--card-scale, 1));
             box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
             width: auto;
-            min-width: 20vw;
+            min-width: 30vw;
         }
         button {
             min-width: 100px;

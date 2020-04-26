@@ -10,7 +10,7 @@ function startDrag(event) {
     let moved = event.currentTarget;
     let stack = moved.getStackUp();
     if (this.onDragCallback(stack)) {
-        shiftX = event.clientX - moved.getBoundingClientRect().left;
+        shiftX = event.clientX - moved.getBoundingClientRect().left - 21;
         shiftY = event.clientY - moved.getBoundingClientRect().top;
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
