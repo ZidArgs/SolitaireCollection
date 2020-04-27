@@ -12,28 +12,33 @@ const TPL = new Template(`
         :host {
             width: 100vw;
             height: 100vh;
-            --card-width: 10vw;
+            overflow: hidden;
+            --card-scale: 1;
         }
         #playground {
+            display: flex;
+            flex-direction: column;
             box-sizing: border-box;
             width: 100vw;
             height: 100vh;
-            padding: 20px;
+            padding: 2vw;
         }
         #top-row {
             display: grid;
             justify-content: center;
             justify-items: center;
-            grid-template-columns: repeat(4, 10vw) 5vw repeat(4, 10vw);
-            grid-gap: 1vw;
+            grid-template-columns: repeat(4, calc(8vw * var(--card-scale, 1))) 10vw repeat(4, calc(8vw * var(--card-scale, 1)));
+            grid-gap: 2vw;
+            height: calc(12vw * var(--card-scale, 1));
         }
         #game-board {
             display: grid;
             justify-content: center;
             justify-items: center;
-            grid-template-columns: repeat(8, 10vw);
-            grid-gap: 1vw;
-            margin-top: 20px;
+            grid-template-columns: repeat(8, calc(8vw * var(--card-scale, 1)));
+            grid-gap: 2vw;
+            height: calc(12vw * var(--card-scale, 1));
+            margin-top: 2vw;
         }
         #goal_spades,
         #goal_hearts,
@@ -43,6 +48,12 @@ const TPL = new Template(`
             background-size: contain;
             background-position: center;
             background-origin: content-box;
+        }
+        .game-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .menu-wrapper {
             position: absolute;
@@ -62,9 +73,9 @@ const TPL = new Template(`
         .menu-box {
             display: inline-flex;
             flex-direction: column;
-            padding: 20px 50px;
+            padding: 2vw 5vw;
             background: #a553c7;
-            border-radius: calc(1vw * var(--card-scale, 1));
+            border-radius: 1vw;
             box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
         }
         .menu-box .text {
@@ -76,17 +87,19 @@ const TPL = new Template(`
             color: rgba(255,255,255,0.7);
             cursor: default;
             user-select: none;
+            font-size: 3vw;
         }
         button {
-            padding: 10px;
-            margin-bottom: 4px;
-            border-radius: calc(1vw * var(--card-scale, 1));
+            padding: 1vw;
+            margin: .5vw;
+            border-radius: 1vw;
             box-shadow: inset 0px 0px 0px 2px rgba(255,255,255,0.7);
             color: rgba(255,255,255,0.7);
             background-color: transparent;
             border: none;
             -webkit-appearance: none;
             cursor: pointer;
+            font-size: 2vw;
         }
         button.hide {
             display: none;
@@ -103,6 +116,9 @@ const TPL = new Template(`
         button:focus {
             outline: none;
         }
+        #top-row button {
+            width: 10vw;
+        }
     </style>
     <div id="playground">
         <div id="top-row">
@@ -110,7 +126,7 @@ const TPL = new Template(`
             <cgc-playingcardplaceholder id="ph_1"></cgc-playingcardplaceholder>
             <cgc-playingcardplaceholder id="ph_2"></cgc-playingcardplaceholder>
             <cgc-playingcardplaceholder id="ph_3"></cgc-playingcardplaceholder>
-            <div>
+            <div class="game-buttons">
                 <button id="menu_button">MENU</button>
                 <button id="undo_button">UNDO</button>
             </div>
@@ -136,7 +152,7 @@ const TPL = new Template(`
             <button id="resume_game_button">RESUME</button>
             <button id="restart_game_button">RESTART</button>
             <button id="new_game_button">NEW GAME</button>
-            <button id="quit_game_button" disabled>QUIT</button>
+            <button id="quit_game_button">QUIT</button>
         </div>
     </div>
 `);
@@ -187,11 +203,11 @@ export default class FreeCell extends HTMLElement {
                 if (!!last) {
                     if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                         if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
-                            return true;
+                            return this.isTurnPossible(target, stack);
                         }
                     }
                 } else {
-                    return true;
+                    return this.isTurnPossible(target, stack);
                 }
                 return false;
             }
@@ -262,7 +278,7 @@ export default class FreeCell extends HTMLElement {
 
         // buttons
         this.shadowRoot.getElementById("new_game_button").addEventListener("click", async function(event) {
-            if (this.checkWin() || await Dialog.confirm("New game?", "Do you want to start a new game?")) {
+            if (this.checkWin() || await Dialog.confirm("Do you want to start a new game?")) {
                 await this.newGame();
                 this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
                 this.shadowRoot.getElementById("menu_text").innerHTML = "PAUSE";
@@ -271,7 +287,7 @@ export default class FreeCell extends HTMLElement {
             }
         }.bind(this));
         this.shadowRoot.getElementById("restart_game_button").addEventListener("click", async function(event) {
-            if (this.checkWin() || await Dialog.confirm("Restart game?", "Do you want to restart the current game?")) {
+            if (this.checkWin() || await Dialog.confirm("Do you want to restart the current game?")) {
                 let savestate = await GameStorage.get("freecell");
                 if (!!savestate.steps.length) {
                     savestate.current = savestate.steps[0];
@@ -282,10 +298,10 @@ export default class FreeCell extends HTMLElement {
                 this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
             }
         }.bind(this));
-        this.shadowRoot.getElementById("menu_button").addEventListener("click", async function(event) {
+        this.shadowRoot.getElementById("menu_button").addEventListener("click", function(event) {
             this.shadowRoot.getElementById("menu_wrapper").classList.add('open');
         }.bind(this));
-        this.shadowRoot.getElementById("resume_game_button").addEventListener("click", async function(event) {
+        this.shadowRoot.getElementById("resume_game_button").addEventListener("click", function(event) {
             this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
         }.bind(this));
         this.shadowRoot.getElementById("undo_button").addEventListener("click", async function(event) {
@@ -295,6 +311,10 @@ export default class FreeCell extends HTMLElement {
                 await GameStorage.set("freecell", savestate);
                 this.setState(savestate.current);
             }
+        }.bind(this));
+        this.shadowRoot.getElementById("quit_game_button").addEventListener("click", function(event) {
+            this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
+            this.dispatchEvent(new Event('close'));
         }.bind(this));
     }
 
@@ -414,9 +434,23 @@ export default class FreeCell extends HTMLElement {
         }
         return true;
     }
-
-    simulateTurn() {
     
+    isTurnPossible(target, stack) {
+        let freeCells = 1;
+        let freeCols = 0;
+        for (let i of PLAYGROUND.slice(8,12)) {
+            let el = this.shadowRoot.getElementById(i);
+            if (!el.children.length) {
+                freeCells++;
+            }
+        }
+        for (let i of PLAYGROUND.slice(0,8)) {
+            let el = this.shadowRoot.getElementById(i);
+            if (!el.children.length && el != target) {
+                freeCols++;
+            }
+        }
+        return stack.length < 2 ** freeCols + freeCells;
     }
 
 }

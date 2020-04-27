@@ -10,14 +10,18 @@ function startDrag(event) {
     let moved = event.currentTarget;
     let stack = moved.getStackUp();
     if (this.onDragCallback(stack)) {
-        shiftX = event.clientX - moved.getBoundingClientRect().left - 21;
-        shiftY = event.clientY - moved.getBoundingClientRect().top;
+        if (!!event.touches) {
+            shiftX = event.touches[0].clientX - moved.getBoundingClientRect().left;
+            shiftY = event.touches[0].clientY - moved.getBoundingClientRect().top;
+        } else {
+            shiftX = event.clientX - moved.getBoundingClientRect().left;
+            shiftY = event.clientY - moved.getBoundingClientRect().top;
+        }
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
         dragElement.style.position = 'absolute';
         dragElement.style.zIndex = 1000;
-        dragElement.style.left = event.pageX - shiftX + 'px';
-        dragElement.style.top = event.pageY - shiftY + 'px';
+        onMouseMove(event);
         dragElement.style.pointerEvents = "none";
         Array.from(stack).forEach(el => dragElement.append(el));
         document.body.append(dragElement);
@@ -26,8 +30,13 @@ function startDrag(event) {
   
 function onMouseMove(event) {
     if (!!dragElement) {
-        dragElement.style.left = event.pageX - shiftX + 'px';
-        dragElement.style.top = event.pageY - shiftY + 'px';
+        if (!!event.touches) {
+            dragElement.style.left = event.touches[0].pageX - shiftX + 'px';
+            dragElement.style.top = event.touches[0].pageY - shiftY + 'px';
+        } else {
+            dragElement.style.left = event.pageX - shiftX + 'px';
+            dragElement.style.top = event.pageY - shiftY + 'px';
+        }
     }
 }
 
@@ -49,7 +58,6 @@ function onDrop(event) {
 
 function onDropAnywhere(event) {
     if (!!dragElement) {
-        let targetElement = event.currentTarget;
         let movedElements  = dragElement.children;
         Array.from(movedElements).forEach(el => sourceElement.append(el));
         dragElement.remove();
@@ -59,7 +67,9 @@ function onDropAnywhere(event) {
 }
 
 document.addEventListener('mousemove', onMouseMove);
+document.addEventListener('touchmove', onMouseMove);
 document.body.addEventListener("mouseup", onDropAnywhere);
+document.body.addEventListener("touchend", onDropAnywhere);
 
 export default class DragDrop {
 
@@ -76,6 +86,7 @@ export default class DragDrop {
         } else {
             DROP_TARGETS.get(this).add(element);
             element.addEventListener("mouseup", onDrop.bind(this));
+            element.addEventListener("touchend", onDrop.bind(this));
         }
     }
 
@@ -95,6 +106,7 @@ export default class DragDrop {
         } else {
             DRAG_ELEMENTS.get(this).add(element);
             element.addEventListener("mousedown", startDrag.bind(this));
+            element.addEventListener("touchstart", startDrag.bind(this));
         }
     }
 

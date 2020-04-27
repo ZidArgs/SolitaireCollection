@@ -7,7 +7,7 @@ const TPL = new Template(`
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: var(--card-width, 60px);
+            width: calc(8vw * var(--card-scale, 1));
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;

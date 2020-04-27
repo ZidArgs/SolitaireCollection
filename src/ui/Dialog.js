@@ -16,35 +16,36 @@ const TPL = new Template(`
             word-wrap: break-word;
             resize: none;
             color: rgba(255,255,255,0.7);
+            font-size: 2vw;
         }
         #footer {
             display: flex;
-            height: 50px;
-            margin-top: 20px;
-            padding: 10px 30px 10px;
+            margin-top: 2vw;
+            padding: 1vw 2vw 1vw;
             justify-content: space-between;
         }
         #window {
             display: inline-flex;
             flex-direction: column;
-            padding: 50px;
+            padding: 3vw;
             background: #a553c7;
-            border-radius: calc(1vw * var(--card-scale, 1));
+            border-radius: 1vw;
             box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
             width: auto;
             min-width: 30vw;
         }
         button {
-            min-width: 100px;
-            padding: 10px;
-            margin-bottom: 4px;
-            border-radius: calc(1vw * var(--card-scale, 1));
+            min-width: 10vw;
+            padding: 1vw;
+            margin-bottom: 1vw;
+            border-radius: 1vw;
             box-shadow: inset 0px 0px 0px 2px rgba(255,255,255,0.7);
             color: rgba(255,255,255,0.7);
             background-color: transparent;
             border: none;
             -webkit-appearance: none;
             cursor: pointer;
+            font-size: 2vw;
         }
         button:hover {
             background-color: rgba(255,255,255,0.2);
@@ -59,10 +60,7 @@ const TPL = new Template(`
             outline: none;
         }
     </style>
-    <div id="window" role="dialog" aria-modal="true" aria-labelledby="title" aria-describedby="title">
-        <div id="header">
-            <div id="title"></div>
-        </div>
+    <div id="window" role="dialog">
         <div id="body">
         </div>
         <div id="footer">
@@ -92,11 +90,6 @@ export default class Dialog extends HTMLElement {
         super();
         this.attachShadow({mode: 'open'});
         this.shadowRoot.append(TPL.generate());
-        
-        let ttl = this.shadowRoot.getElementById('title');
-        if (!!options.title && typeof title === "string") {
-            ttl.innerHTML = title;
-        }
 
         let bdy = this.shadowRoot.getElementById('body');
         if (!!options.text && typeof options.text === "string") {
@@ -127,10 +120,9 @@ export default class Dialog extends HTMLElement {
         }
     }
     
-    static confirm(ttl, msg) {
+    static confirm(msg) {
         return new Promise(function(resolve) {
             let d = new Dialog({
-                title: ttl,
                 text: msg,
                 submit: "YES",
                 cancel: "NO"
