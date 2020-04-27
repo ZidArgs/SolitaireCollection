@@ -17,6 +17,10 @@ function quitGame(event) {
     main_menu.style.display = "";
 }
 
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js');
+}
+
 !async function() {
     for (let name in games) {
         games[name].addEventListener('close', quitGame);
