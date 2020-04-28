@@ -2,7 +2,7 @@
     "name": "Solitaire Collection",
     "short_name": "Solitaire",
     "start_url": ".",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#73b3e7",
     "description": "A Solitaire Collection with Freecell, etc.",
     "lang": "en-US",
