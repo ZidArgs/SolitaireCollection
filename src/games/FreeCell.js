@@ -130,9 +130,9 @@ const TPL = new Template(`
                 <button id="menu_button">MENU</button>
                 <button id="undo_button">UNDO</button>
             </div>
+            <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
             <cgc-playingcardgoal id="goal_spades" theme="french" suit="S"></cgc-playingcardgoal>
             <cgc-playingcardgoal id="goal_hearts" theme="french" suit="H"></cgc-playingcardgoal>
-            <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
             <cgc-playingcardgoal id="goal_diamonds" theme="french" suit="D"></cgc-playingcardgoal>
         </div>
         <div id="game-board">
