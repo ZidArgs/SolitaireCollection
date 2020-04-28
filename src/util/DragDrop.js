@@ -3,44 +3,41 @@ const DRAG_ELEMENTS = new WeakMap();
 
 let sourceElement = null;
 let dragElement = null;
+let isTouch = false;
 let shiftX = 0;
 let shiftY = 0;
 
-function startDrag(event) {
+function onDragStart(event) {
+    if (!!isTouch) return;
     let moved = event.currentTarget;
     let stack = moved.getStackUp();
     if (this.onDragCallback(stack)) {
-        if (!!event.touches) {
-            shiftX = event.touches[0].clientX - moved.getBoundingClientRect().left;
-            shiftY = event.touches[0].clientY - moved.getBoundingClientRect().top;
-        } else {
-            shiftX = event.clientX - moved.getBoundingClientRect().left;
-            shiftY = event.clientY - moved.getBoundingClientRect().top;
-        }
+        shiftX = event.clientX - moved.getBoundingClientRect().left;
+        shiftY = event.clientY - moved.getBoundingClientRect().top;
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
         dragElement.style.position = 'absolute';
         dragElement.style.zIndex = 1000;
-        onMouseMove(event);
+        onDragMove(event);
         dragElement.style.pointerEvents = "none";
+        dragElement.style.touchAction = "none";
         Array.from(stack).forEach(el => dragElement.append(el));
         document.body.append(dragElement);
-    }
-}
-  
-function onMouseMove(event) {
-    if (!!dragElement) {
-        if (!!event.touches) {
-            dragElement.style.left = event.touches[0].pageX - shiftX + 'px';
-            dragElement.style.top = event.touches[0].pageY - shiftY + 'px';
-        } else {
-            dragElement.style.left = event.pageX - shiftX + 'px';
-            dragElement.style.top = event.pageY - shiftY + 'px';
-        }
+        document.addEventListener('mousemove', this.bound.onDragMove);
+        document.body.addEventListener("mouseup", this.bound.onDragEndAnywhere);
     }
 }
 
-function onDrop(event) {
+function onDragMove(event) {
+    if (!!isTouch) return;
+    if (!!dragElement) {
+        dragElement.style.left = event.pageX - shiftX + 'px';
+        dragElement.style.top = event.pageY - shiftY + 'px';
+    }
+}
+
+function onDragEnd(event) {
+    if (!!isTouch) return;
     if (!!dragElement) {
         let targetElement = event.currentTarget;
         let movedElements  = dragElement.children;
@@ -53,29 +50,112 @@ function onDrop(event) {
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
+        document.removeEventListener('mousemove', this.bound.onDragMove);
+        document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
     }
 }
 
-function onDropAnywhere(event) {
+function onDragEndAnywhere(event) {
+    if (!!isTouch) return;
     if (!!dragElement) {
-        let movedElements  = dragElement.children;
+        let movedElements = dragElement.children;
         Array.from(movedElements).forEach(el => sourceElement.append(el));
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
+        document.removeEventListener('mousemove', this.bound.onDragMove);
+        document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
     }
 }
 
-document.addEventListener('mousemove', onMouseMove);
-document.addEventListener('touchmove', onMouseMove);
-document.body.addEventListener("mouseup", onDropAnywhere);
-document.body.addEventListener("touchend", onDropAnywhere);
+function onTouchCard(event) {
+    if (!dragElement) {
+        isTouch = true;
+        let moved = event.currentTarget;
+        let stack = moved.getStackUp();
+        if (this.onDragCallback(stack)) {
+            let pX = moved.getBoundingClientRect().left;
+            let pY = moved.getBoundingClientRect().top;
+            sourceElement = moved.parentElement;
+            dragElement = document.createElement("cgc-playingcardcolumn");
+            dragElement.style.position = 'absolute';
+            dragElement.style.zIndex = 1000;
+            dragElement.style.left = pX + 'px';
+            dragElement.style.top = pY + 'px';
+            dragElement.style.pointerEvents = "none";
+            dragElement.style.touchAction = "none";
+            dragElement.style.boxShadow = "0px 0px 0px 4px #00ffff";
+            dragElement.style.paddingBottom = "calc(12vw * var(--card-scale, 1) - 2.5vw)";
+            dragElement.style.borderRadius = "calc(1vw * var(--card-scale, 1))";
+            Array.from(stack).forEach(el => dragElement.append(el));
+            document.body.append(dragElement);
+            document.addEventListener('touchend', this.bound.onTouchOther);
+            event.stopPropagation();
+        }
+    } else {
+        isTouch = false;
+        let moved = event.currentTarget;
+        let movedElements = dragElement.children;
+        let targetElement = moved.parentElement;
+        if (this.onDropCallback(targetElement, movedElements)) {
+            Array.from(movedElements).forEach(el => targetElement.append(el));
+            this.onDropChangedCallback(sourceElement, targetElement, movedElements);
+        } else {
+            Array.from(movedElements).forEach(el => sourceElement.append(el));
+        }
+        dragElement.remove();
+        sourceElement = null;
+        dragElement = null;
+        document.removeEventListener('touchend', this.bound.onTouchOther);
+        event.stopPropagation();
+    }
+}
+
+function onTouchTarget(event) {
+    if (!!dragElement) {
+        isTouch = false;
+        let movedElements = dragElement.children;
+        let targetElement = event.currentTarget;
+        if (this.onDropCallback(targetElement, movedElements)) {
+            Array.from(movedElements).forEach(el => targetElement.append(el));
+            this.onDropChangedCallback(sourceElement, targetElement, movedElements);
+        } else {
+            Array.from(movedElements).forEach(el => sourceElement.append(el));
+        }
+        dragElement.remove();
+        sourceElement = null;
+        dragElement = null;
+        document.removeEventListener('touchend', this.bound.onTouchOther);
+        event.stopPropagation();
+    }
+}
+
+function onTouchOther(event) {
+    if (!!dragElement) {
+        let movedElements = dragElement.children;
+        Array.from(movedElements).forEach(el => sourceElement.append(el));
+        dragElement.remove();
+        sourceElement = null;
+        dragElement = null;
+        document.removeEventListener('touchend', this.bound.onTouchOther);
+        event.stopPropagation();
+    }
+}
 
 export default class DragDrop {
 
     constructor() {
         DROP_TARGETS.set(this, new Set());
         DRAG_ELEMENTS.set(this, new Set());
+        this.bound = {
+            onDragStart: onDragStart.bind(this),
+            onDragMove: onDragMove.bind(this),
+            onDragEnd: onDragEnd.bind(this),
+            onDragEndAnywhere: onDragEndAnywhere.bind(this),
+            onTouchCard: onTouchCard.bind(this),
+            onTouchTarget: onTouchTarget.bind(this),
+            onTouchOther: onTouchOther.bind(this),
+        };
     }
 
     registerDropTarget(element) {
@@ -85,8 +165,8 @@ export default class DragDrop {
             }
         } else {
             DROP_TARGETS.get(this).add(element);
-            element.addEventListener("mouseup", onDrop.bind(this));
-            element.addEventListener("touchend", onDrop.bind(this));
+            element.addEventListener("mouseup", this.bound.onDragEnd);
+            element.addEventListener("touchend", this.bound.onTouchTarget);
         }
     }
 
@@ -105,8 +185,8 @@ export default class DragDrop {
             }
         } else {
             DRAG_ELEMENTS.get(this).add(element);
-            element.addEventListener("mousedown", startDrag.bind(this));
-            element.addEventListener("touchstart", startDrag.bind(this));
+            element.addEventListener("mousedown", this.bound.onDragStart);
+            element.addEventListener("touchend", this.bound.onTouchCard);
         }
     }
 

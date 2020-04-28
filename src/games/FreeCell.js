@@ -195,6 +195,23 @@ export default class FreeCell extends HTMLElement {
         let dragDrop = new DragDrop();
         DRAG_DROP.set(this, dragDrop);
 
+        // on card starts to drag - return if possibe
+        dragDrop.onDragCallback = function(stack) {
+            let buffer = Array.from(stack);
+            let last = buffer.pop();
+            while (!!buffer.length) {
+                let next = buffer.pop();
+                if (SUITS.indexOf(last.suit) % 2 == SUITS.indexOf(next.suit) % 2) {
+                    return false;
+                }
+                if (VALUES.indexOf(last.value) != VALUES.indexOf(next.value) - 1) {
+                    return false;
+                }
+                last = next;
+            }
+            return true;
+        }.bind(this);
+
         // on card starts to drop - return if possibe
         dragDrop.onDropCallback = function(target, stack) {
             if (target instanceof PlayingCardColumn) {
@@ -233,23 +250,6 @@ export default class FreeCell extends HTMLElement {
                 }
                 return false;
             }
-        }.bind(this);
-
-        // on card starts to drag - return if possibe
-        dragDrop.onDragCallback = function(stack) {
-            let buffer = Array.from(stack);
-            let last = buffer.pop();
-            while (!!buffer.length) {
-                let next = buffer.pop();
-                if (SUITS.indexOf(last.suit) % 2 == SUITS.indexOf(next.suit) % 2) {
-                    return false;
-                }
-                if (VALUES.indexOf(last.value) != VALUES.indexOf(next.value) - 1) {
-                    return false;
-                }
-                last = next;
-            }
-            return true;
         }.bind(this);
 
         // on card changed place
