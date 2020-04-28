@@ -43,11 +43,12 @@ function onDragEnd(event) {
         let movedElements  = dragElement.children;
         if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
+            dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
             Array.from(movedElements).forEach(el => sourceElement.append(el));
+            dragElement.remove();
         }
-        dragElement.remove();
         sourceElement = null;
         dragElement = null;
         document.removeEventListener('mousemove', this.bound.onDragMove);
@@ -78,17 +79,14 @@ function onTouchCard(event) {
             let pY = moved.getBoundingClientRect().top;
             sourceElement = moved.parentElement;
             dragElement = document.createElement("cgc-playingcardcolumn");
-            dragElement.style.position = 'absolute';
             dragElement.style.zIndex = 1000;
-            dragElement.style.left = pX + 'px';
-            dragElement.style.top = pY + 'px';
             dragElement.style.pointerEvents = "none";
             dragElement.style.touchAction = "none";
             dragElement.style.boxShadow = "0px 0px 0px 4px #00ffff";
-            dragElement.style.paddingBottom = "calc(12vw * var(--card-scale, 1) - 2.5vw)";
+            dragElement.style.paddingBottom = "calc(12vw * var(--card-scale, 1) - 2.5vmax)";
             dragElement.style.borderRadius = "calc(1vw * var(--card-scale, 1))";
             Array.from(stack).forEach(el => dragElement.append(el));
-            document.body.append(dragElement);
+            sourceElement.append(dragElement);
             document.addEventListener('touchend', this.bound.onTouchOther);
             event.stopPropagation();
         }
@@ -99,11 +97,12 @@ function onTouchCard(event) {
         let targetElement = moved.parentElement;
         if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
+            dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
             Array.from(movedElements).forEach(el => sourceElement.append(el));
+            dragElement.remove();
         }
-        dragElement.remove();
         sourceElement = null;
         dragElement = null;
         document.removeEventListener('touchend', this.bound.onTouchOther);
@@ -118,11 +117,12 @@ function onTouchTarget(event) {
         let targetElement = event.currentTarget;
         if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
+            dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
             Array.from(movedElements).forEach(el => sourceElement.append(el));
+            dragElement.remove();
         }
-        dragElement.remove();
         sourceElement = null;
         dragElement = null;
         document.removeEventListener('touchend', this.bound.onTouchOther);
