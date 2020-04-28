@@ -37,7 +37,7 @@ const TPL = new Template(`
             justify-items: center;
             grid-template-columns: repeat(8, calc(8vw * var(--card-scale, 1)));
             grid-gap: 2vw;
-            height: calc(12vw * var(--card-scale, 1));
+            flex: 1;
             margin-top: 2vw;
         }
         #goal_spades,

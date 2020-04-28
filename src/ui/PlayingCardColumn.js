@@ -12,11 +12,20 @@ const TPL = new Template(`
             -moz-user-select: none;
             user-select: none;
         }
+        #face {
+            position: absolute;
+            width: calc(8vw * var(--card-scale, 1));
+            height: calc(12vw * var(--card-scale, 1));
+            border-radius: calc(1vw * var(--card-scale, 1));
+            box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
+        }
         ::slotted(cgc-playingcard) {
             flex: 1;
             max-height: 2.5vw;
         }
     </style>
+    <div id="face">
+    </div>
     <slot>
     </slot>
 `);
