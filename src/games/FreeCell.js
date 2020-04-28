@@ -5,6 +5,7 @@ import PlayingCardColumn from "/src/ui/PlayingCardColumn.js";
 import PlayingCardPlaceholder from "/src/ui/PlayingCardPlaceholder.js";
 import PlayingCardGoal from "/src/ui/PlayingCardGoal.js";
 import "/src/ui/PlayingCard.js";
+import Menu from "/src/ui/Menu.js";
 import Dialog from "/src/ui/Dialog.js";
 
 const TPL = new Template(`
@@ -55,40 +56,6 @@ const TPL = new Template(`
             align-items: center;
             justify-content: center;
         }
-        .menu-wrapper {
-            position: absolute;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            top: 0px;
-            left: 0px;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(2px);
-        }
-        .menu-wrapper.open {
-            display: flex;
-        }
-        .menu-box {
-            display: inline-flex;
-            flex-direction: column;
-            padding: 2vw 5vw;
-            background: #a553c7;
-            border-radius: 1vw;
-            box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
-        }
-        .menu-box .text {
-            display: flex;
-            padding: 10px;
-            margin-bottom: 4px;
-            justify-content: center;
-            font-weight: bold;
-            color: rgba(255,255,255,0.7);
-            cursor: default;
-            user-select: none;
-            font-size: 3vw;
-        }
         button {
             padding: 1vw;
             margin: .5vw;
@@ -115,6 +82,9 @@ const TPL = new Template(`
         }
         button:focus {
             outline: none;
+        }
+        #top-row button {
+            width: 10vw;
         }
         #top-row button {
             width: 10vw;
@@ -146,19 +116,13 @@ const TPL = new Template(`
             <cgc-playingcardcolumn id="col_7"></cgc-playingcardcolumn>
         </div>
     </div>
-    <div id="menu_wrapper" class="menu-wrapper">
-        <div id="menu" class="menu-box">
-            <div id="menu_text" class="text">PAUSE</div>
-            <button id="resume_game_button">RESUME</button>
-            <button id="restart_game_button">RESTART</button>
-            <button id="new_game_button">NEW GAME</button>
-            <button id="quit_game_button">QUIT</button>
-        </div>
-    </div>
 `);
 
 let SettingsStorage = new IDBStorage("settings");
 let GameStorage = new IDBStorage("games");
+
+const MENU_PAUSE = new WeakMap();
+const MENU_WIN = new WeakMap();
 
 const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
@@ -183,6 +147,38 @@ function shuffleDeck(arr) {
     return res;
 }
 
+async function onRestartGame() {
+    if (await Dialog.confirm("Do you want to restart the current game?")) {
+        let savestate = await GameStorage.get("freecell");
+        if (!!savestate.steps.length) {
+            savestate.current = savestate.steps[0];
+            savestate.steps = [];
+            await GameStorage.set("freecell", savestate);
+            this.setState(savestate.current);
+        }
+        return true;
+    }
+    return false;
+}
+
+async function onNewGame() {
+    if (await Dialog.confirm("Do you want to start a new game?")) {
+        await this.newGame();
+        return true;
+    }
+    return false;
+}
+
+async function onNextGame() {
+    await this.newGame();
+    return true;
+}
+
+async function onQuitGame() {
+    this.dispatchEvent(new Event('close'));
+    return true;
+}
+
 export default class FreeCell extends HTMLElement {
 
     constructor() {
@@ -196,7 +192,7 @@ export default class FreeCell extends HTMLElement {
         DRAG_DROP.set(this, dragDrop);
 
         // on card starts to drag - return if possibe
-        dragDrop.onDragCallback = function(stack) {
+        dragDrop.onDragCallback = function(source, stack) {
             let buffer = Array.from(stack);
             let last = buffer.pop();
             while (!!buffer.length) {
@@ -213,18 +209,18 @@ export default class FreeCell extends HTMLElement {
         }.bind(this);
 
         // on card starts to drop - return if possibe
-        dragDrop.onDropCallback = function(target, stack) {
+        dragDrop.onDropCallback = function(source, target, stack) {
             if (target instanceof PlayingCardColumn) {
                 let last = target.lastElementChild;
                 let first = stack[0];
                 if (!!last) {
                     if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                         if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
-                            return this.isTurnPossible(target, stack);
+                            return this.isTurnPossible(source, target, stack);
                         }
                     }
                 } else {
-                    return this.isTurnPossible(target, stack);
+                    return this.isTurnPossible(source, target, stack);
                 }
                 return false;
             }
@@ -257,10 +253,7 @@ export default class FreeCell extends HTMLElement {
             this.autoStack();
             if (this.checkWin()) {
                 await GameStorage.set("freecell", null);
-                this.shadowRoot.getElementById("menu_wrapper").classList.add('open');
-                this.shadowRoot.getElementById("menu_text").innerHTML = "WIN!";
-                this.shadowRoot.getElementById("restart_game_button").classList.add('hide');
-                this.shadowRoot.getElementById("resume_game_button").classList.add('hide');
+                MENU_WIN.get(this).show();
             } else {
                 let savestate = await GameStorage.get("freecell");
                 savestate.steps.push(savestate.current);
@@ -276,33 +269,37 @@ export default class FreeCell extends HTMLElement {
         }
         dragDrop.registerDropTarget(pg_els);
 
+        // create menus
+        MENU_PAUSE.set(this, new Menu({
+            title: "PAUSE",
+            buttons: [{
+                content: "RESUME",
+                handler: true
+            },{
+                content: "RESTART",
+                handler: onRestartGame.bind(this)
+            },{
+                content: "NEW GAME",
+                handler: onNewGame.bind(this)
+            },{
+                content: "QUIT",
+                handler: onQuitGame.bind(this)
+            }]
+        }));
+        MENU_WIN.set(this, new Menu({
+            title: "WIN!",
+            buttons: [{
+                content: "NEW GAME",
+                handler: onNextGame.bind(this)
+            },{
+                content: "QUIT",
+                handler: onQuitGame.bind(this)
+            }]
+        }));
+
         // buttons
-        this.shadowRoot.getElementById("new_game_button").addEventListener("click", async function(event) {
-            if (this.checkWin() || await Dialog.confirm("Do you want to start a new game?")) {
-                await this.newGame();
-                this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
-                this.shadowRoot.getElementById("menu_text").innerHTML = "PAUSE";
-                this.shadowRoot.getElementById("restart_game_button").classList.remove('hide');
-                this.shadowRoot.getElementById("resume_game_button").classList.remove('hide');
-            }
-        }.bind(this));
-        this.shadowRoot.getElementById("restart_game_button").addEventListener("click", async function(event) {
-            if (this.checkWin() || await Dialog.confirm("Do you want to restart the current game?")) {
-                let savestate = await GameStorage.get("freecell");
-                if (!!savestate.steps.length) {
-                    savestate.current = savestate.steps[0];
-                    savestate.steps = [];
-                    await GameStorage.set("freecell", savestate);
-                    this.setState(savestate.current);
-                }
-                this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
-            }
-        }.bind(this));
         this.shadowRoot.getElementById("menu_button").addEventListener("click", function(event) {
-            this.shadowRoot.getElementById("menu_wrapper").classList.add('open');
-        }.bind(this));
-        this.shadowRoot.getElementById("resume_game_button").addEventListener("click", function(event) {
-            this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
+            MENU_PAUSE.get(this).show();
         }.bind(this));
         this.shadowRoot.getElementById("undo_button").addEventListener("click", async function(event) {
             let savestate = await GameStorage.get("freecell");
@@ -311,10 +308,6 @@ export default class FreeCell extends HTMLElement {
                 await GameStorage.set("freecell", savestate);
                 this.setState(savestate.current);
             }
-        }.bind(this));
-        this.shadowRoot.getElementById("quit_game_button").addEventListener("click", function(event) {
-            this.shadowRoot.getElementById("menu_wrapper").classList.remove('open');
-            this.dispatchEvent(new Event('close'));
         }.bind(this));
     }
 
@@ -435,8 +428,8 @@ export default class FreeCell extends HTMLElement {
         return true;
     }
     
-    isTurnPossible(target, stack) {
-        let freeCells = 1;
+    isTurnPossible(source, target, stack) {
+        let freeCells = 0;
         let freeCols = 0;
         for (let i of PLAYGROUND.slice(8,12)) {
             let el = this.shadowRoot.getElementById(i);
@@ -446,11 +439,11 @@ export default class FreeCell extends HTMLElement {
         }
         for (let i of PLAYGROUND.slice(0,8)) {
             let el = this.shadowRoot.getElementById(i);
-            if (!el.children.length && el != target) {
+            if (!el.children.length && el != source && el != target) {
                 freeCols++;
             }
         }
-        return stack.length < 2 ** freeCols + freeCells;
+        return stack.length <= (2 ** freeCols) * (freeCells + 1);
     }
 
 }

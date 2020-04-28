@@ -7,45 +7,47 @@ const TPL = new Template(`
             display: flex;
             align-items: center;
             justify-content: center;
-            box-sizing: border-box;
+            top: 0px;
+            left: 0px;
             width: 100vw;
             height: 100vh;
+            box-sizing: border-box;
         }
         #body {
             display: block;
             word-wrap: break-word;
             resize: none;
             color: rgba(255,255,255,0.7);
-            font-size: 2vw;
+            font-size: 2vmax;
         }
         #footer {
             display: flex;
-            margin-top: 2vw;
-            padding: 1vw 2vw 1vw;
+            margin-top: 2vmax;
+            padding: 1vmax 2vmax 1vmax;
             justify-content: space-between;
         }
         #window {
             display: inline-flex;
             flex-direction: column;
-            padding: 3vw;
+            padding: 3vmax;
             background: #a553c7;
-            border-radius: 1vw;
+            border-radius: 1vmax;
             box-shadow: inset 0px 0px 0px 4px rgba(255,255,255,0.5);
             width: auto;
-            min-width: 30vw;
+            min-width: 30vmax;
         }
         button {
-            min-width: 10vw;
-            padding: 1vw;
-            margin-bottom: 1vw;
-            border-radius: 1vw;
+            min-width: 10vmax;
+            padding: 1vmax;
+            margin: .5vmax;
+            border-radius: 1vmax;
             box-shadow: inset 0px 0px 0px 2px rgba(255,255,255,0.7);
             color: rgba(255,255,255,0.7);
             background-color: transparent;
             border: none;
             -webkit-appearance: none;
             cursor: pointer;
-            font-size: 2vw;
+            font-size: 2vmax;
         }
         button:hover {
             background-color: rgba(255,255,255,0.2);

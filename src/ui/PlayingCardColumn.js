@@ -21,7 +21,7 @@ const TPL = new Template(`
         }
         ::slotted(cgc-playingcard) {
             flex: 1;
-            max-height: 2.5vw;
+            max-height: 2.5vmax;
         }
     </style>
     <div id="face">
