@@ -18,6 +18,9 @@ function resolveFiles(currentPath) {
                 result = result.concat(buffer);
             } else if (relativePath.length > 1 && file.isFile()) {
                 result.push(relativePath);
+                if (relativePath.endsWith("index.html")) {
+                    result.push(relativePath.replace("index.html", ""));
+                }
             }
         }
     }

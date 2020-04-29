@@ -1,7 +1,8 @@
-const CACHE_NAME = "4";
+const CACHE_NAME = "8";
 const FILES = [
     "/games/freecell/index.css",
     "/games/freecell/index.html",
+    "/games/freecell/",
     "/games/freecell/index.js",
     "/games/Klondike.js",
     "/img/favicons/144.png",
@@ -75,6 +76,7 @@ const FILES = [
     "/img/playing_cards/goals/french/S.svg",
     "/index.css",
     "/index.html",
+    "/",
     "/manifest.json",
     "/src/index.js",
     "/src/ui/Dialog.js",
@@ -84,7 +86,6 @@ const FILES = [
     "/src/ui/PlayingCardGoal.js",
     "/src/ui/PlayingCardPlaceholder.js",
     "/src/util/CardDeck.js",
-    "/src/util/CardGameHelpers.js",
     "/src/util/DragDrop.js",
     "/src/util/IDBStorage.js",
     "/src/util/Template.js",

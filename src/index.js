@@ -1,7 +1,7 @@
 let main_menu = document.getElementById("main_menu");
 
 function openGame(event) {
-    location.href = `/games/${event.currentTarget.dataset.game}/index.html`;
+    location.href = `/games/${event.currentTarget.dataset.game}/`;
 }
 
 if ('serviceWorker' in navigator) {
