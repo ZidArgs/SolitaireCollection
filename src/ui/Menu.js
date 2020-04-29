@@ -78,6 +78,9 @@ const TPL = new Template(`
 
 export default class Menu extends HTMLElement {
 
+    static BACK = "BACK";
+    static CLOSE = "CLOSE";
+
     constructor(options = {}) {
         super();
         this.attachShadow({mode: 'open'});
@@ -97,8 +100,19 @@ export default class Menu extends HTMLElement {
                         this.close();
                     }
                 });
-            } else {
-                el.addEventListener('click', event => {
+            }
+            if (typeof button.href == "string") {
+                el.addEventListener('click', async event => {
+                    location.href = `${button.handler}/index.html`;
+                });
+            }
+            if (button.action == Menu.BACK) {
+                el.addEventListener('click', async event => {
+                    history.back();
+                });
+            }
+            if (button.action == Menu.CLOSE) {
+                el.addEventListener('click', async event => {
                     this.close();
                 });
             }

@@ -7,6 +7,7 @@
         <meta name="robots" content="nofollow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
         <meta name="theme-color" content="#000000">
+        <link rel="stylesheet" href="/index.css">
         <link rel="manifest" href="/manifest.json">
         <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicons/default_192.png">
         <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/96.png">
@@ -14,60 +15,6 @@
         <link rel="icon" type="image/svg+xml" href="/img/favicons/logo.svg" sizes="any">
         <script src="/src/index.js" type="module"></script>
         <style>
-            * {
-                box-sizing: border-box;
-                font-family: Arial;
-            }
-            body {
-                display: flex;
-                background: #00aa33;
-                width: 100vmax;
-                height: 100vh;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-            }
-            body > * {
-                flex: 1;
-            }
-            #main_menu {
-                width: 100vmax;
-                height: 100vh;
-                overflow: hidden;
-                padding: 1vmax;
-            }
-            .game-choice {
-                display: inline-block;
-                padding: 2vmax;
-                margin: .5vmax;
-                border-radius: 2vmax;
-                box-shadow: inset 0px 0px 0px .5vmax #ffffff;
-                background-color: transparent;
-                border: none;
-                -webkit-appearance: none;
-                cursor: pointer;
-            }
-            .game-choice:hover {
-                background-color: rgba(255,255,255,0.2);
-            }
-            .game-choice .game-preview {
-                width: 16vmax;
-                height: 9vmax;
-                background-repeat: no-repeat;
-                background-size: contain;
-                background-position: center;
-                background-origin: content-box;
-                background-color: #ffffff;
-                border: solid .2vmax #ffffff;
-            }
-            .game-choice .game-name {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 1vmax;
-                color: #ffffff;
-                font-size: 3vmax;
-            }
         </style>
     </head>
     <body>
@@ -77,6 +24,8 @@
                 <div class="game-name">Freecell</div>
             </div>
         </div>
-        <cgc-freecell id="freecell" style="display: none;"></cgc-freecell>
+        <div id="footer_menu" style="display: none;">
+            <button id="settings_button">SETTINGS</button>
+        </div>
     </body>
 </html>
