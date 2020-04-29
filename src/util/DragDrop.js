@@ -41,7 +41,7 @@ function onDragEnd(event) {
     if (!!dragElement) {
         let targetElement = event.currentTarget;
         let movedElements  = dragElement.children;
-        if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
+        if (targetElement =! sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
@@ -75,8 +75,6 @@ function onTouchCard(event) {
         let moved = event.currentTarget;
         let stack = moved.getStackUp();
         if (this.onDragCallback(sourceElement, stack)) {
-            let pX = moved.getBoundingClientRect().left;
-            let pY = moved.getBoundingClientRect().top;
             sourceElement = moved.parentElement;
             dragElement = document.createElement("cgc-playingcardcolumn");
             dragElement.style.zIndex = 1000;
@@ -95,7 +93,7 @@ function onTouchCard(event) {
         let moved = event.currentTarget;
         let movedElements = dragElement.children;
         let targetElement = moved.parentElement;
-        if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
+        if (targetElement =! sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
@@ -115,7 +113,7 @@ function onTouchTarget(event) {
         isTouch = false;
         let movedElements = dragElement.children;
         let targetElement = event.currentTarget;
-        if (this.onDropCallback(sourceElement, targetElement, movedElements)) {
+        if (targetElement =! sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
