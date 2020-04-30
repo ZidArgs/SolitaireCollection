@@ -1,11 +1,19 @@
 const fs = require('fs');
 const BLACKLIST = new Set([
     "/dist.js",
-    "/index.json",
     "/package.json",
-    "/.git",
-    "/sw.js_template"
+    "/.git"
 ]);
+function getDate() {
+    let date = new Date();
+    let Y = date.getFullYear();
+    let M = ("0"+(date.getMonth()+1)).slice(-2);
+    let D = ("0"+date.getDate()).slice(-2);
+    let h = ("0"+date.getHours()).slice(-2);
+    let m = ("0"+date.getMinutes()).slice(-2);
+    let s = ("0"+date.getSeconds()).slice(-2);
+    return `${D}.${M}.${Y}-${h}:${m}:${s}`;
+}
 function resolveFiles(currentPath) {
     let result = [];
     let files = fs.readdirSync(currentPath , {withFileTypes: true});
@@ -27,15 +35,44 @@ function resolveFiles(currentPath) {
     return result;
 }
 let files = resolveFiles(__dirname);
-//files.push("/");
-let content = {
-    version: 0,
-    data: files
-};
-if (fs.existsSync("index.json")) {
-    let oldIndex = JSON.parse(fs.readFileSync("index.json"));
-    content.version = oldIndex.version + 1;
+
+fs.writeFileSync("sw.js",
+`const CACHE_NAME = "${getDate()}";
+const FILES = ${JSON.stringify(files, null, 4)};
+
+this.addEventListener('install', function(event) {
+    event.waitUntil(registerCachedFiles());
+});
+
+self.addEventListener('activate', function(event) {
+    clients.claim();
+    event.waitUntil(removeOldCaches());
+});
+
+this.addEventListener('fetch', async function(event) {
+    event.respondWith(getResponse(event.request));
+});
+
+async function registerCachedFiles(request) {
+    var cache = await caches.open(CACHE_NAME);
+    return cache.addAll(FILES);
 }
-let tpl = fs.readFileSync("sw.js_template");
-fs.writeFileSync("sw.js", `const CACHE_NAME = "${content.version}";\nconst FILES = ${JSON.stringify(content.data, null, 4)};\n\n${tpl}`);
-fs.writeFileSync("index.json", JSON.stringify(content));
+
+async function getResponse(request) {
+    var cache = await caches.open(CACHE_NAME);
+    let response = await cache.match(request.url);
+    if (!response) {
+        response = await fetch(request);
+        cache.add(response.clone())
+    }
+    return response;
+}
+
+async function removeOldCaches() {
+    let keys = await caches.keys();
+    for (let key of keys) {
+        if (key != CACHE_NAME) {
+            await caches.delete(key);
+        }
+    }
+}`);

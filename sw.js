@@ -1,4 +1,4 @@
-const CACHE_NAME = "8";
+const CACHE_NAME = "30.04.2020-18:38:00";
 const FILES = [
     "/games/freecell/index.css",
     "/games/freecell/index.html",
