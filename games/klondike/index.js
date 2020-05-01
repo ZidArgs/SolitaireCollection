@@ -28,7 +28,7 @@ const MENU_PAUSE = new Menu({
         content: "RESTART",
         handler: async function() {
             if (await Dialog.confirm("Do you want to restart the current game?")) {
-                await gameStorage.restart();
+                gameStorage.restart();
                 return true;
             }
             return false;
@@ -61,16 +61,16 @@ const MENU_WIN = new Menu({
     }]
 });
 
-const GAME_NAME = "freecell";
+const GAME_NAME = "klondike";
 const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
 const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const PLAYGROUND = [
     "col_0", "col_1", "col_2", "col_3",
-    "col_4", "col_5", "col_6", "col_7"
+    "col_4", "col_5", "col_6"
 ];
 const CELLS = [
-    "ph_0", "ph_1", "ph_2", "ph_3"
+    "ph_0", "ph_1"
 ];
 const GOALS = [
     "goal_spades", "goal_hearts", "goal_clubs", "goal_diamonds"
@@ -105,11 +105,11 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
         if (!!last) {
             if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                 if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
-                    return isTurnPossible(source, target, stack);
+                    return true;
                 }
             }
         } else {
-            return isTurnPossible(source, target, stack);
+            return true;
         }
         return false;
     }
@@ -145,6 +145,10 @@ DRAG_DROP.onDropChangedCallback = async function(source, target, stack) {
         MENU_WIN.show();
     } else {
         await gameStorage.save();
+        let last = source.lastElementChild;
+        if (!!last) {
+            last.revealed = true;
+        }
     }
 }
 
@@ -159,12 +163,18 @@ async function newGame() {
     for (let i of PLAYGROUND) {
         cols.push(document.getElementById(i));
     }
+    DECK.collect();
     DECK.shuffle();
-    for (let i = 0; i < DECK.length; ++i) {
-        cols[i % cols.length].append(DECK.draw());
+    for (let i = 0; i < cols.length; ++i) {
+        for (let j = i; j < cols.length; ++j) {
+            cols[j].append(DECK.draw());
+        }
+        let last = cols[i].lastElementChild;
+        if (!!last) {
+            last.revealed = true;
+        }
     }
-    await gameStorage.reset();
-    await gameStorage.save();
+    //gameStorage.save();
 }
 
 function autoStack() {
@@ -211,24 +221,6 @@ function checkWin() {
     return true;
 }
 
-function isTurnPossible(source, target, stack) {
-    let freeCells = 0;
-    let freeCols = 0;
-    for (let i of CELLS) {
-        let el = document.getElementById(i);
-        if (!el.children.length) {
-            freeCells++;
-        }
-    }
-    for (let i of PLAYGROUND) {
-        let el = document.getElementById(i);
-        if (!el.children.length && el != source && el != target) {
-            freeCols++;
-        }
-    }
-    return stack.length <= (2 ** freeCols) * (freeCells + 1);
-}
-
 !async function() {
     let card_theme = await SettingsStorage.get("card_theme", "french");
     let card_back = await SettingsStorage.get("card_back", "fiber_red");
@@ -267,7 +259,7 @@ function createDeck(card_back, card_theme) {
             el.theme = card_theme;
             el.suit = suit;
             el.value = value;
-            el.revealed = true;
+            el.revealed = false;
             DECK.add(el);
             CARDS.set(`${suit}_${value}`, el);
             DRAG_DROP.registerDragElement(el);
