@@ -148,7 +148,6 @@ export default class Dialog extends HTMLElement {
 
     close() {
         document.body.removeChild(this);
-        this.dispatchEvent(new Event('close'));
     }
 
 }

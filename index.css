@@ -52,8 +52,8 @@ body > * {
     background-color: rgba(255,255,255,0.2);
 }
 .game-choice .game-preview {
-    width: 32vmin;
-    height: 18vmin;
+    width: 25vmin;
+    height: 20vmin;
     margin-right: 2vmax;
     background-repeat: no-repeat;
     background-size: contain;

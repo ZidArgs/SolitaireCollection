@@ -155,15 +155,17 @@ async function startGame() {
 }
 
 async function newGame() {
+    await gameStorage.reset();
     let cols = [];
     for (let i of PLAYGROUND) {
         cols.push(document.getElementById(i));
     }
     DECK.shuffle();
     for (let i = 0; i < DECK.length; ++i) {
-        cols[i % cols.length].append(DECK.draw());
+        let card = DECK.draw();
+        card.revealed = true;
+        cols[i % cols.length].append(card);
     }
-    await gameStorage.reset();
     await gameStorage.save();
 }
 

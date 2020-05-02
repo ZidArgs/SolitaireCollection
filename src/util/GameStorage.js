@@ -24,6 +24,7 @@ function setState(fields, cards, state) {
     for (let i of fields) {
         let data = state[i];
         let target = document.getElementById(i);
+        if (!data) continue;
         data.forEach(el => {
             let card = cards.get(`${el.suit}_${el.value}`);
             card.revealed = el.revealed;
@@ -40,16 +41,31 @@ export default class GameStorage {
         CARDS.set(this, cards);
     }
 
-    async save() {
+    async get(key) {
+        let name = NAME.get(this);
+        let savestate = await storage.get(name);
+        if (!!savestate && !!savestate.current.data) {
+            return savestate.current.data[key];
+        }
+        return null;
+    }
+
+    async save(data = {}) {
         let name = NAME.get(this);
         let fields = FIELDS.get(this);
         let savestate = await storage.get(name);
         if (!!savestate) {
             savestate.steps.push(savestate.current);
-            savestate.current = getState(fields);
+            savestate.current = {
+                state: getState(fields),
+                data: Object.assign({}, savestate.current.data, data)
+            }
         } else {
             savestate = {
-                current: getState(fields),
+                current: {
+                    state: getState(fields),
+                    data: Object.assign({}, data)
+                },
                 steps: []
             };
         }
@@ -62,7 +78,13 @@ export default class GameStorage {
         let cards = CARDS.get(this);
         let savestate = await storage.get(name);
         if (!!savestate) {
-            setState(fields, cards, savestate.current);
+            if (!savestate.current.state) {
+                savestate.current = {
+                    state: savestate.current,
+                    data: {}
+                }
+            }
+            setState(fields, cards, savestate.current.state);
             return true;
         }
         return false;
@@ -77,7 +99,7 @@ export default class GameStorage {
             savestate.current = savestate.steps[0];
             savestate.steps = [];
             await storage.set(name, savestate);
-            setState(fields, cards, savestate.current);
+            setState(fields, cards, savestate.current.state);
         }
     }
 
@@ -89,7 +111,7 @@ export default class GameStorage {
         if (!!savestate.steps.length) {
             savestate.current = savestate.steps.pop();
             await storage.set(name, savestate);
-            setState(fields, cards, savestate.current);
+            setState(fields, cards, savestate.current.state);
         }
     }
 

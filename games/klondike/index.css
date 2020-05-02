@@ -22,7 +22,7 @@ body {
     display: grid;
     justify-content: center;
     justify-items: center;
-    grid-template-columns: repeat(3, calc(8vw * var(--card-scale, 1))) 10vw repeat(4, calc(8vw * var(--card-scale, 1)));
+    grid-template-columns: calc(8vw * var(--card-scale, 1)) calc(16vw * var(--card-scale, 1)) 10vw repeat(4, calc(8vw * var(--card-scale, 1)));
     grid-gap: 2vw;
     height: calc(12vw * var(--card-scale, 1));
 }

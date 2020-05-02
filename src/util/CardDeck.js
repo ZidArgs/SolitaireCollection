@@ -2,7 +2,7 @@ const CARDS = new WeakMap();
 const CURRENT = new WeakMap();
 
 //TODO add theming
-//TODO create cards in here (remove add function)
+//TODO create cards in here (replace add function)
 
 /*
     for (let suit of SUITS) {
@@ -35,6 +35,7 @@ export default class CardDeck {
         let cards = CARDS.get(this);
         for (let card of cards) {
             card.remove();
+            card.revealed = false;
         }
         CURRENT.set(this, [...cards]);
     }
@@ -55,7 +56,7 @@ export default class CardDeck {
     }
 
     peek() {
-        let card = CURRENT.get(this).peek()
+        let [card] = CURRENT.get(this).slice(-1);
         return card;
     }
 

@@ -1,6 +1,5 @@
-const CACHE_NAME = "01.05.2020-15:47:43";
+const CACHE_NAME = "02.05.2020-03:11:11";
 const FILES = [
-    "/games/Klondike.js",
     "/games/freecell/index.css",
     "/games/freecell/index.html",
     "/games/freecell/",
@@ -17,6 +16,7 @@ const FILES = [
     "/img/favicons/96.png",
     "/img/favicons/logo.svg",
     "/img/games/freecell.png",
+    "/img/games/klondike.png",
     "/img/playing_cards/back/fiber_black.svg",
     "/img/playing_cards/back/fiber_blue.svg",
     "/img/playing_cards/back/fiber_red.svg",
@@ -83,12 +83,17 @@ const FILES = [
     "/",
     "/manifest.json",
     "/src/index.js",
+    "/src/ui/CircleSelect.js",
     "/src/ui/Dialog.js",
     "/src/ui/Menu.js",
+    "/src/ui/Option.js",
     "/src/ui/PlayingCard.js",
     "/src/ui/PlayingCardColumn.js",
+    "/src/ui/PlayingCardDeck.js",
+    "/src/ui/PlayingCardDrawer.js",
     "/src/ui/PlayingCardGoal.js",
     "/src/ui/PlayingCardPlaceholder.js",
+    "/src/ui/Settings.js",
     "/src/util/CardDeck.js",
     "/src/util/DragDrop.js",
     "/src/util/GameStorage.js",
