@@ -2,6 +2,7 @@ import IDBStorage from "/src/util/IDBStorage.js";
 import GameStorage from "/src/util/GameStorage.js";
 import DragDrop from "/src/util/DragDrop.js";
 import CardDeck from "/src/util/CardDeck.js";
+import WinCondition from "/src/util/WinCondition.js";
 import PlayingCardColumn from "/src/ui/PlayingCardColumn.js";
 import PlayingCardPlaceholder from "/src/ui/PlayingCardPlaceholder.js";
 import PlayingCardGoal from "/src/ui/PlayingCardGoal.js";
@@ -113,6 +114,13 @@ const CARDS = new Map();
 const CARD_DECK = new CardDeck();
 let gameStorage = null;
 
+WinCondition.set({
+    goal_spades:   ["S_A", "S_2", "S_3", "S_4", "S_5", "S_6", "S_7", "S_8", "S_9", "S_10", "S_J", "S_Q", "S_K"],
+    goal_hearts:   ["H_A", "H_2", "H_3", "H_4", "H_5", "H_6", "H_7", "H_8", "H_9", "H_10", "H_J", "H_Q", "H_K"],
+    goal_clubs:    ["C_A", "C_2", "C_3", "C_4", "C_5", "C_6", "C_7", "C_8", "C_9", "C_10", "C_J", "C_Q", "C_K"],
+    goal_diamonds: ["D_A", "D_2", "D_3", "D_4", "D_5", "D_6", "D_7", "D_8", "D_9", "D_10", "D_J", "D_Q", "D_K"]
+});
+
 // on card starts to drag - return if possibe
 DRAG_DROP.onDragCallback = function(source, stack) {
     let buffer = Array.from(stack);
@@ -176,7 +184,7 @@ DRAG_DROP.onDropCallback = function(source, target, stack) { // TODO only kings 
 // on card changed place
 DRAG_DROP.onDropChangedCallback = async function(source, target, stack) {
     autoStack();
-    if (checkWin()) {
+    if (WinCondition.check()) {
         await gameStorage.reset();
         MENU_WIN.show();
     } else {
@@ -251,18 +259,6 @@ function autoStack() {
     }
 }
 
-function checkWin() {
-    for (let i of PLAYGROUND) {
-        if (document.getElementById(i).children.length != 0) {
-            return false;
-        }
-    }
-    if (document.getElementById(DECK).children.length != 0) {
-        return false;
-    }
-    return true;
-}
-
 !async function() {
     let card_theme = await SettingsStorage.get("card_theme", "french");
     let card_back = await SettingsStorage.get("card_back", "fiber_red");
@@ -295,7 +291,7 @@ function checkWin() {
             await gameStorage.save();
         } else {
             let drawnCards = await gameStorage.get("drawn_cards");
-            if (maxDrawsCount != 0 && drawnCards < maxDrawsCount) {
+            if (maxDrawsCount == 0 || drawnCards < maxDrawsCount) {
                 while(!!drawerElement.children.length) {
                     let card = drawerElement.lastElementChild;
                     card.revealed = false;

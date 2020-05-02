@@ -42,6 +42,7 @@ const FILES = ${JSON.stringify(files, null, 4)};
 
 this.addEventListener('install', function(event) {
     event.waitUntil(registerCachedFiles());
+    return self.skipWaiting();
 });
 
 self.addEventListener('activate', function(event) {

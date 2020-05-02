@@ -1,4 +1,4 @@
-const CACHE_NAME = "02.05.2020-03:11:11";
+const CACHE_NAME = "02.05.2020-04:37:18";
 const FILES = [
     "/games/freecell/index.css",
     "/games/freecell/index.html",
@@ -99,11 +99,13 @@ const FILES = [
     "/src/util/GameStorage.js",
     "/src/util/IDBStorage.js",
     "/src/util/Template.js",
+    "/src/util/WinCondition.js",
     "/sw.js"
 ];
 
 this.addEventListener('install', function(event) {
     event.waitUntil(registerCachedFiles());
+    return self.skipWaiting();
 });
 
 self.addEventListener('activate', function(event) {
