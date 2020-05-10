@@ -1,5 +1,6 @@
-const CACHE_NAME = "02.05.2020-04:37:18";
+const CACHE_NAME = "10.05.2020-03:21:04";
 const FILES = [
+    "/LICENSE",
     "/games/freecell/index.css",
     "/games/freecell/index.html",
     "/games/freecell/",
