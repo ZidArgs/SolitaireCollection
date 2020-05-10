@@ -11,7 +11,7 @@ function onDragStart(event) {
     if (!!isTouch) return;
     let moved = event.currentTarget;
     let stack = moved.getStackUp();
-    if (this.onDragCallback(sourceElement, stack)) {
+    if (!dragElement && this.onDragCallback(sourceElement, stack)) {
         shiftX = event.clientX - moved.getBoundingClientRect().left;
         shiftY = event.clientY - moved.getBoundingClientRect().top;
         sourceElement = moved.parentElement;
@@ -25,6 +25,7 @@ function onDragStart(event) {
         document.body.append(dragElement);
         document.addEventListener('mousemove', this.bound.onDragMove);
         document.body.addEventListener("mouseup", this.bound.onDragEndAnywhere);
+        document.addEventListener('mouseout', this.bound.onDragEndLeavePage);
     }
 }
 
@@ -53,6 +54,7 @@ function onDragEnd(event) {
         dragElement = null;
         document.removeEventListener('mousemove', this.bound.onDragMove);
         document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
+        document.removeEventListener('mouseout', this.bound.onDragEndLeavePage);
     }
 }
 
@@ -66,6 +68,13 @@ function onDragEndAnywhere(event) {
         dragElement = null;
         document.removeEventListener('mousemove', this.bound.onDragMove);
         document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
+        document.removeEventListener('mouseout', this.bound.onDragEndLeavePage);
+    }
+}
+
+function onDragEndLeavePage(event) {
+    if (!event.relatedTarget || event.relatedTarget.nodeName == "HTML") {
+        this.bound.onDragEndAnywhere(event);
     }
 }
 
@@ -150,6 +159,7 @@ export default class DragDrop {
             onDragMove: onDragMove.bind(this),
             onDragEnd: onDragEnd.bind(this),
             onDragEndAnywhere: onDragEndAnywhere.bind(this),
+            onDragEndLeavePage: onDragEndLeavePage.bind(this),
             onTouchCard: onTouchCard.bind(this),
             onTouchTarget: onTouchTarget.bind(this),
             onTouchOther: onTouchOther.bind(this),
