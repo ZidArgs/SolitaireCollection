@@ -57,6 +57,7 @@ const TPL = new Template(`
             background-color: transparent;
             border: none;
             -webkit-appearance: none;
+            user-select: none;
             cursor: pointer;
             font-size: 2vmax;
         }

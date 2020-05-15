@@ -27,6 +27,7 @@ const TPL = new Template(`
             flex-shrink: 0;
             border: none;
             background: none;
+            user-select: none;
             color: inherit;
             cursor: pointer;
             opacity: 0.5;
