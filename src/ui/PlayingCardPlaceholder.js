@@ -2,14 +2,17 @@ import Template from "/src/util/Template.js";
 
 const TPL = new Template(`
     <style>
-        :host {
+        * {
             position: relative;
-            display: block;
-            width: calc(8vw * var(--card-scale, 1));
-            height: calc(12vw * var(--card-scale, 1));
+            box-sizing: border-box;
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;
+        }
+        :host {
+            display: block;
+            width: calc(8vw * var(--card-scale, 1));
+            height: calc(12vw * var(--card-scale, 1));
         }
         #face {
             width: calc(8vw * var(--card-scale, 1));

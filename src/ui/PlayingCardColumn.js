@@ -2,15 +2,18 @@ import Template from "/src/util/Template.js";
 
 const TPL = new Template(`
     <style>
-        :host {
+        * {
             position: relative;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        :host {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: calc(8vw * var(--card-scale, 1));
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
         }
         #face {
             position: absolute;

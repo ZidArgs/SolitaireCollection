@@ -6,14 +6,14 @@ const TPL = new Template(`
         * {
             position: relative;
             box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
         :host {
             display: inline-flex;
             width: 200px;
             height: 40px;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            user-select: none;
         }
         :host(:not([readonly])),
         :host([readonly="false"]) {

@@ -16,6 +16,10 @@
         <script src="/src/index.js" type="module"></script>
         <script type="text/javascript">
             document.write(`<base href="${document.location.origin}" />`);
+            window.addEventListener('contextmenu', function() {
+                event.preventDefault();
+                return false;
+            });
         </script>
     </head>
     <body>

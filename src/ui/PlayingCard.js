@@ -2,12 +2,15 @@ import Template from "/src/util/Template.js";
 
 const TPL = new Template(`
     <style>
-        :host {
+        * {
             position: relative;
-            display: block;
+            box-sizing: border-box;
             -webkit-user-select: none;
             -moz-user-select: none;
             user-select: none;
+        }
+        :host {
+            display: block;
         }
         #face {
             width: calc(8vw * var(--card-scale, 1));

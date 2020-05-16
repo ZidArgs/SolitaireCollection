@@ -5,6 +5,13 @@ import "/src/ui/CircleSelect.js";
 
 const TPL = new Template(`
     <style>
+        * {
+            position: relative;
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
         :host {
             position: absolute;
             display: flex;
@@ -57,7 +64,6 @@ const TPL = new Template(`
             background-color: transparent;
             border: none;
             -webkit-appearance: none;
-            user-select: none;
             cursor: pointer;
             font-size: 2vmax;
         }
