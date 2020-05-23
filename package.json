@@ -5,7 +5,8 @@
   "license": "MIT",
   "description": "Collection of solitaire games for the web and mobile",
   "scripts": {
-    "index": "node dist.js"
+    "index": "node dist.js",
+    "serve": "serve . -p 5012"
   },
   "repository": {
     "type": "git",

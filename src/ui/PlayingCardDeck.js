@@ -27,7 +27,6 @@ const TPL = new Template(`
             flex: 1;
             top: calc(12vw * var(--card-scale, 1) - .1vmax);
             max-height: 0.08vw;
-            transform: rotate(180deg);
             pointer-events: none;
         }
     </style>
