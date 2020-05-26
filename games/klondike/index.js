@@ -288,7 +288,12 @@ function autoStack() {
                 }
             }
             autoStack();
-            await gameStorage.save();
+            if (WinCondition.check()) {
+                await gameStorage.reset();
+                MENU_WIN.show();
+            } else {
+                await gameStorage.save();
+            }
         } else {
             let drawnCards = await gameStorage.get("drawn_cards");
             if (maxDrawsCount == 0 || drawnCards < maxDrawsCount) {
