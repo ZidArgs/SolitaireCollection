@@ -139,7 +139,7 @@ DRAG_DROP.onDragCallback = function(source, stack) {
 }
 
 // on card starts to drop - return if possibe
-DRAG_DROP.onDropCallback = function(source, target, stack) { // TODO only kings do drop on empty columns
+DRAG_DROP.onDropCallback = function(source, target, stack) {
     if (target instanceof PlayingCardColumn) {
         let last = target.lastElementChild;
         let first = stack[0]; 
