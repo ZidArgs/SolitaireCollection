@@ -119,12 +119,12 @@ this.addEventListener('fetch', async function(event) {
 });
 
 async function registerCachedFiles(request) {
-    var cache = await caches.open(CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     return cache.addAll(FILES);
 }
 
 async function getResponse(request) {
-    var cache = await caches.open(CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     let response = await cache.match(request.url);
     if (!response) {
         response = await fetch(request);
@@ -134,7 +134,7 @@ async function getResponse(request) {
 }
 
 async function removeOldCaches() {
-    let keys = await caches.keys();
+    const keys = await caches.keys();
     for (let key of keys) {
         if (key != CACHE_NAME) {
             await caches.delete(key);
