@@ -93,8 +93,8 @@ export default class CircleSelect extends HTMLElement {
 
     connectedCallback() {
         if (!this.value) {
-            let all = this.querySelectorAll("[value]");
-            if (!!all.length) {
+            const all = this.querySelectorAll("[value]");
+            if (all.length) {
                 this.value = all[0].value;
             }
         }
@@ -109,7 +109,7 @@ export default class CircleSelect extends HTMLElement {
     }
 
     get readonly() {
-        let val = this.getAttribute('readonly');
+        const val = this.getAttribute('readonly');
         return !!val && val != "false";
     }
 
@@ -125,15 +125,15 @@ export default class CircleSelect extends HTMLElement {
         switch (name) {
             case 'value':
                 if (oldValue != newValue) {
-                    let oe = this.querySelector(`.active`);
-                    if (!!oe) {
+                    const oe = this.querySelector(`.active`);
+                    if (oe) {
                         oe.classList.remove("active");
                     }
-                    let ne = this.querySelector(`[value="${newValue}"]`);
-                    if (!!ne) {
+                    const ne = this.querySelector(`[value="${newValue}"]`);
+                    if (ne) {
                         ne.classList.add("active");
                     }
-                    let event = new Event('change');
+                    const event = new Event('change');
                     event.oldValue = oldValue;
                     event.newValue = newValue;
                     event.value = newValue;
@@ -145,9 +145,9 @@ export default class CircleSelect extends HTMLElement {
 
     next(ev) {
         if (!this.readonly) {
-            let all = this.querySelectorAll("[value]");
-            if (!!all.length) {
-                let opt = this.querySelector(`[value="${this.value}"]`);
+            const all = this.querySelectorAll("[value]");
+            if (all.length) {
+                const opt = this.querySelector(`[value="${this.value}"]`);
                 if (!!opt && !!opt.nextElementSibling) {
                     this.value = opt.nextElementSibling.getAttribute("value");
                 } else {
@@ -161,13 +161,13 @@ export default class CircleSelect extends HTMLElement {
 
     prev(ev) {
         if (!this.readonly) {
-            let all = this.querySelectorAll("[value]");
-            if (!!all.length) {
-                let opt = this.querySelector(`[value="${this.value}"]`);
+            const all = this.querySelectorAll("[value]");
+            if (all.length) {
+                const opt = this.querySelector(`[value="${this.value}"]`);
                 if (!!opt && !!opt.previousElementSibling) {
                     this.value = opt.previousElementSibling.getAttribute("value");
                 } else {
-                    this.value = all[all.length-1].getAttribute("value");
+                    this.value = all[all.length - 1].getAttribute("value");
                 }
             }
         }

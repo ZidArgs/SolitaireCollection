@@ -135,7 +135,7 @@ async function getResponse(request) {
 
 async function removeOldCaches() {
     const keys = await caches.keys();
-    for (let key of keys) {
+    for (const key of keys) {
         if (key != CACHE_NAME) {
             await caches.delete(key);
         }

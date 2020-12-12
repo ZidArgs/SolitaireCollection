@@ -32,8 +32,8 @@ export default class CardDeck {
     }
 
     collect() {
-        let cards = CARDS.get(this);
-        for (let card of cards) {
+        const cards = CARDS.get(this);
+        for (const card of cards) {
             card.remove();
             card.revealed = false;
         }
@@ -41,8 +41,8 @@ export default class CardDeck {
     }
 
     shuffle() {
-        let old = CARDS.get(this);
-        let cards = [];
+        const old = CARDS.get(this);
+        const cards = [];
         while (old.length > 0) {
             cards.push(old.splice(Math.floor(Math.random() * old.length), 1)[0]);
         }
@@ -51,12 +51,12 @@ export default class CardDeck {
     }
 
     draw() {
-        let card = CURRENT.get(this).pop()
+        const card = CURRENT.get(this).pop()
         return card;
     }
 
     peek() {
-        let [card] = CURRENT.get(this).slice(-1);
+        const [card] = CURRENT.get(this).slice(-1);
         return card;
     }
 

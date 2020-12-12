@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
 document.body.style.setProperty("--card-scale", "1");
 document.body.style.setProperty("--background-color", "#00aa33");
 
-let SettingsStorage = new IDBStorage("settings");
+const SettingsStorage = new IDBStorage("settings");
 
 // create menus
 const MENU_PAUSE = new Menu({
@@ -25,7 +25,7 @@ const MENU_PAUSE = new Menu({
     buttons: [{
         content: "RESUME",
         action: Menu.CLOSE
-    },{
+    }, {
         content: "RESTART",
         handler: async function() {
             if (await Dialog.confirm("Do you want to restart the current game?")) {
@@ -34,7 +34,7 @@ const MENU_PAUSE = new Menu({
             }
             return false;
         }
-    },{
+    }, {
         content: "NEW GAME",
         handler: async function() {
             if (await Dialog.confirm("Do you want to start a new game?")) {
@@ -43,7 +43,7 @@ const MENU_PAUSE = new Menu({
             }
             return false;
         }
-    },{
+    }, {
         content: "QUIT",
         action: Menu.BACK
     }]
@@ -56,7 +56,7 @@ const MENU_WIN = new Menu({
             await newGame();
             return true;
         }
-    },{
+    }, {
         content: "QUIT",
         action: Menu.BACK
     }]
@@ -90,10 +90,10 @@ WinCondition.set({
 
 // on card starts to drag - return if possibe
 DRAG_DROP.onDragCallback = function(source, stack) {
-    let buffer = Array.from(stack);
+    const buffer = Array.from(stack);
     let last = buffer.pop();
-    while (!!buffer.length) {
-        let next = buffer.pop();
+    while (buffer.length) {
+        const next = buffer.pop();
         if (SUITS.indexOf(last.suit) % 2 == SUITS.indexOf(next.suit) % 2) {
             return false;
         }
@@ -108,9 +108,9 @@ DRAG_DROP.onDragCallback = function(source, stack) {
 // on card starts to drop - return if possibe
 DRAG_DROP.onDropCallback = function(source, target, stack) {
     if (target instanceof PlayingCardColumn) {
-        let last = target.lastElementChild;
-        let first = stack[0];
-        if (!!last) {
+        const last = target.lastElementChild;
+        const first = stack[0];
+        if (last) {
             if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                 if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
                     return isTurnPossible(source, target, stack);
@@ -129,10 +129,10 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
     }
     if (target instanceof PlayingCardGoal) {
         if (stack.length == 1) {
-            let last = target.lastElementChild;
-            let first = stack[0];
+            const last = target.lastElementChild;
+            const first = stack[0];
             if (target.suit == first.suit) {
-                if (!!last) {
+                if (last) {
                     if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) - 1) {
                         return true;
                     }
@@ -164,13 +164,13 @@ async function startGame() {
 
 async function newGame() {
     await gameStorage.reset();
-    let cols = [];
-    for (let i of PLAYGROUND) {
+    const cols = [];
+    for (const i of PLAYGROUND) {
         cols.push(document.getElementById(i));
     }
     DECK.shuffle();
     for (let i = 0; i < DECK.length; ++i) {
-        let card = DECK.draw();
+        const card = DECK.draw();
         card.revealed = true;
         cols[i % cols.length].append(card);
     }
@@ -179,27 +179,27 @@ async function newGame() {
 
 function autoStack() {
     let changed = false;
-    let goals = [];
-    for (let i of GOALS) {
+    const goals = [];
+    for (const i of GOALS) {
         goals.push(document.getElementById(i));
     }
-    for (let i of PLAYGROUND.concat(CELLS)) {
-        let col = document.getElementById(i);
-        let first = col.lastElementChild;
-        if (!!first) {
-            let target = goals[SUITS.indexOf(first.suit)];
-            let last = target.lastElementChild;
+    for (const i of PLAYGROUND.concat(CELLS)) {
+        const col = document.getElementById(i);
+        const first = col.lastElementChild;
+        if (first) {
+            const target = goals[SUITS.indexOf(first.suit)];
+            const last = target.lastElementChild;
             if (!last && VALUES.indexOf(first.value) == 0) {
                 target.append(first);
                 changed = true;
             } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
-                function checkGoals(goal) {
+                const checkGoals = goal => {
                     if (!goal.lastElementChild) {
                         return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
                     } else {
                         return VALUES.indexOf(first.value) <= VALUES.indexOf(goal.lastElementChild.value) + AUTOSTACK_DIFF;
                     }
-                }
+                };
                 if (goals.every(checkGoals)) {
                     target.append(first);
                     changed = true;
@@ -215,14 +215,14 @@ function autoStack() {
 function isTurnPossible(source, target, stack) {
     let freeCells = 0;
     let freeCols = 0;
-    for (let i of CELLS) {
-        let el = document.getElementById(i);
+    for (const i of CELLS) {
+        const el = document.getElementById(i);
         if (!el.children.length) {
             freeCells++;
         }
     }
-    for (let i of PLAYGROUND) {
-        let el = document.getElementById(i);
+    for (const i of PLAYGROUND) {
+        const el = document.getElementById(i);
         if (!el.children.length && el != source && el != target) {
             freeCols++;
         }
@@ -231,17 +231,17 @@ function isTurnPossible(source, target, stack) {
 }
 
 !async function() {
-    let card_theme = await SettingsStorage.get("card_theme", "french");
-    let card_back = await SettingsStorage.get("card_back", "fiber_red");
+    const card_theme = await SettingsStorage.get("card_theme", "french");
+    const card_back = await SettingsStorage.get("card_back", "fiber_red");
 
-    let pg_els = [];
-    for (let i of PLAYGROUND) {
+    const pg_els = [];
+    for (const i of PLAYGROUND) {
         pg_els.push(document.getElementById(i));
     }
-    for (let i of CELLS) {
+    for (const i of CELLS) {
         pg_els.push(document.getElementById(i));
     }
-    for (let i of GOALS) {
+    for (const i of GOALS) {
         pg_els.push(document.getElementById(i));
     }
     DRAG_DROP.registerDropTarget(pg_els);
@@ -261,9 +261,9 @@ function isTurnPossible(source, target, stack) {
 }();
 
 function createDeck(card_back, card_theme) {
-    for (let suit of SUITS) {
-        for (let value of VALUES) {
-            let el = document.createElement('cgc-playingcard');
+    for (const suit of SUITS) {
+        for (const value of VALUES) {
+            const el = document.createElement('cgc-playingcard');
             el.back = card_back;
             el.theme = card_theme;
             el.suit = suit;

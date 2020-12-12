@@ -68,7 +68,7 @@ export default class PlayingCardGoal extends HTMLElement {
             case 'suit':
                 if (oldValue != newValue) {
                     if (this.theme && this.suit) {
-                        let src = `url("/img/playing_cards/goals/${this.theme}/${this.suit}.svg")`;
+                        const src = `url("/img/playing_cards/goals/${this.theme}/${this.suit}.svg")`;
                         this.shadowRoot.getElementById("face").style.backgroundImage = src;
                     } else {
                         this.shadowRoot.getElementById("face").style.backgroundImage = "";

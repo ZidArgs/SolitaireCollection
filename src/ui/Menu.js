@@ -85,21 +85,18 @@ const TPL = new Template(`
 
 export default class Menu extends HTMLElement {
 
-    static BACK = "BACK";
-    static CLOSE = "CLOSE";
-
     constructor(options = {}) {
         super();
         this.attachShadow({mode: 'open'});
         this.shadowRoot.append(TPL.generate());
         // build menu
-        if (!!options.title) {
+        if (options.title) {
             this.shadowRoot.getElementById("title").innerHTML = options.title;
         }
-        let buttons = this.shadowRoot.getElementById("buttons");
+        const buttons = this.shadowRoot.getElementById("buttons");
         buttons.innerHTML = "";
-        for (let button of options.buttons) {
-            let el = document.createElement("button");
+        for (const button of options.buttons) {
+            const el = document.createElement("button");
             el.innerHTML = button.content;
             if (typeof button.handler == "function") {
                 el.addEventListener('click', async event => {
@@ -137,5 +134,8 @@ export default class Menu extends HTMLElement {
     }
 
 }
+
+Menu.BACK = "BACK";
+Menu.CLOSE = "CLOSE";
 
 customElements.define('cgc-menu', Menu);

@@ -6,7 +6,7 @@ export default class Template {
         if (template instanceof HTMLTemplateElement) {
             TEMPLATE.set(this, template);
         } else {
-            let buf = document.createElement('template');
+            const buf = document.createElement('template');
             if (template instanceof HTMLElement) {
                 buf.append(template);
             } else if (typeof template === "string") {

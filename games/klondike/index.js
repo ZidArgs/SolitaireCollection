@@ -20,7 +20,7 @@ if ('serviceWorker' in navigator) {
 document.body.style.setProperty("--card-scale", "1");
 document.body.style.setProperty("--background-color", "#00aa33");
 
-let SettingsStorage = new IDBStorage("settings");
+const SettingsStorage = new IDBStorage("settings");
 
 // create menus
 const SETTINGS = new Settings([{
@@ -31,11 +31,11 @@ const SETTINGS = new Settings([{
     options: [{
         title: "1",
         value: 1
-    },{
+    }, {
         title: "3",
         value: 3
     }]
-},{
+}, {
     title: "Maximum draw rounds",
     type: "number",
     default: "3",
@@ -43,7 +43,7 @@ const SETTINGS = new Settings([{
     options: [{
         title: "∞",
         value: 0
-    },{
+    }, {
         title: "3",
         value: 3
     }]
@@ -53,7 +53,7 @@ const MENU_PAUSE = new Menu({
     buttons: [{
         content: "RESUME",
         action: Menu.CLOSE
-    },{
+    }, {
         content: "RESTART",
         handler: async function() {
             if (await Dialog.confirm("Do you want to restart the current game?")) {
@@ -62,7 +62,7 @@ const MENU_PAUSE = new Menu({
             }
             return false;
         }
-    },{
+    }, {
         content: "NEW GAME",
         handler: async function() {
             if (await Dialog.confirm("Do you want to start a new game?")) {
@@ -71,13 +71,13 @@ const MENU_PAUSE = new Menu({
             }
             return false;
         }
-    },{
+    }, {
         content: "SETTINGS",
         handler: async function() {
             SETTINGS.show();
             return false;
         }
-    },{
+    }, {
         content: "QUIT",
         action: Menu.BACK
     }]
@@ -90,7 +90,7 @@ const MENU_WIN = new Menu({
             await newGame();
             return true;
         }
-    },{
+    }, {
         content: "QUIT",
         action: Menu.BACK
     }]
@@ -123,10 +123,10 @@ WinCondition.set({
 
 // on card starts to drag - return if possibe
 DRAG_DROP.onDragCallback = function(source, stack) {
-    let buffer = Array.from(stack);
+    const buffer = Array.from(stack);
     let last = buffer.pop();
-    while (!!buffer.length) {
-        let next = buffer.pop();
+    while (buffer.length) {
+        const next = buffer.pop();
         if (SUITS.indexOf(last.suit) % 2 == SUITS.indexOf(next.suit) % 2) {
             return false;
         }
@@ -141,9 +141,9 @@ DRAG_DROP.onDragCallback = function(source, stack) {
 // on card starts to drop - return if possibe
 DRAG_DROP.onDropCallback = function(source, target, stack) {
     if (target instanceof PlayingCardColumn) {
-        let last = target.lastElementChild;
-        let first = stack[0]; 
-        if (!!last) {
+        const last = target.lastElementChild;
+        const first = stack[0];
+        if (last) {
             if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                 if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
                     return true;
@@ -156,10 +156,10 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
     }
     if (target instanceof PlayingCardGoal) {
         if (stack.length == 1) {
-            let last = target.lastElementChild;
-            let first = stack[0];
+            const last = target.lastElementChild;
+            const first = stack[0];
             if (target.suit == first.suit) {
-                if (!!last) {
+                if (last) {
                     if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) - 1) {
                         return true;
                     }
@@ -200,8 +200,8 @@ async function startGame() {
 
 async function newGame() {
     await gameStorage.reset();
-    let cols = [];
-    for (let i of PLAYGROUND) {
+    const cols = [];
+    for (const i of PLAYGROUND) {
         cols.push(document.getElementById(i));
     }
     CARD_DECK.collect();
@@ -210,12 +210,12 @@ async function newGame() {
         for (let j = i; j < cols.length; ++j) {
             cols[j].append(CARD_DECK.draw());
         }
-        let last = cols[i].lastElementChild;
-        if (!!last) {
+        const last = cols[i].lastElementChild;
+        if (last) {
             last.revealed = true;
         }
     }
-    while (!!CARD_DECK.remaining) {
+    while (CARD_DECK.remaining) {
         document.getElementById(DECK).append(CARD_DECK.draw());
     }
     await gameStorage.save({
@@ -225,28 +225,28 @@ async function newGame() {
 
 function autoStack() {
     let changed = false;
-    let goals = [];
-    for (let i of GOALS) {
+    const goals = [];
+    for (const i of GOALS) {
         goals.push(document.getElementById(i));
     }
-    for (let i of PLAYGROUND.concat([DRAWER])) {
-        let col = document.getElementById(i);
-        let first = col.lastElementChild;
-        if (!!first) {
+    for (const i of PLAYGROUND.concat([DRAWER])) {
+        const col = document.getElementById(i);
+        const first = col.lastElementChild;
+        if (first) {
             first.revealed = true;
-            let target = goals[SUITS.indexOf(first.suit)];
-            let last = target.lastElementChild;
+            const target = goals[SUITS.indexOf(first.suit)];
+            const last = target.lastElementChild;
             if (!last && VALUES.indexOf(first.value) == 0) {
                 target.append(first);
                 changed = true;
             } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
-                function checkGoals(goal) {
+                const checkGoals = goal => {
                     if (!goal.lastElementChild) {
                         return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
                     } else {
                         return VALUES.indexOf(first.value) <= VALUES.indexOf(goal.lastElementChild.value) + AUTOSTACK_DIFF;
                     }
-                }
+                };
                 if (goals.every(checkGoals)) {
                     target.append(first);
                     changed = true;
@@ -260,11 +260,11 @@ function autoStack() {
 }
 
 !async function() {
-    let card_theme = await SettingsStorage.get("card_theme", "french");
-    let card_back = await SettingsStorage.get("card_back", "fiber_red");
+    const card_theme = await SettingsStorage.get("card_theme", "french");
+    const card_back = await SettingsStorage.get("card_back", "fiber_red");
 
-    let pg_els = [];
-    for (let i of PLAYGROUND.concat(GOALS)) {
+    const pg_els = [];
+    for (const i of PLAYGROUND.concat(GOALS)) {
         pg_els.push(document.getElementById(i));
     }
     DRAG_DROP.registerDropTarget(pg_els);
@@ -272,15 +272,15 @@ function autoStack() {
     createDeck(card_back, card_theme);
     gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(GOALS).concat([DECK, DRAWER]), CARDS);
 
-    let deckElement = document.getElementById(DECK);
-    let drawerElement = document.getElementById(DRAWER);
+    const deckElement = document.getElementById(DECK);
+    const drawerElement = document.getElementById(DRAWER);
     deckElement.addEventListener("click", async function(event) {
-        let maxDrawsCount = await SettingsStorage.get("klondike.draw_cards_max", 3);
-        if (!!deckElement.children.length) {
-            let cardCount = await SettingsStorage.get("klondike.draw_cards_count", 3);
+        const maxDrawsCount = await SettingsStorage.get("klondike.draw_cards_max", 3);
+        if (deckElement.children.length) {
+            const cardCount = await SettingsStorage.get("klondike.draw_cards_count", 3);
             for (let i = 0; i < cardCount; ++i) {
-                let card = deckElement.lastElementChild;
-                if (!!card) {
+                const card = deckElement.lastElementChild;
+                if (card) {
                     card.revealed = true;
                     drawerElement.append(card);
                 } else {
@@ -295,10 +295,10 @@ function autoStack() {
                 await gameStorage.save();
             }
         } else {
-            let drawnCards = await gameStorage.get("drawn_cards");
+            const drawnCards = await gameStorage.get("drawn_cards");
             if (maxDrawsCount == 0 || drawnCards < maxDrawsCount) {
-                while(!!drawerElement.children.length) {
-                    let card = drawerElement.lastElementChild;
+                while (drawerElement.children.length) {
+                    const card = drawerElement.lastElementChild;
                     card.revealed = false;
                     deckElement.append(card);
                 }
@@ -325,9 +325,9 @@ function autoStack() {
 }();
 
 function createDeck(card_back, card_theme) {
-    for (let suit of SUITS) {
-        for (let value of VALUES) {
-            let el = document.createElement('cgc-playingcard');
+    for (const suit of SUITS) {
+        for (const value of VALUES) {
+            const el = document.createElement('cgc-playingcard');
             el.back = card_back;
             el.theme = card_theme;
             el.suit = suit;

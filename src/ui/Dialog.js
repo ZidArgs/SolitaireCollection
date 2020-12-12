@@ -99,14 +99,14 @@ export default class Dialog extends HTMLElement {
         this.attachShadow({mode: 'open'});
         this.shadowRoot.append(TPL.generate());
 
-        let bdy = this.shadowRoot.getElementById('body');
+        const bdy = this.shadowRoot.getElementById('body');
         if (!!options.text && typeof options.text === "string") {
             bdy.innerHTML = options.text;
         }
-        let footer = this.shadowRoot.getElementById('footer');
+        const footer = this.shadowRoot.getElementById('footer');
 
-        let sbm = this.shadowRoot.getElementById('submit');
-        if (!!options.submit) {
+        const sbm = this.shadowRoot.getElementById('submit');
+        if (options.submit) {
             if (typeof options.submit === "string") {
                 sbm.innerHTML = options.submit;
                 sbm.setAttribute("title", options.submit);
@@ -116,8 +116,8 @@ export default class Dialog extends HTMLElement {
             footer.removeChild(sbm);
         }
 
-        let ccl = this.shadowRoot.getElementById('cancel');
-        if (!!options.cancel) {
+        const ccl = this.shadowRoot.getElementById('cancel');
+        if (options.cancel) {
             if (typeof options.cancel === "string") {
                 ccl.innerHTML = options.cancel;
                 ccl.setAttribute("title", options.cancel);
@@ -130,7 +130,7 @@ export default class Dialog extends HTMLElement {
     
     static confirm(msg) {
         return new Promise(function(resolve) {
-            let d = new Dialog({
+            const d = new Dialog({
                 text: msg,
                 submit: "YES",
                 cancel: "NO"

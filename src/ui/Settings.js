@@ -95,12 +95,12 @@ const TPL = new Template(`
     </div>
 `);
 
-let SettingsStorage = new IDBStorage("settings");
+const SettingsStorage = new IDBStorage("settings");
 
 async function dialogSubmit() {
     if (await Dialog.confirm("To apply the settings, a new game must be started.<br>Do you want to start a new game?")) {
-        let settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
-        for (let el of settings) {
+        const settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
+        for (const el of settings) {
             let value = el.value;
             switch (el.dataset.type) {
                 case "number": value = parseFloat(value); break;
@@ -121,39 +121,36 @@ function dialogCancel() {
 
 export default class Settings extends HTMLElement {
 
-    static BACK = "BACK";
-    static CLOSE = "CLOSE";
-
     constructor(settings = {}) {
         super();
         this.attachShadow({mode: 'open'});
         this.shadowRoot.append(TPL.generate());
 
-        let sbm = this.shadowRoot.getElementById('submit');
+        const sbm = this.shadowRoot.getElementById('submit');
         sbm.onclick = dialogSubmit.bind(this);
 
-        let ccl = this.shadowRoot.getElementById('cancel');
+        const ccl = this.shadowRoot.getElementById('cancel');
         ccl.onclick = dialogCancel.bind(this);
 
         // build settings
-        let container = this.shadowRoot.getElementById("body");
+        const container = this.shadowRoot.getElementById("body");
         container.innerHTML = "";
-        for (let setting of settings) {
-            let el = document.createElement("div");
+        for (const setting of settings) {
+            const el = document.createElement("div");
             el.className = "option";
 
-            let name = document.createElement("div");
+            const name = document.createElement("div");
             name.className = "name";
             name.innerHTML = setting.title;
             el.append(name);
 
-            let select = document.createElement("cgc-circleselect");
+            const select = document.createElement("cgc-circleselect");
             select.className = "select";
             select.dataset.value = setting.value;
             select.dataset.type = setting.type || "string";
             select.dataset.default = setting.default;
-            for (let option of setting.options) {
-                let opt = document.createElement("option");
+            for (const option of setting.options) {
+                const opt = document.createElement("option");
                 opt.value = option.value;
                 opt.innerHTML = option.title;
                 select.append(opt);
@@ -165,8 +162,8 @@ export default class Settings extends HTMLElement {
     }
 
     async show() {
-        let settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
-        for (let el of settings) {
+        const settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
+        for (const el of settings) {
             el.value = await SettingsStorage.get(el.dataset.value, el.dataset.default);
         }
         document.body.append(this);
@@ -177,5 +174,8 @@ export default class Settings extends HTMLElement {
     }
 
 }
+
+Settings.BACK = "BACK";
+Settings.CLOSE = "CLOSE";
 
 customElements.define('cgc-settings', Settings);

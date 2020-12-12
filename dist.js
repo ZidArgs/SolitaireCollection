@@ -5,24 +5,24 @@ const BLACKLIST = new Set([
     "/.git"
 ]);
 function getDate() {
-    let date = new Date();
-    let Y = date.getFullYear();
-    let M = ("0"+(date.getMonth()+1)).slice(-2);
-    let D = ("0"+date.getDate()).slice(-2);
-    let h = ("0"+date.getHours()).slice(-2);
-    let m = ("0"+date.getMinutes()).slice(-2);
-    let s = ("0"+date.getSeconds()).slice(-2);
+    const date = new Date();
+    const Y = date.getFullYear();
+    const M = ("0" + (date.getMonth() + 1)).slice(-2);
+    const D = ("0" + date.getDate()).slice(-2);
+    const h = ("0" + date.getHours()).slice(-2);
+    const m = ("0" + date.getMinutes()).slice(-2);
+    const s = ("0" + date.getSeconds()).slice(-2);
     return `${D}.${M}.${Y}-${h}:${m}:${s}`;
 }
 function resolveFiles(currentPath) {
     let result = [];
-    let files = fs.readdirSync(currentPath , {withFileTypes: true});
-    for (let file of files) {
-        let absolutePath = `${currentPath}/${file.name}`;
+    const files = fs.readdirSync(currentPath, {withFileTypes: true});
+    for (const file of files) {
+        const absolutePath = `${currentPath}/${file.name}`;
         var relativePath = absolutePath.replace(__dirname, "");
         if (!BLACKLIST.has(relativePath)) {
             if (file.isDirectory()) {
-                let buffer = resolveFiles(absolutePath);
+                const buffer = resolveFiles(absolutePath);
                 result = result.concat(buffer);
             } else if (relativePath.length > 1 && file.isFile()) {
                 result.push(relativePath);
@@ -34,10 +34,10 @@ function resolveFiles(currentPath) {
     }
     return result;
 }
-let files = resolveFiles(__dirname);
+const files = resolveFiles(__dirname);
 
 fs.writeFileSync("sw.js",
-`const CACHE_NAME = "${getDate()}";
+    `const CACHE_NAME = "${getDate()}";
 const FILES = ${JSON.stringify(files, null, 4)};
 
 this.addEventListener('install', function(event) {
@@ -55,7 +55,7 @@ this.addEventListener('fetch', async function(event) {
 });
 
 async function registerCachedFiles(request) {
-    var cache = await caches.open(CACHE_NAME);
+    const    cache = await caches.open(CACHE_NAME);
     return cache.addAll(FILES);
 }
 
@@ -70,10 +70,11 @@ async function getResponse(request) {
 }
 
 async function removeOldCaches() {
-    let keys = await caches.keys();
-    for (let key of keys) {
+    const keys = await caches.keys();
+    for (const key of keys) {
         if (key != CACHE_NAME) {
             await caches.delete(key);
         }
     }
-}`);
+}
+`);

@@ -7,10 +7,10 @@ class WinCondition {
     }
 
     check() {
-        for (let i in condition) {
-            let check = condition[i];
+        for (const i in condition) {
+            const check = condition[i];
             let el = document.getElementById(i).children[0];
-            for (let j of check) {
+            for (const j of check) {
                 if (!el) {
                     return false;
                 }

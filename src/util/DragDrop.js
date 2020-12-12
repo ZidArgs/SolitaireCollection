@@ -8,9 +8,9 @@ let shiftX = 0;
 let shiftY = 0;
 
 function onDragStart(event) {
-    if (!!isTouch) return;
-    let moved = event.currentTarget;
-    let stack = moved.getStackUp();
+    if (isTouch) return;
+    const moved = event.currentTarget;
+    const stack = moved.getStackUp();
     if (!dragElement && this.onDragCallback(sourceElement, stack)) {
         shiftX = event.clientX - moved.getBoundingClientRect().left;
         shiftY = event.clientY - moved.getBoundingClientRect().top;
@@ -30,18 +30,18 @@ function onDragStart(event) {
 }
 
 function onDragMove(event) {
-    if (!!isTouch) return;
-    if (!!dragElement) {
+    if (isTouch) return;
+    if (dragElement) {
         dragElement.style.left = event.pageX - shiftX + 'px';
         dragElement.style.top = event.pageY - shiftY + 'px';
     }
 }
 
 function onDragEnd(event) {
-    if (!!isTouch) return;
-    if (!!dragElement) {
-        let targetElement = event.currentTarget;
-        let movedElements  = dragElement.children;
+    if (isTouch) return;
+    if (dragElement) {
+        const targetElement = event.currentTarget;
+        const movedElements  = dragElement.children;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
@@ -59,9 +59,9 @@ function onDragEnd(event) {
 }
 
 function onDragEndAnywhere(event) {
-    if (!!isTouch) return;
-    if (!!dragElement) {
-        let movedElements = dragElement.children;
+    if (isTouch) return;
+    if (dragElement) {
+        const movedElements = dragElement.children;
         Array.from(movedElements).forEach(el => sourceElement.append(el));
         dragElement.remove();
         sourceElement = null;
@@ -81,8 +81,8 @@ function onDragEndLeavePage(event) {
 function onTouchCard(event) {
     if (!dragElement) {
         isTouch = true;
-        let moved = event.currentTarget;
-        let stack = moved.getStackUp();
+        const moved = event.currentTarget;
+        const stack = moved.getStackUp();
         if (this.onDragCallback(sourceElement, stack)) {
             sourceElement = moved.parentElement;
             dragElement = document.createElement("cgc-playingcardcolumn");
@@ -99,9 +99,9 @@ function onTouchCard(event) {
         }
     } else {
         isTouch = false;
-        let moved = event.currentTarget;
-        let movedElements = dragElement.children;
-        let targetElement = moved.parentElement;
+        const moved = event.currentTarget;
+        const movedElements = dragElement.children;
+        const targetElement = moved.parentElement;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
@@ -118,10 +118,10 @@ function onTouchCard(event) {
 }
 
 function onTouchTarget(event) {
-    if (!!dragElement) {
+    if (dragElement) {
         isTouch = false;
-        let movedElements = dragElement.children;
-        let targetElement = event.currentTarget;
+        const movedElements = dragElement.children;
+        const targetElement = event.currentTarget;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
             Array.from(movedElements).forEach(el => targetElement.append(el));
             dragElement.remove();
@@ -138,8 +138,8 @@ function onTouchTarget(event) {
 }
 
 function onTouchOther(event) {
-    if (!!dragElement) {
-        let movedElements = dragElement.children;
+    if (dragElement) {
+        const movedElements = dragElement.children;
         Array.from(movedElements).forEach(el => sourceElement.append(el));
         dragElement.remove();
         sourceElement = null;
@@ -162,13 +162,13 @@ export default class DragDrop {
             onDragEndLeavePage: onDragEndLeavePage.bind(this),
             onTouchCard: onTouchCard.bind(this),
             onTouchTarget: onTouchTarget.bind(this),
-            onTouchOther: onTouchOther.bind(this),
+            onTouchOther: onTouchOther.bind(this)
         };
     }
 
     registerDropTarget(element) {
         if (Array.isArray(element)) {
-            for(let el of element) {
+            for (const el of element) {
                 this.registerDropTarget(el);
             }
         } else {
@@ -180,7 +180,7 @@ export default class DragDrop {
 
     registerDragElement(element) {
         if (Array.isArray(element)) {
-            for(let el of element) {
+            for (const el of element) {
                 this.registerDragElement(el);
             }
         } else {
