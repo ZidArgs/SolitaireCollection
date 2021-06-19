@@ -109,13 +109,13 @@ async function dialogSubmit() {
             }
             await SettingsStorage.set(el.dataset.value, value);
         }
-        this.dispatchEvent(new Event('submit'));
+        this.dispatchEvent(new Event("submit"));
         document.body.removeChild(this);
     }
 }
 
 function dialogCancel() {
-    this.dispatchEvent(new Event('cancel'));
+    this.dispatchEvent(new Event("cancel"));
     document.body.removeChild(this);
 }
 
@@ -123,13 +123,13 @@ export default class Settings extends HTMLElement {
 
     constructor(settings = {}) {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
 
-        const sbm = this.shadowRoot.getElementById('submit');
+        const sbm = this.shadowRoot.getElementById("submit");
         sbm.onclick = dialogSubmit.bind(this);
 
-        const ccl = this.shadowRoot.getElementById('cancel');
+        const ccl = this.shadowRoot.getElementById("cancel");
         ccl.onclick = dialogCancel.bind(this);
 
         // build settings
@@ -178,4 +178,4 @@ export default class Settings extends HTMLElement {
 Settings.BACK = "BACK";
 Settings.CLOSE = "CLOSE";
 
-customElements.define('cgc-settings', Settings);
+customElements.define("cgc-settings", Settings);

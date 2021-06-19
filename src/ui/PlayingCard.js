@@ -11,6 +11,7 @@ const TPL = new Template(`
         }
         :host {
             display: block;
+            cursor: grab;
         }
         #face {
             width: calc(8vw * var(--card-scale, 1));
@@ -21,7 +22,7 @@ const TPL = new Template(`
             background-size: contain;
             background-position: center;
             background-origin: content-box;
-            background-color: #fffffF;
+            background-color: #ffffff;
         }
     </style>
     <div id="face">
@@ -32,7 +33,7 @@ export default class PlayingCard extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
@@ -47,52 +48,52 @@ export default class PlayingCard extends HTMLElement {
     }
 
     get back() {
-        return this.getAttribute('back');
+        return this.getAttribute("back");
     }
 
     set back(val) {
-        this.setAttribute('back', val);
+        this.setAttribute("back", val);
     }
 
     get theme() {
-        return this.getAttribute('theme');
+        return this.getAttribute("theme");
     }
 
     set theme(val) {
-        this.setAttribute('theme', val);
+        this.setAttribute("theme", val);
     }
 
     get suit() {
-        return this.getAttribute('suit');
+        return this.getAttribute("suit");
     }
 
     set suit(val) {
-        this.setAttribute('suit', val);
+        this.setAttribute("suit", val);
     }
 
     get value() {
-        return this.getAttribute('value');
+        return this.getAttribute("value");
     }
 
     set value(val) {
-        this.setAttribute('value', val);
+        this.setAttribute("value", val);
     }
 
     get revealed() {
-        return !!this.getAttribute('revealed') && this.getAttribute('revealed') != "false";
+        return !!this.getAttribute("revealed") && this.getAttribute("revealed") != "false";
     }
 
     set revealed(val) {
-        this.setAttribute('revealed', !!val && val != "false");
+        this.setAttribute("revealed", !!val && val != "false");
     }
 
     static get observedAttributes() {
-        return ['back', 'theme', 'suit', 'value', 'revealed'];
+        return ["back", "theme", "suit", "value", "revealed"];
     }
       
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case 'back':
+            case "back":
                 if (!this.revealed && oldValue != newValue) {
                     if (this.back) {
                         const src = `url("/img/playing_cards/back/${this.back}.svg")`;
@@ -102,9 +103,9 @@ export default class PlayingCard extends HTMLElement {
                     }
                 }
                 break;
-            case 'theme':
-            case 'suit':
-            case 'value':
+            case "theme":
+            case "suit":
+            case "value":
                 if (!!this.revealed && oldValue != newValue) {
                     if (this.theme && this.suit && this.value) {
                         const src = `url("/img/playing_cards/front/${this.theme}/${this.suit}_${this.value}.svg")`;
@@ -114,7 +115,7 @@ export default class PlayingCard extends HTMLElement {
                     }
                 }
                 break;
-            case 'revealed':
+            case "revealed":
                 if (oldValue != newValue) {
                     if (this.revealed) {
                         if (this.theme && this.suit && this.value) {
@@ -138,4 +139,4 @@ export default class PlayingCard extends HTMLElement {
 
 }
 
-customElements.define('cgc-playingcard', PlayingCard);
+customElements.define("cgc-playingcard", PlayingCard);

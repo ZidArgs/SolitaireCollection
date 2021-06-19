@@ -40,10 +40,10 @@ export default class PlayingCardDrawer extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
 }
 
-customElements.define('cgc-playingcarddrawer', PlayingCardDrawer);
+customElements.define("cgc-playingcarddrawer", PlayingCardDrawer);

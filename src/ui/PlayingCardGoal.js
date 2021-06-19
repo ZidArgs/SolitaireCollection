@@ -38,34 +38,34 @@ export default class PlayingCardGoal extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
     get theme() {
-        return this.getAttribute('theme');
+        return this.getAttribute("theme");
     }
 
     set theme(val) {
-        this.setAttribute('theme', val);
+        this.setAttribute("theme", val);
     }
 
     get suit() {
-        return this.getAttribute('suit');
+        return this.getAttribute("suit");
     }
 
     set suit(val) {
-        this.setAttribute('suit', val);
+        this.setAttribute("suit", val);
     }
 
     static get observedAttributes() {
-        return ['theme', 'suit'];
+        return ["theme", "suit"];
     }
       
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
-            case 'theme':
-            case 'suit':
+            case "theme":
+            case "suit":
                 if (oldValue != newValue) {
                     if (this.theme && this.suit) {
                         const src = `url("/img/playing_cards/goals/${this.theme}/${this.suit}.svg")`;
@@ -80,4 +80,4 @@ export default class PlayingCardGoal extends HTMLElement {
 
 }
 
-customElements.define('cgc-playingcardgoal', PlayingCardGoal);
+customElements.define("cgc-playingcardgoal", PlayingCardGoal);

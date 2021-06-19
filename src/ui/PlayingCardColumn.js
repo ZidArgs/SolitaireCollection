@@ -26,6 +26,15 @@ const TPL = new Template(`
             flex: 1;
             max-height: 2.5vmax;
         }
+        :host(.grabbed) {
+            position: absolute;
+            z-ndex: 1000;
+            pointer-events: none;
+            touch-action: none;
+        }
+        :host(.grabbed) ::slotted(cgc-playingcard) {
+            cursor: grabbing;
+        }
     </style>
     <div id="face">
     </div>
@@ -37,10 +46,10 @@ export default class PlayingCardColumn extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
 }
 
-customElements.define('cgc-playingcardcolumn', PlayingCardColumn);
+customElements.define("cgc-playingcardcolumn", PlayingCardColumn);

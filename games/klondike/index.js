@@ -13,8 +13,8 @@ import Menu from "/src/ui/Menu.js";
 import Dialog from "/src/ui/Dialog.js";
 import Settings from "/src/ui/Settings.js";
 
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
 }
 
 document.body.style.setProperty("--card-scale", "1");
@@ -327,7 +327,7 @@ function autoStack() {
 function createDeck(card_back, card_theme) {
     for (const suit of SUITS) {
         for (const value of VALUES) {
-            const el = document.createElement('cgc-playingcard');
+            const el = document.createElement("cgc-playingcard");
             el.back = card_back;
             el.theme = card_theme;
             el.suit = suit;

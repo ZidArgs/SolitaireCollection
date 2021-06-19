@@ -40,10 +40,10 @@ export default class PlayingCardDeck extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
 }
 
-customElements.define('cgc-playingcarddeck', PlayingCardDeck);
+customElements.define("cgc-playingcarddeck", PlayingCardDeck);

@@ -83,12 +83,12 @@ const TPL = new Template(`
 `);
 
 function dialogSubmit() {
-    this.dispatchEvent(new Event('submit'));
+    this.dispatchEvent(new Event("submit"));
     document.body.removeChild(this);
 }
 
 function dialogCancel() {
-    this.dispatchEvent(new Event('cancel'));
+    this.dispatchEvent(new Event("cancel"));
     document.body.removeChild(this);
 }
 
@@ -96,16 +96,16 @@ export default class Dialog extends HTMLElement {
 
     constructor(options = {}) {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
 
-        const bdy = this.shadowRoot.getElementById('body');
+        const bdy = this.shadowRoot.getElementById("body");
         if (!!options.text && typeof options.text === "string") {
             bdy.innerHTML = options.text;
         }
-        const footer = this.shadowRoot.getElementById('footer');
+        const footer = this.shadowRoot.getElementById("footer");
 
-        const sbm = this.shadowRoot.getElementById('submit');
+        const sbm = this.shadowRoot.getElementById("submit");
         if (options.submit) {
             if (typeof options.submit === "string") {
                 sbm.innerHTML = options.submit;
@@ -116,7 +116,7 @@ export default class Dialog extends HTMLElement {
             footer.removeChild(sbm);
         }
 
-        const ccl = this.shadowRoot.getElementById('cancel');
+        const ccl = this.shadowRoot.getElementById("cancel");
         if (options.cancel) {
             if (typeof options.cancel === "string") {
                 ccl.innerHTML = options.cancel;
@@ -158,4 +158,4 @@ export default class Dialog extends HTMLElement {
 
 }
 
-customElements.define('cgc-dialog', Dialog);
+customElements.define("cgc-dialog", Dialog);

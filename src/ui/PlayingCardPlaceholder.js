@@ -31,10 +31,10 @@ export default class PlayingCardPlaceholder extends HTMLElement {
 
     constructor() {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
     }
 
 }
 
-customElements.define('cgc-playingcardplaceholder', PlayingCardPlaceholder);
+customElements.define("cgc-playingcardplaceholder", PlayingCardPlaceholder);

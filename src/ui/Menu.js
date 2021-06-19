@@ -87,7 +87,7 @@ export default class Menu extends HTMLElement {
 
     constructor(options = {}) {
         super();
-        this.attachShadow({mode: 'open'});
+        this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
         // build menu
         if (options.title) {
@@ -99,24 +99,24 @@ export default class Menu extends HTMLElement {
             const el = document.createElement("button");
             el.innerHTML = button.content;
             if (typeof button.handler == "function") {
-                el.addEventListener('click', async event => {
+                el.addEventListener("click", async event => {
                     if (await button.handler()) {
                         this.close();
                     }
                 });
             }
             if (typeof button.href == "string") {
-                el.addEventListener('click', async event => {
+                el.addEventListener("click", async event => {
                     location.href = `${button.handler}/index.html`;
                 });
             }
             if (button.action == Menu.BACK) {
-                el.addEventListener('click', async event => {
+                el.addEventListener("click", async event => {
                     history.back();
                 });
             }
             if (button.action == Menu.CLOSE) {
-                el.addEventListener('click', async event => {
+                el.addEventListener("click", async event => {
                     this.close();
                 });
             }
@@ -130,7 +130,7 @@ export default class Menu extends HTMLElement {
 
     close() {
         document.body.removeChild(this);
-        this.dispatchEvent(new Event('close'));
+        this.dispatchEvent(new Event("close"));
     }
 
 }
@@ -138,4 +138,4 @@ export default class Menu extends HTMLElement {
 Menu.BACK = "BACK";
 Menu.CLOSE = "CLOSE";
 
-customElements.define('cgc-menu', Menu);
+customElements.define("cgc-menu", Menu);

@@ -16,24 +16,23 @@ function onDragStart(event) {
         shiftY = event.clientY - moved.getBoundingClientRect().top;
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
-        dragElement.style.position = 'absolute';
-        dragElement.style.zIndex = 1000;
-        onDragMove(event);
-        dragElement.style.pointerEvents = "none";
-        dragElement.style.touchAction = "none";
+        dragElement.classList.add("grabbed");
         Array.from(stack).forEach(el => dragElement.append(el));
-        document.body.append(dragElement);
-        document.addEventListener('mousemove', this.bound.onDragMove);
-        document.body.addEventListener("mouseup", this.bound.onDragEndAnywhere);
-        document.addEventListener('mouseout', this.bound.onDragEndLeavePage);
+        setTimeout(() => {
+            onDragMove(event);
+            document.body.append(dragElement);
+            document.addEventListener("mousemove", this.bound.onDragMove);
+            document.body.addEventListener("mouseup", this.bound.onDragEndAnywhere);
+            document.addEventListener("mouseout", this.bound.onDragEndLeavePage);
+        }, 0);
     }
 }
 
 function onDragMove(event) {
     if (isTouch) return;
     if (dragElement) {
-        dragElement.style.left = event.pageX - shiftX + 'px';
-        dragElement.style.top = event.pageY - shiftY + 'px';
+        dragElement.style.left = event.pageX - shiftX + "px";
+        dragElement.style.top = event.pageY - shiftY + "px";
     }
 }
 
@@ -52,9 +51,9 @@ function onDragEnd(event) {
         }
         sourceElement = null;
         dragElement = null;
-        document.removeEventListener('mousemove', this.bound.onDragMove);
+        document.removeEventListener("mousemove", this.bound.onDragMove);
         document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
-        document.removeEventListener('mouseout', this.bound.onDragEndLeavePage);
+        document.removeEventListener("mouseout", this.bound.onDragEndLeavePage);
     }
 }
 
@@ -66,9 +65,9 @@ function onDragEndAnywhere(event) {
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
-        document.removeEventListener('mousemove', this.bound.onDragMove);
+        document.removeEventListener("mousemove", this.bound.onDragMove);
         document.body.removeEventListener("mouseup", this.bound.onDragEndAnywhere);
-        document.removeEventListener('mouseout', this.bound.onDragEndLeavePage);
+        document.removeEventListener("mouseout", this.bound.onDragEndLeavePage);
     }
 }
 
@@ -86,6 +85,7 @@ function onTouchCard(event) {
         if (this.onDragCallback(sourceElement, stack)) {
             sourceElement = moved.parentElement;
             dragElement = document.createElement("cgc-playingcardcolumn");
+            dragElement.classList.add("grabbed");
             dragElement.style.zIndex = 1000;
             dragElement.style.pointerEvents = "none";
             dragElement.style.touchAction = "none";
@@ -94,7 +94,7 @@ function onTouchCard(event) {
             dragElement.style.borderRadius = "calc(1vw * var(--card-scale, 1))";
             Array.from(stack).forEach(el => dragElement.append(el));
             sourceElement.append(dragElement);
-            document.addEventListener('touchend', this.bound.onTouchOther);
+            document.addEventListener("touchend", this.bound.onTouchOther);
             event.stopPropagation();
         }
     } else {
@@ -112,7 +112,7 @@ function onTouchCard(event) {
         }
         sourceElement = null;
         dragElement = null;
-        document.removeEventListener('touchend', this.bound.onTouchOther);
+        document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
 }
@@ -132,7 +132,7 @@ function onTouchTarget(event) {
         }
         sourceElement = null;
         dragElement = null;
-        document.removeEventListener('touchend', this.bound.onTouchOther);
+        document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
 }
@@ -144,7 +144,7 @@ function onTouchOther(event) {
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
-        document.removeEventListener('touchend', this.bound.onTouchOther);
+        document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
 }
