@@ -38,7 +38,7 @@ export default class IDBStorage {
     constructor(name) {
         NAME.set(this, name);
     }
-    
+
     set(key, value) {
         return new Promise(async function(resolve, reject) {
             const transaction = await getStoreWritable(this);
@@ -137,12 +137,10 @@ export default class IDBStorage {
                 if (el) {
                     res[el.key] = el.value;
                     el.continue();
+                } else if (typeof filter == "string") {
+                    resolve(res.filter(key => key.startsWith(filter)));
                 } else {
-                    if (typeof filter == "string") {
-                        resolve(res.filter(key => key.startsWith(filter)));
-                    } else {
-                        resolve(res);
-                    }
+                    resolve(res);
                 }
             };
             request.onerror = function(e) {
@@ -150,7 +148,7 @@ export default class IDBStorage {
             }
         }.bind(this));
     }
-    
+
     setAll(values) {
         return new Promise(async function(resolve, reject) {
             const transaction = await getStoreWritable(this);

@@ -104,17 +104,17 @@ const FILES = [
     "/sw.js"
 ];
 
-this.addEventListener('install', function(event) {
+this.addEventListener("install", function(event) {
     event.waitUntil(registerCachedFiles());
     return self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
-    clients.claim();
+self.addEventListener("activate", function(event) {
+    self.clients.claim();
     event.waitUntil(removeOldCaches());
 });
 
-this.addEventListener('fetch', async function(event) {
+this.addEventListener("fetch", async function(event) {
     event.respondWith(getResponse(event.request));
 });
 

@@ -8,7 +8,9 @@ let shiftX = 0;
 let shiftY = 0;
 
 function onDragStart(event) {
-    if (isTouch) return;
+    if (isTouch) {
+        return;
+    }
     const moved = event.currentTarget;
     const stack = moved.getStackUp();
     if (!dragElement && this.onDragCallback(sourceElement, stack)) {
@@ -29,7 +31,9 @@ function onDragStart(event) {
 }
 
 function onDragMove(event) {
-    if (isTouch) return;
+    if (isTouch) {
+        return;
+    }
     if (dragElement) {
         dragElement.style.left = event.pageX - shiftX + "px";
         dragElement.style.top = event.pageY - shiftY + "px";
@@ -37,7 +41,9 @@ function onDragMove(event) {
 }
 
 function onDragEnd(event) {
-    if (isTouch) return;
+    if (isTouch) {
+        return;
+    }
     if (dragElement) {
         const targetElement = event.currentTarget;
         const movedElements  = dragElement.children;
@@ -58,7 +64,9 @@ function onDragEnd(event) {
 }
 
 function onDragEndAnywhere(event) {
-    if (isTouch) return;
+    if (isTouch) {
+        return;
+    }
     if (dragElement) {
         const movedElements = dragElement.children;
         Array.from(movedElements).forEach(el => sourceElement.append(el));

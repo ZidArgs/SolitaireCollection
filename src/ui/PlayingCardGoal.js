@@ -61,7 +61,7 @@ export default class PlayingCardGoal extends HTMLElement {
     static get observedAttributes() {
         return ["theme", "suit"];
     }
-      
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "theme":

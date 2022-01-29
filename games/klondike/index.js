@@ -218,9 +218,7 @@ async function newGame() {
     while (CARD_DECK.remaining) {
         document.getElementById(DECK).append(CARD_DECK.draw());
     }
-    await gameStorage.save({
-        drawn_cards: 1
-    });
+    await gameStorage.save({drawn_cards: 1});
 }
 
 function autoStack() {
@@ -259,7 +257,7 @@ function autoStack() {
     }
 }
 
-!async function() {
+(async function() {
     const card_theme = await SettingsStorage.get("card_theme", "french");
     const card_back = await SettingsStorage.get("card_back", "fiber_red");
 
@@ -302,9 +300,7 @@ function autoStack() {
                     card.revealed = false;
                     deckElement.append(card);
                 }
-                await gameStorage.save({
-                    drawn_cards: drawnCards + 1
-                });
+                await gameStorage.save({drawn_cards: drawnCards + 1});
             }
         }
     });
@@ -312,7 +308,7 @@ function autoStack() {
     SETTINGS.addEventListener("submit", function(event) {
         newGame();
     });
-    
+
     // buttons
     document.getElementById("menu_button").addEventListener("click", function(event) {
         MENU_PAUSE.show();
@@ -322,7 +318,7 @@ function autoStack() {
     });
 
     startGame();
-}();
+})();
 
 function createDeck(card_back, card_theme) {
     for (const suit of SUITS) {

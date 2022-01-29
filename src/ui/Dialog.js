@@ -127,7 +127,7 @@ export default class Dialog extends HTMLElement {
             footer.removeChild(ccl);
         }
     }
-    
+
     static confirm(msg) {
         return new Promise(function(resolve) {
             const d = new Dialog({

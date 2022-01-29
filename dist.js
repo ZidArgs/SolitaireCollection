@@ -1,9 +1,10 @@
-const fs = require('fs');
+const fs = require("fs");
 const BLACKLIST = new Set([
     "/dist.js",
     "/package.json",
     "/.git"
 ]);
+
 function getDate() {
     const date = new Date();
     const Y = date.getFullYear();
@@ -14,12 +15,13 @@ function getDate() {
     const s = ("0" + date.getSeconds()).slice(-2);
     return `${D}.${M}.${Y}-${h}:${m}:${s}`;
 }
+
 function resolveFiles(currentPath) {
     let result = [];
     const files = fs.readdirSync(currentPath, {withFileTypes: true});
     for (const file of files) {
         const absolutePath = `${currentPath}/${file.name}`;
-        var relativePath = absolutePath.replace(__dirname, "");
+        const relativePath = absolutePath.replace(__dirname, "");
         if (!BLACKLIST.has(relativePath)) {
             if (file.isDirectory()) {
                 const buffer = resolveFiles(absolutePath);
@@ -34,23 +36,24 @@ function resolveFiles(currentPath) {
     }
     return result;
 }
+
 const files = resolveFiles(__dirname);
 
 fs.writeFileSync("sw.js",
     `const CACHE_NAME = "${getDate()}";
 const FILES = ${JSON.stringify(files, null, 4)};
 
-this.addEventListener('install', function(event) {
+this.addEventListener("install", function(event) {
     event.waitUntil(registerCachedFiles());
     return self.skipWaiting();
 });
 
-self.addEventListener('activate', function(event) {
-    clients.claim();
+self.addEventListener("activate", function(event) {
+    self.clients.claim();
     event.waitUntil(removeOldCaches());
 });
 
-this.addEventListener('fetch', async function(event) {
+this.addEventListener("fetch", async function(event) {
     event.respondWith(getResponse(event.request));
 });
 
@@ -77,4 +80,5 @@ async function removeOldCaches() {
         }
     }
 }
+
 `);

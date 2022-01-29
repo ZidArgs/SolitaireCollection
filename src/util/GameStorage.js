@@ -24,7 +24,9 @@ function setState(fields, cards, state) {
     for (const i of fields) {
         const data = state[i];
         const target = document.getElementById(i);
-        if (!data) continue;
+        if (!data) {
+            continue;
+        }
         data.forEach(el => {
             const card = cards.get(`${el.suit}_${el.value}`);
             card.revealed = el.revealed;

@@ -120,7 +120,7 @@ export default class CircleSelect extends HTMLElement {
     static get observedAttributes() {
         return ["value"];
     }
-      
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "value":

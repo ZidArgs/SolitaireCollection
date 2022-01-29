@@ -90,7 +90,7 @@ export default class PlayingCard extends HTMLElement {
     static get observedAttributes() {
         return ["back", "theme", "suit", "value", "revealed"];
     }
-      
+
     attributeChangedCallback(name, oldValue, newValue) {
         switch (name) {
             case "back":
@@ -124,13 +124,11 @@ export default class PlayingCard extends HTMLElement {
                         } else {
                             this.shadowRoot.getElementById("face").style.backgroundImage = "";
                         }
+                    } else if (this.back) {
+                        const src = `url("/img/playing_cards/back/${this.back}.svg")`;
+                        this.shadowRoot.getElementById("face").style.backgroundImage = src;
                     } else {
-                        if (this.back) {
-                            const src = `url("/img/playing_cards/back/${this.back}.svg")`;
-                            this.shadowRoot.getElementById("face").style.backgroundImage = src;
-                        } else {
-                            this.shadowRoot.getElementById("face").style.backgroundImage = "";
-                        }
+                        this.shadowRoot.getElementById("face").style.backgroundImage = "";
                     }
                 }
                 break;

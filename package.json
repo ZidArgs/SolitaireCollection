@@ -4,14 +4,22 @@
   "author": "Denis Peters (ZidArgs)",
   "license": "MIT",
   "description": "Collection of solitaire games for the web and mobile",
-  "scripts": {
-    "index": "node dist.js",
-    "serve": "serve . -p 5012"
-  },
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/zidargs/solitairecollection.git"
   },
   "homepage": "https://bitbucket.org/zidargs/solitairecollection/src",
-  "dependencies": {}
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.16.10",
+    "@babel/eslint-parser": "^7.16.5",
+    "@babel/plugin-syntax-top-level-await": "^7.14.5",
+    "eslint": "^8.0.0"
+  },
+  "scripts": {
+    "lint": "yarn eslint .",
+    "lintfix": "yarn eslint --fix .",
+    "index": "node dist.js",
+    "serve": "serve . -p 5012"
+  }
 }

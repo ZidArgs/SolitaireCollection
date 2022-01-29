@@ -230,7 +230,7 @@ function isTurnPossible(source, target, stack) {
     return stack.length <= (2 ** freeCols) * (freeCells + 1);
 }
 
-!async function() {
+(async function() {
     const card_theme = await SettingsStorage.get("card_theme", "french");
     const card_back = await SettingsStorage.get("card_back", "fiber_red");
 
@@ -248,7 +248,7 @@ function isTurnPossible(source, target, stack) {
 
     createDeck(card_back, card_theme);
     gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(CELLS).concat(GOALS), CARDS);
-    
+
     // buttons
     document.getElementById("menu_button").addEventListener("click", function(event) {
         MENU_PAUSE.show();
@@ -258,7 +258,7 @@ function isTurnPossible(source, target, stack) {
     });
 
     startGame();
-}();
+})();
 
 function createDeck(card_back, card_theme) {
     for (const suit of SUITS) {
