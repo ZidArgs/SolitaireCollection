@@ -182,7 +182,7 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
 }
 
 // on card changed place
-DRAG_DROP.onDropChangedCallback = async function(source, target, stack) {
+DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
     autoStack();
     if (WinCondition.check()) {
         await gameStorage.reset();
@@ -238,7 +238,7 @@ function autoStack() {
                 target.append(first);
                 changed = true;
             } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
-                const checkGoals = goal => {
+                const checkGoals = (goal) => {
                     if (!goal.lastElementChild) {
                         return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
                     } else {
@@ -272,7 +272,7 @@ function autoStack() {
 
     const deckElement = document.getElementById(DECK);
     const drawerElement = document.getElementById(DRAWER);
-    deckElement.addEventListener("click", async function(event) {
+    deckElement.addEventListener("click", async () => {
         const maxDrawsCount = await SettingsStorage.get("klondike.draw_cards_max", 3);
         if (deckElement.children.length) {
             const cardCount = await SettingsStorage.get("klondike.draw_cards_count", 3);
@@ -305,15 +305,15 @@ function autoStack() {
         }
     });
 
-    SETTINGS.addEventListener("submit", function(event) {
+    SETTINGS.addEventListener("submit", () => {
         newGame();
     });
 
     // buttons
-    document.getElementById("menu_button").addEventListener("click", function(event) {
+    document.getElementById("menu_button").addEventListener("click", () => {
         MENU_PAUSE.show();
     });
-    document.getElementById("undo_button").addEventListener("click", async function(event) {
+    document.getElementById("undo_button").addEventListener("click", async () => {
         await gameStorage.undo();
     });
 

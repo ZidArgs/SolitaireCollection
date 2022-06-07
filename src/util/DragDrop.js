@@ -19,7 +19,7 @@ function onDragStart(event) {
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
         dragElement.classList.add("grabbed");
-        Array.from(stack).forEach(el => dragElement.append(el));
+        Array.from(stack).forEach((el) => dragElement.append(el));
         setTimeout(() => {
             onDragMove(event);
             document.body.append(dragElement);
@@ -48,11 +48,11 @@ function onDragEnd(event) {
         const targetElement = event.currentTarget;
         const movedElements  = dragElement.children;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
-            Array.from(movedElements).forEach(el => targetElement.append(el));
+            Array.from(movedElements).forEach((el) => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
-            Array.from(movedElements).forEach(el => sourceElement.append(el));
+            Array.from(movedElements).forEach((el) => sourceElement.append(el));
             dragElement.remove();
         }
         sourceElement = null;
@@ -63,13 +63,13 @@ function onDragEnd(event) {
     }
 }
 
-function onDragEndAnywhere(event) {
+function onDragEndAnywhere(/* event */) {
     if (isTouch) {
         return;
     }
     if (dragElement) {
         const movedElements = dragElement.children;
-        Array.from(movedElements).forEach(el => sourceElement.append(el));
+        Array.from(movedElements).forEach((el) => sourceElement.append(el));
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
@@ -100,7 +100,7 @@ function onTouchCard(event) {
             dragElement.style.boxShadow = "0px 0px 0px 4px #00ffff";
             dragElement.style.paddingBottom = "calc(12vw * var(--card-scale, 1) - 2.5vmax)";
             dragElement.style.borderRadius = "calc(1vw * var(--card-scale, 1))";
-            Array.from(stack).forEach(el => dragElement.append(el));
+            Array.from(stack).forEach((el) => dragElement.append(el));
             sourceElement.append(dragElement);
             document.addEventListener("touchend", this.bound.onTouchOther);
             event.stopPropagation();
@@ -111,11 +111,11 @@ function onTouchCard(event) {
         const movedElements = dragElement.children;
         const targetElement = moved.parentElement;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
-            Array.from(movedElements).forEach(el => targetElement.append(el));
+            Array.from(movedElements).forEach((el) => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
-            Array.from(movedElements).forEach(el => sourceElement.append(el));
+            Array.from(movedElements).forEach((el) => sourceElement.append(el));
             dragElement.remove();
         }
         sourceElement = null;
@@ -131,11 +131,11 @@ function onTouchTarget(event) {
         const movedElements = dragElement.children;
         const targetElement = event.currentTarget;
         if (targetElement != sourceElement && this.onDropCallback(sourceElement, targetElement, movedElements)) {
-            Array.from(movedElements).forEach(el => targetElement.append(el));
+            Array.from(movedElements).forEach((el) => targetElement.append(el));
             dragElement.remove();
             this.onDropChangedCallback(sourceElement, targetElement, movedElements);
         } else {
-            Array.from(movedElements).forEach(el => sourceElement.append(el));
+            Array.from(movedElements).forEach((el) => sourceElement.append(el));
             dragElement.remove();
         }
         sourceElement = null;
@@ -148,7 +148,7 @@ function onTouchTarget(event) {
 function onTouchOther(event) {
     if (dragElement) {
         const movedElements = dragElement.children;
-        Array.from(movedElements).forEach(el => sourceElement.append(el));
+        Array.from(movedElements).forEach((el) => sourceElement.append(el));
         dragElement.remove();
         sourceElement = null;
         dragElement = null;
@@ -198,15 +198,15 @@ export default class DragDrop {
         }
     }
 
-    onDragCallback(source, stack) {
+    onDragCallback(/* source, stack */) {
         return true;
     }
 
-    onDropCallback(source, target, stack) {
+    onDropCallback(/* source, target, stack */) {
         return true;
     }
 
-    onDropChangedCallback(source, target, stack) {
+    onDropChangedCallback(/* source, target, stack */) {
         return;
     }
 

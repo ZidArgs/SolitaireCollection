@@ -146,7 +146,7 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
 }
 
 // on card changed place
-DRAG_DROP.onDropChangedCallback = async function(source, target, stack) {
+DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
     autoStack();
     if (WinCondition.check()) {
         await gameStorage.reset();
@@ -193,7 +193,7 @@ function autoStack() {
                 target.append(first);
                 changed = true;
             } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
-                const checkGoals = goal => {
+                const checkGoals = (goal) => {
                     if (!goal.lastElementChild) {
                         return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
                     } else {
@@ -250,10 +250,10 @@ function isTurnPossible(source, target, stack) {
     gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(CELLS).concat(GOALS), CARDS);
 
     // buttons
-    document.getElementById("menu_button").addEventListener("click", function(event) {
+    document.getElementById("menu_button").addEventListener("click", () => {
         MENU_PAUSE.show();
     });
-    document.getElementById("undo_button").addEventListener("click", async function(event) {
+    document.getElementById("undo_button").addEventListener("click", async () => {
         await gameStorage.undo();
     });
 

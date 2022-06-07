@@ -11,7 +11,7 @@ function getState(fields) {
     for (const i of fields) {
         res[i] = [];
         const cards = document.getElementById(i).children;
-        Array.from(cards).forEach(el => res[i].push({
+        Array.from(cards).forEach((el) => res[i].push({
             suit: el.suit,
             value: el.value,
             revealed: el.revealed
@@ -27,7 +27,7 @@ function setState(fields, cards, state) {
         if (!data) {
             continue;
         }
-        data.forEach(el => {
+        data.forEach((el) => {
             const card = cards.get(`${el.suit}_${el.value}`);
             card.revealed = el.revealed;
             target.append(card);

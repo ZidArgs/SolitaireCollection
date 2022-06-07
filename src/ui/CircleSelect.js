@@ -83,10 +83,10 @@ export default class CircleSelect extends HTMLElement {
         this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
         // button events
-        this.shadowRoot.getElementById("next").addEventListener("click", event => {
+        this.shadowRoot.getElementById("next").addEventListener("click", (event) => {
             this.next(event);
         });
-        this.shadowRoot.getElementById("prev").addEventListener("click", event => {
+        this.shadowRoot.getElementById("prev").addEventListener("click", (event) => {
             this.prev(event);
         });
     }

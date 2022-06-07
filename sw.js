@@ -118,7 +118,7 @@ this.addEventListener("fetch", async function(event) {
     event.respondWith(getResponse(event.request));
 });
 
-async function registerCachedFiles(request) {
+async function registerCachedFiles(/* request */) {
     const cache = await caches.open(CACHE_NAME);
     return cache.addAll(FILES);
 }

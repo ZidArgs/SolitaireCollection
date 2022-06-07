@@ -1,7 +1,7 @@
 function openDB(name) {
     return new Promise(function(resolve, reject) {
         const request = indexedDB.open(name);
-        request.onupgradeneeded = function(event) {
+        request.onupgradeneeded = function() {
             const db = request.result;
             if (!db.objectStoreNames.contains("data")) {
                 db.createObjectStore("data");
@@ -43,7 +43,7 @@ export default class IDBStorage {
         return new Promise(async function(resolve, reject) {
             const transaction = await getStoreWritable(this);
             const request = transaction.put(value, key);
-            request.onsuccess = function(e) {
+            request.onsuccess = function() {
                 resolve();
             };
             request.onerror = function(e) {
@@ -87,7 +87,7 @@ export default class IDBStorage {
         return new Promise(async function(resolve, reject) {
             const transaction = await getStoreWritable(this);
             const request = transaction.delete(key);
-            request.onsuccess = function(e) {
+            request.onsuccess = function() {
                 resolve();
             };
             request.onerror = function(e) {
@@ -100,7 +100,7 @@ export default class IDBStorage {
         return new Promise(async function(resolve, reject) {
             const transaction = await getStoreWritable(this);
             const request = transaction.clear();
-            request.onsuccess = function(e) {
+            request.onsuccess = function() {
                 resolve();
             };
             request.onerror = function(e) {
@@ -116,7 +116,7 @@ export default class IDBStorage {
             request.onsuccess = function(e) {
                 const res = e.target.result;
                 if (typeof filter == "string") {
-                    resolve(res.filter(key => key.startsWith(filter)));
+                    resolve(res.filter((key) => key.startsWith(filter)));
                 } else {
                     resolve(res);
                 }
@@ -138,7 +138,7 @@ export default class IDBStorage {
                     res[el.key] = el.value;
                     el.continue();
                 } else if (typeof filter == "string") {
-                    resolve(res.filter(key => key.startsWith(filter)));
+                    resolve(res.filter((key) => key.startsWith(filter)));
                 } else {
                     resolve(res);
                 }
@@ -156,7 +156,7 @@ export default class IDBStorage {
             for (const key in values) {
                 all.push(new Promise(function(res, rej) {
                     const request = transaction.put(values[key], key);
-                    request.onsuccess = function(e) {
+                    request.onsuccess = function() {
                         res();
                     };
                     request.onerror = function(e) {

@@ -99,24 +99,24 @@ export default class Menu extends HTMLElement {
             const el = document.createElement("button");
             el.innerHTML = button.content;
             if (typeof button.handler == "function") {
-                el.addEventListener("click", async event => {
+                el.addEventListener("click", async () => {
                     if (await button.handler()) {
                         this.close();
                     }
                 });
             }
             if (typeof button.href == "string") {
-                el.addEventListener("click", async event => {
+                el.addEventListener("click", async () => {
                     location.href = `${button.handler}/index.html`;
                 });
             }
             if (button.action == Menu.BACK) {
-                el.addEventListener("click", async event => {
+                el.addEventListener("click", async () => {
                     history.back();
                 });
             }
             if (button.action == Menu.CLOSE) {
-                el.addEventListener("click", async event => {
+                el.addEventListener("click", async () => {
                     this.close();
                 });
             }
