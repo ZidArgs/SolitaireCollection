@@ -24,9 +24,24 @@ const SettingsStorage = new IDBStorage("settings");
 
 // create menus
 const SETTINGS = new Settings([{
+    title: "Game Orientation",
+    type: "string",
+    default: "",
+    value: "main.orientation",
+    options: [{
+        title: "rotate",
+        value: ""
+    }, {
+        title: "landscape",
+        value: "landscape"
+    }, {
+        title: "portrait",
+        value: "portrait"
+    }]
+}, {
     title: "Cards per Draw",
     type: "number",
-    default: "3",
+    default: 3,
     value: "klondike.draw_cards_count",
     options: [{
         title: "1",
@@ -38,7 +53,7 @@ const SETTINGS = new Settings([{
 }, {
     title: "Maximum draw rounds",
     type: "number",
-    default: "3",
+    default: 3,
     value: "klondike.draw_cards_max",
     options: [{
         title: "∞",
@@ -47,7 +62,7 @@ const SETTINGS = new Settings([{
         title: "3",
         value: 3
     }]
-}]);
+}], true);
 const MENU_PAUSE = new Menu({
     title: "PAUSE",
     buttons: [{
@@ -79,7 +94,7 @@ const MENU_PAUSE = new Menu({
         }
     }, {
         content: "QUIT",
-        action: Menu.BACK
+        action: Menu.QUIT_FRAME
     }]
 });
 const MENU_WIN = new Menu({
@@ -257,9 +272,24 @@ function autoStack() {
     }
 }
 
+SETTINGS.addEventListener("submit", (event) =>{
+    const orientation = event.data["main.orientation"] ?? "";
+    if (orientation != "") {
+        screen.orientation.lock(orientation);
+    } else {
+        screen.orientation.unlock();
+    }
+});
+
 (async function() {
-    const card_theme = await SettingsStorage.get("card_theme", "french");
-    const card_back = await SettingsStorage.get("card_back", "fiber_red");
+    const card_theme = await SettingsStorage.get("main.card_theme", "french");
+    const card_back = await SettingsStorage.get("main.card_back", "fiber_red");
+    const orientation = await SettingsStorage.get("main.orientation", "");
+    if (orientation != "") {
+        screen.orientation.lock(orientation);
+    } else {
+        screen.orientation.unlock();
+    }
 
     const pg_els = [];
     for (const i of PLAYGROUND.concat(GOALS)) {

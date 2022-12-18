@@ -9,6 +9,7 @@ import PlayingCardGoal from "/src/ui/PlayingCardGoal.js";
 import "/src/ui/PlayingCard.js";
 import Menu from "/src/ui/Menu.js";
 import Dialog from "/src/ui/Dialog.js";
+import Settings from "/src/ui/Settings.js";
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/sw.js");
@@ -20,6 +21,22 @@ document.body.style.setProperty("--background-color", "#00aa33");
 const SettingsStorage = new IDBStorage("settings");
 
 // create menus
+const SETTINGS = new Settings([{
+    title: "Game Orientation",
+    type: "string",
+    default: "",
+    value: "main.orientation",
+    options: [{
+        title: "rotate",
+        value: ""
+    }, {
+        title: "landscape",
+        value: "landscape"
+    }, {
+        title: "portrait",
+        value: "portrait"
+    }]
+}], true);
 const MENU_PAUSE = new Menu({
     title: "PAUSE",
     buttons: [{
@@ -44,8 +61,14 @@ const MENU_PAUSE = new Menu({
             return false;
         }
     }, {
+        content: "SETTINGS",
+        handler: async function() {
+            SETTINGS.show();
+            return false;
+        }
+    }, {
         content: "QUIT",
-        action: Menu.BACK
+        action: Menu.QUIT_FRAME
     }]
 });
 const MENU_WIN = new Menu({
@@ -230,9 +253,24 @@ function isTurnPossible(source, target, stack) {
     return stack.length <= (2 ** freeCols) * (freeCells + 1);
 }
 
+SETTINGS.addEventListener("submit", (event) =>{
+    const orientation = event.data["main.orientation"] ?? "";
+    if (orientation != "") {
+        screen.orientation.lock(orientation);
+    } else {
+        screen.orientation.unlock();
+    }
+});
+
 (async function() {
-    const card_theme = await SettingsStorage.get("card_theme", "french");
-    const card_back = await SettingsStorage.get("card_back", "fiber_red");
+    const card_theme = await SettingsStorage.get("main.card_theme", "french");
+    const card_back = await SettingsStorage.get("main.ard_back", "fiber_red");
+    const orientation = await SettingsStorage.get("main.orientation", "");
+    if (orientation != "") {
+        screen.orientation.lock(orientation);
+    } else {
+        screen.orientation.unlock();
+    }
 
     const pg_els = [];
     for (const i of PLAYGROUND) {

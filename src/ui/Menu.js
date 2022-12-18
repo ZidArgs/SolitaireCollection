@@ -110,6 +110,16 @@ export default class Menu extends HTMLElement {
                     location.href = `${button.handler}/index.html`;
                 });
             }
+            if (button.action == Menu.QUIT_FRAME) {
+                el.addEventListener("click", async () => {
+                    window.parent.dispatchEvent(new Event("quit_frame"));
+                });
+            }
+            if (button.action == Menu.QUIT) {
+                el.addEventListener("click", async () => {
+                    window.close();
+                });
+            }
             if (button.action == Menu.BACK) {
                 el.addEventListener("click", async () => {
                     history.back();
@@ -135,6 +145,8 @@ export default class Menu extends HTMLElement {
 
 }
 
+Menu.QUIT_FRAME = "QUIT";
+Menu.QUIT = "QUIT";
 Menu.BACK = "BACK";
 Menu.CLOSE = "CLOSE";
 

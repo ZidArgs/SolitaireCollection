@@ -97,40 +97,28 @@ const TPL = new Template(`
 
 const SettingsStorage = new IDBStorage("settings");
 
-async function dialogSubmit() {
-    if (await Dialog.confirm("To apply the settings, a new game must be started.<br>Do you want to start a new game?")) {
-        const settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
-        for (const el of settings) {
-            let value = el.value;
-            switch (el.dataset.type) {
-                case "number": value = parseFloat(value); break;
-                case "boolean": value = !!value && value != "false"; break;
-                default: value = value.toString(); break;
-            }
-            await SettingsStorage.set(el.dataset.value, value);
-        }
-        this.dispatchEvent(new Event("submit"));
-        document.body.removeChild(this);
-    }
-}
-
-function dialogCancel() {
-    this.dispatchEvent(new Event("cancel"));
-    document.body.removeChild(this);
-}
-
 export default class Settings extends HTMLElement {
 
-    constructor(settings = {}) {
+    constructor(settings = {}, inGame = false) {
         super();
         this.attachShadow({mode: "open"});
         this.shadowRoot.append(TPL.generate());
 
         const sbm = this.shadowRoot.getElementById("submit");
-        sbm.onclick = dialogSubmit.bind(this);
+        if (inGame) {
+            sbm.addEventListener("click", () => {
+                this.#dialogSubmit();
+            });
+        } else {
+            sbm.addEventListener("click", () => {
+                this.#submit();
+            });
+        }
 
         const ccl = this.shadowRoot.getElementById("cancel");
-        ccl.onclick = dialogCancel.bind(this);
+        ccl.addEventListener("click", () => {
+            this.#dialogCancel();
+        });
 
         // build settings
         const container = this.shadowRoot.getElementById("body");
@@ -173,9 +161,36 @@ export default class Settings extends HTMLElement {
         document.body.removeChild(this);
     }
 
-}
+    async #dialogSubmit() {
+        if (await Dialog.confirm("To apply the settings, a new game must be started.<br>Do you want to start a new game?")) {
+            this.#submit();
+        }
+    }
 
-Settings.BACK = "BACK";
-Settings.CLOSE = "CLOSE";
+    async #submit() {
+        const settings = Array.from(this.shadowRoot.querySelectorAll("cgc-circleselect"));
+        const data = {};
+        for (const el of settings) {
+            let value = el.value;
+            switch (el.dataset.type) {
+                case "number": value = parseFloat(value); break;
+                case "boolean": value = !!value && value != "false"; break;
+                default: value = value.toString(); break;
+            }
+            data[el.dataset.value] = value;
+            await SettingsStorage.set(el.dataset.value, value);
+        }
+        const event = new Event("submit");
+        event.data = data;
+        this.dispatchEvent(event);
+        document.body.removeChild(this);
+    }
+
+    #dialogCancel() {
+        this.dispatchEvent(new Event("cancel"));
+        document.body.removeChild(this);
+    }
+
+}
 
 customElements.define("cgc-settings", Settings);

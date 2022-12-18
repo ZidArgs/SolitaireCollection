@@ -57,13 +57,13 @@ this.addEventListener("fetch", async function(event) {
     event.respondWith(getResponse(event.request));
 });
 
-async function registerCachedFiles(request) {
-    const    cache = await caches.open(CACHE_NAME);
+async function registerCachedFiles(/* request */) {
+    const cache = await caches.open(CACHE_NAME);
     return cache.addAll(FILES);
 }
 
 async function getResponse(request) {
-    var cache = await caches.open(CACHE_NAME);
+    const cache = await caches.open(CACHE_NAME);
     let response = await cache.match(request.url);
     if (!response) {
         response = await fetch(request);
