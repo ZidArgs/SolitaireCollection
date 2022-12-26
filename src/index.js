@@ -24,6 +24,7 @@ const SETTINGS = new Settings([{
 function quitFrame() {
     gameFrame.removeEventListener("load", mayQuitFrame);
     gameFrame.src = "";
+    screen.orientation.unlock();
     document.exitFullscreen();
 }
 
