@@ -1,9 +1,17 @@
 const fs = require("fs");
 const BLACKLIST = new Set([
+    "/",
+    "/LICENSE",
+    "/.eslintignore",
+    "/.eslintrc.json",
+    "/.gitignore",
+    "/.vscode/settings.json",
+    "/babel.config.json",
     "/dist.js",
     "/package.json",
     "/.git",
-    "/node_modules"
+    "/node_modules",
+    "/yarn.lock"
 ]);
 
 function getDate() {

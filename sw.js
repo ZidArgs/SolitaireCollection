@@ -1,10 +1,5 @@
-const CACHE_NAME = "14.04.2023-20:12:08";
+const CACHE_NAME = "14.04.2023-20:58:23";
 const FILES = [
-    "/.eslintignore",
-    "/.eslintrc.json",
-    "/.gitignore",
-    "/.vscode/settings.json",
-    "/babel.config.json",
     "/games/freecell/index.css",
     "/games/freecell/index.html",
     "/games/freecell/",
@@ -86,7 +81,6 @@ const FILES = [
     "/index.css",
     "/index.html",
     "/",
-    "/LICENSE",
     "/manifest.json",
     "/src/index.js",
     "/src/ui/CircleSelect.js",
@@ -106,8 +100,7 @@ const FILES = [
     "/src/util/IDBStorage.js",
     "/src/util/Template.js",
     "/src/util/WinCondition.js",
-    "/sw.js",
-    "/yarn.lock"
+    "/sw.js"
 ];
 
 this.addEventListener("install", function(event) {
