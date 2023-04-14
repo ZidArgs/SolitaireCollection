@@ -27,10 +27,12 @@ const TPL = new Template(`
             max-height: 2.5vmax;
         }
         :host(.grabbed) {
-            position: absolute;
             z-ndex: 1000;
             pointer-events: none;
             touch-action: none;
+        }
+        :host(.grabbed.floating) {
+            position: absolute;
         }
         :host(.grabbed) ::slotted(cgc-playingcard) {
             cursor: grabbing;

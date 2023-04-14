@@ -19,6 +19,7 @@ function onDragStart(event) {
         sourceElement = moved.parentElement;
         dragElement = document.createElement("cgc-playingcardcolumn");
         dragElement.classList.add("grabbed");
+        dragElement.classList.add("floating");
         Array.from(stack).forEach((el) => dragElement.append(el));
         setTimeout(() => {
             onDragMove(event);
@@ -123,6 +124,7 @@ function onTouchCard(event) {
         document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
+    event.preventDefault();
 }
 
 function onTouchTarget(event) {
@@ -143,6 +145,7 @@ function onTouchTarget(event) {
         document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
+    event.preventDefault();
 }
 
 function onTouchOther(event) {
@@ -155,6 +158,7 @@ function onTouchOther(event) {
         document.removeEventListener("touchend", this.bound.onTouchOther);
         event.stopPropagation();
     }
+    event.preventDefault();
 }
 
 export default class DragDrop {
@@ -195,6 +199,9 @@ export default class DragDrop {
             DRAG_ELEMENTS.get(this).add(element);
             element.addEventListener("mousedown", this.bound.onDragStart);
             element.addEventListener("touchend", this.bound.onTouchCard);
+            element.addEventListener("touchstart", (event) => {
+                event.preventDefault();
+            });
         }
     }
 

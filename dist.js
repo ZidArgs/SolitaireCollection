@@ -2,7 +2,8 @@ const fs = require("fs");
 const BLACKLIST = new Set([
     "/dist.js",
     "/package.json",
-    "/.git"
+    "/.git",
+    "/node_modules"
 ]);
 
 function getDate() {
