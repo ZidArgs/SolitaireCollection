@@ -187,6 +187,9 @@ export default class DragDrop {
             DROP_TARGETS.get(this).add(element);
             element.addEventListener("mouseup", this.bound.onDragEnd);
             element.addEventListener("touchend", this.bound.onTouchTarget);
+            element.addEventListener("touchstart", (event) => {
+                event.preventDefault();
+            });
         }
     }
 
