@@ -19,8 +19,8 @@ const TPL = new Template(`
             justify-content: center;
             top: 0px;
             left: 0px;
-            width: 100vw;
-            height: 100vh;
+            width: 100dvw;
+            height: 100dvh;
             box-sizing: border-box;
         }
         #menu {
