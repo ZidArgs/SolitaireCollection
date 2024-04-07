@@ -137,13 +137,13 @@ export default class Dialog extends HTMLElement {
             });
             d.onsubmit = function() {
                 resolve(true);
-            }
+            };
             d.oncancel = function() {
                 resolve(false);
-            }
+            };
             d.onclose = function() {
                 resolve();
-            }
+            };
             d.show();
         });
     }

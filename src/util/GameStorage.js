@@ -61,7 +61,7 @@ export default class GameStorage {
             savestate.current = {
                 state: getState(fields),
                 data: Object.assign({}, savestate.current.data, data)
-            }
+            };
         } else {
             savestate = {
                 current: {
@@ -84,7 +84,7 @@ export default class GameStorage {
                 savestate.current = {
                     state: savestate.current,
                     data: {}
-                }
+                };
             }
             setState(fields, cards, savestate.current.state);
             return true;

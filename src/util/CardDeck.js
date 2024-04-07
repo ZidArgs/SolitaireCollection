@@ -51,7 +51,7 @@ export default class CardDeck {
     }
 
     draw() {
-        const card = CURRENT.get(this).pop()
+        const card = CURRENT.get(this).pop();
         return card;
     }
 

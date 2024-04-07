@@ -127,7 +127,7 @@ async function getResponse(request) {
     let response = await cache.match(request.url);
     if (!response) {
         response = await fetch(request);
-        cache.add(response.clone())
+        cache.add(response.clone());
     }
     return response;
 }

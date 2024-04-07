@@ -12,7 +12,7 @@ function openDB(name) {
         };
         request.onerror = function(e) {
             reject(e);
-        }
+        };
     });
 }
 
@@ -48,7 +48,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -66,7 +66,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -79,7 +79,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -92,7 +92,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -105,7 +105,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -123,7 +123,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -145,7 +145,7 @@ export default class IDBStorage {
             };
             request.onerror = function(e) {
                 reject(e);
-            }
+            };
         }.bind(this));
     }
 
@@ -161,7 +161,7 @@ export default class IDBStorage {
                     };
                     request.onerror = function(e) {
                         rej(e);
-                    }
+                    };
                 }));
             }
             Promise.all(all).then(resolve, reject);

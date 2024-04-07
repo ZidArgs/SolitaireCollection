@@ -151,7 +151,7 @@ DRAG_DROP.onDragCallback = function(source, stack) {
         last = next;
     }
     return true;
-}
+};
 
 // on card starts to drop - return if possibe
 DRAG_DROP.onDropCallback = function(source, target, stack) {
@@ -194,7 +194,7 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
     if (target instanceof PlayingCardDrawer) {
         return false;
     }
-}
+};
 
 // on card changed place
 DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
@@ -205,7 +205,7 @@ DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
     } else {
         await gameStorage.save();
     }
-}
+};
 
 async function startGame() {
     if (!await gameStorage.load()) {
