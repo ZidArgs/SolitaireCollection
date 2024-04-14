@@ -1,7 +1,7 @@
 {
   "name": "solitairecollection",
   "version": "1.0.0",
-  "author": "Denis Peters (ZidArgs)",
+  "author": "Denis Weiß (ZidArgs)",
   "license": "MIT",
   "description": "Collection of solitaire games for the web and mobile",
   "repository": {
