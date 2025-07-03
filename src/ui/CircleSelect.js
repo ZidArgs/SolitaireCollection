@@ -147,7 +147,7 @@ export default class CircleSelect extends HTMLElement {
         if (!this.readonly) {
             const all = this.querySelectorAll("[value]");
             if (all.length) {
-                const opt = this.querySelector(`[value="${this.value}"]`);
+                const opt = this.querySelector(`[value="${this.value ?? ""}"]`);
                 if (!!opt && !!opt.nextElementSibling) {
                     this.value = opt.nextElementSibling.getAttribute("value");
                 } else {
@@ -163,7 +163,7 @@ export default class CircleSelect extends HTMLElement {
         if (!this.readonly) {
             const all = this.querySelectorAll("[value]");
             if (all.length) {
-                const opt = this.querySelector(`[value="${this.value}"]`);
+                const opt = this.querySelector(`[value="${this.value ?? ""}"]`);
                 if (!!opt && !!opt.previousElementSibling) {
                     this.value = opt.previousElementSibling.getAttribute("value");
                 } else {
