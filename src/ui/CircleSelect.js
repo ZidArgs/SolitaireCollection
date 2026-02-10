@@ -108,12 +108,12 @@ export default class CircleSelect extends HTMLElement {
         this.setAttribute("value", val);
     }
 
-    get readonly() {
+    get readOnly() {
         const val = this.getAttribute("readonly");
         return !!val && val != "false";
     }
 
-    set readonly(val) {
+    set readOnly(val) {
         this.setAttribute("readonly", val);
     }
 
@@ -144,7 +144,7 @@ export default class CircleSelect extends HTMLElement {
     }
 
     next(ev) {
-        if (!this.readonly) {
+        if (!this.readOnly) {
             const all = this.querySelectorAll("[value]");
             if (all.length) {
                 const opt = this.querySelector(`[value="${this.value ?? ""}"]`);
@@ -160,7 +160,7 @@ export default class CircleSelect extends HTMLElement {
     }
 
     prev(ev) {
-        if (!this.readonly) {
+        if (!this.readOnly) {
             const all = this.querySelectorAll("[value]");
             if (all.length) {
                 const opt = this.querySelector(`[value="${this.value ?? ""}"]`);
