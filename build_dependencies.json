@@ -1,0 +1,31 @@
+[
+    {
+        "name": "@emcjs/core",
+        "js": {
+            "src": "@emcjs/core/src",
+            "dest": "_libs/emcjs/core"
+        }
+    },
+    {
+        "name": "@emcjs/logic",
+        "js": {
+            "src": "@emcjs/logic/src",
+            "dest": "_libs/emcjs/logic"
+        }
+    },
+    {
+        "name": "@emcjs/fe",
+        "js": {
+            "src": "@emcjs/fe/src",
+            "dest": "_libs/emcjs/fe"
+        },
+        "css": {
+            "src": "@emcjs/fe/src/_style",
+            "dest": "_libs/emcjs/fe/_style"
+        },
+        "font": {
+            "src": "@emcjs/fe/src/_fonts",
+            "dest": "_libs/emcjs/fe/_fonts"
+        }
+    }
+]
