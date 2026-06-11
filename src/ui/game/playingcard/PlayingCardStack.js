@@ -1,4 +1,5 @@
 import CustomElement from "@emcjs/fe/ui/element/CustomElement.js";
+import PlayingCardStackTypeEnum from "../../../enum/PlayingCardStackTypeEnum.js";
 import TPL from "./PlayingCardStack.js.html" with {type: "html"};
 import STYLE from "./PlayingCardStack.js.css" with {type: "css"};
 
@@ -12,6 +13,14 @@ export default class PlayingCardStack extends CustomElement {
         STYLE.apply(this.shadowRoot);
         /* --- */
         this.#bodyEl = this.shadowRoot.getElementById("body");
+    }
+
+    set type(value) {
+        this.setEnumAttribute("type", value, PlayingCardStackTypeEnum);
+    }
+
+    get type() {
+        return this.getEnumAttribute("type");
     }
 
     set image(value) {

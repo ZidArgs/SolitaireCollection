@@ -5,6 +5,7 @@ import STYLE from "./PlayingCard.js.css" with {type: "css"};
 
 const playingcardBackImageObserver = new SettingsObserver("playingcard.backImage");
 const playingcardBackFillObserver = new SettingsObserver("playingcard.backFill");
+const playingcardFaceThemeObserver = new SettingsObserver("playingcard.faceTheme");
 
 export default class PlayingCard extends CustomElement {
 
@@ -27,6 +28,10 @@ export default class PlayingCard extends CustomElement {
         this.#updateFill();
         playingcardBackFillObserver.onChange(() => {
             this.#updateFill();
+        });
+        this.#updateFace();
+        playingcardFaceThemeObserver.onChange(() => {
+            this.#updateFace();
         });
     }
 
@@ -56,14 +61,6 @@ export default class PlayingCard extends CustomElement {
         return this.getAttribute("value");
     }
 
-    set front(value) {
-        this.setAttribute("front", value);
-    }
-
-    get front() {
-        return this.getAttribute("front");
-    }
-
     set revealed(value) {
         this.setBooleanAttribute("revealed", value);
     }
@@ -73,22 +70,24 @@ export default class PlayingCard extends CustomElement {
     }
 
     static get observedAttributes() {
-        return ["front", "back"];
+        return ["suit", "value"];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue != newValue) {
             switch (name) {
-                case "front": {
-                    this.#setFace(newValue);
+                case "suit":
+                case "value": {
+                    this.#updateFace();
                 } break;
             }
         }
     }
 
-    #setFace(value) {
-        if (value) {
-            const src = `url("/img/playing_cards/front/${value}/${this.suit}_${this.value}.svg")`;
+    #updateFace() {
+        const faceTheme = playingcardFaceThemeObserver.value;
+        if (faceTheme && this.suit && this.value) {
+            const src = `url("/img/playing_cards/front/${faceTheme}/${this.suit}_${this.value}.svg")`;
             this.#faceEl.style.backgroundImage = src;
         } else {
             this.#faceEl.style.backgroundImage = "";
@@ -108,6 +107,18 @@ export default class PlayingCard extends CustomElement {
     #updateFill() {
         const value = playingcardBackFillObserver.value;
         this.#backEl.classList.toggle("fill", !!value);
+    }
+
+    toString() {
+        return `PlayingCard[${this.suit}_${this.value}]`;
+    }
+
+    toJSON() {
+        return {
+            suit: this.suit,
+            value: this.value,
+            revealed: this.revealed
+        };
     }
 
 }

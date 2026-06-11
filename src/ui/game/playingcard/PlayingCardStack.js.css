@@ -23,9 +23,39 @@
     background-color: #ffffff;
 }
 
-::slotted(cgc-playingcard) {
-    flex: 1;
-    top: calc(12vw * var(--card-scale, 1) - .1vmax);
-    max-height: 0.08vw;
-    pointer-events: none;
+:host(:not([type])) {
+    ::slotted(cgc-playingcard) {
+        display: none;
+    }
+}
+
+:host([type="deck"]) {
+    ::slotted(cgc-playingcard) {
+        top: calc(12vw * var(--card-scale, 1) - .1vmax);
+        max-height: 0.08vw;
+        pointer-events: none;
+    }
+}
+
+:host([type="column"]) {
+    ::slotted(cgc-playingcard) {
+        max-height: 2.5vmax;
+    }
+}
+
+:host([type="placeholder"]),
+:host([type="goal"]) {
+    ::slotted(cgc-playingcard:not(:last-child)) {
+        display: none;
+    }
+}
+
+:host([type="drawer"]) {
+    ::slotted(cgc-playingcard) {
+        max-width: .15vw;
+    }
+
+    ::slotted(cgc-playingcard:nth-last-child(-n + 3)) {
+        max-width: 2.5vw;
+    }
 }
