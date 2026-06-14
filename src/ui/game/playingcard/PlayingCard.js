@@ -1,4 +1,4 @@
-import CustomElement from "@emcjs/fe/ui/element/CustomElement.js";
+import AbstractGameElement from "../AbstractGameElement.js";
 import SettingsObserver from "../../../util/observer/SettingsObserver.js";
 import TPL from "./PlayingCard.js.html" with {type: "html"};
 import STYLE from "./PlayingCard.js.css" with {type: "css"};
@@ -7,7 +7,7 @@ const playingcardBackImageObserver = new SettingsObserver("playingcard.backImage
 const playingcardBackFillObserver = new SettingsObserver("playingcard.backFill");
 const playingcardFaceThemeObserver = new SettingsObserver("playingcard.faceTheme");
 
-export default class PlayingCard extends CustomElement {
+export default class PlayingCard extends AbstractGameElement {
 
     #faceEl;
 
@@ -110,15 +110,32 @@ export default class PlayingCard extends CustomElement {
     }
 
     toString() {
-        return `PlayingCard[${this.suit}_${this.value}]`;
+        return PlayingCard.getCardId(this.suit, this.value);
     }
 
     toJSON() {
         return {
-            suit: this.suit,
-            value: this.value,
-            revealed: this.revealed
+            "@name": PlayingCard.getCardId(this.suit, this.value),
+            ...this.serialize()
         };
+    }
+
+    serialize() {
+        return {
+            suit: this.suit ?? "",
+            value: this.value ?? "",
+            revealed: this.revealed ?? false
+        };
+    }
+
+    deserialize(data) {
+        this.suit = data.suit ?? "";
+        this.value = data.value ?? "";
+        this.revealed = data.revealed ?? false;
+    }
+
+    static getCardId(suit, value) {
+        return `PlayingCard[${suit ?? ""}|${value ?? ""}]`;
     }
 
 }

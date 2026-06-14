@@ -4,7 +4,7 @@
  */
 
 const CACHE_INDEX = "/index.json";
-const CACHE_NAME = "my-cache-name";
+const CACHE_NAME = "SolitaireCollection";
 const HEADER_CONFIG = new Headers({
     "Content-Type": "text/plain",
     "Pragma": "no-cache",

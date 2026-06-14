@@ -1,6 +1,7 @@
 import PlayingCard from "../../ui/game/playingcard/PlayingCard.js";
+import AbstractGameElementPool from "../AbstractGameElementPool.js";
 
-export default class CardDeck {
+export default class CardDeck extends AbstractGameElementPool {
 
     #cardIds = new Map();
 
@@ -9,6 +10,7 @@ export default class CardDeck {
     #current = [];
 
     constructor(cardEls = []) {
+        super();
         if (!Array.isArray(cardEls)) {
             cardEls = [cardEls];
         }
@@ -20,6 +22,15 @@ export default class CardDeck {
                 this.#cardIds.set(cardEl.toString(), cardEl);
             }
         }
+    }
+
+    getElement(data) {
+        const {
+            suit = "",
+            value = ""
+        } = data ?? {};
+        const cardId = PlayingCard.getCardId(suit, value);
+        this.#cardIds.get(cardId);
     }
 
     collect() {
@@ -74,8 +85,7 @@ export default class CardDeck {
     deserialize(current) {
         this.#current = [];
         for (const cardData of current) {
-            const cardId = `PlayingCard[${cardData.suit}_${cardData.value}]`;
-            const cardEl = this.#cardIds.get(cardId);
+            const cardEl = this.getElement(cardData.suit, cardData.value);
             if (cardEl != null) {
                 cardEl.revealed = cardData.revealed;
                 this.#current.push(cardEl);

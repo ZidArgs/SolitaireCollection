@@ -1,9 +1,9 @@
-import CustomElement from "@emcjs/fe/ui/element/CustomElement.js";
+import AbstractGameElementHolder from "../AbstractGameElementHolder.js";
 import PlayingCardStackTypeEnum from "../../../enum/PlayingCardStackTypeEnum.js";
 import TPL from "./PlayingCardStack.js.html" with {type: "html"};
 import STYLE from "./PlayingCardStack.js.css" with {type: "css"};
 
-export default class PlayingCardStack extends CustomElement {
+export default class PlayingCardStack extends AbstractGameElementHolder {
 
     #bodyEl;
 

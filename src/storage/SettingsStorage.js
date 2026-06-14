@@ -1,8 +1,7 @@
 import ObservableIDBProxyStorage from "@emcjs/core/data/storage/observable/ObservableIDBProxyStorage.js";
-import SettingsResource from "../data/resource/SettingsResource.js";
-import StorageDefaultValues from "../data/StorageDefaultValues.js";
+import AppSettingsConfigHandler from "../util/settings/AppSettingsConfigHandler.js";
 
-const defaultValues = new StorageDefaultValues(Object.entries(SettingsResource.get()));
+const defaultValues = AppSettingsConfigHandler.defaultValues;
 
 class AppSettingsStorage extends ObservableIDBProxyStorage {
 
@@ -73,7 +72,6 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
 
 }
 
-const SettingsStorage = new AppSettingsStorage();
-await SettingsStorage.awaitLoaded();
+const SettingsStorage = await AppSettingsStorage.create();
 
 export default SettingsStorage;
