@@ -56,4 +56,4 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
 
 }
 
-customElements.define("cgc-playingcard-stack", PlayingCardStack);
+customElements.define("sc-playingcard-stack", PlayingCardStack);

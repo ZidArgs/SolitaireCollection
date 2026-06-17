@@ -17,7 +17,7 @@ function onDragStart(event) {
         shiftX = event.clientX - moved.getBoundingClientRect().left;
         shiftY = event.clientY - moved.getBoundingClientRect().top;
         sourceElement = moved.parentElement;
-        dragElement = document.createElement("cgc-playingcardcolumn");
+        dragElement = document.createElement("sc-playingcardcolumn");
         dragElement.classList.add("grabbed");
         dragElement.classList.add("floating");
         Array.from(stack).forEach((el) => dragElement.append(el));
@@ -93,7 +93,7 @@ function onTouchCard(event) {
         const stack = moved.getStackUp();
         if (this.onDragCallback(sourceElement, stack)) {
             sourceElement = moved.parentElement;
-            dragElement = document.createElement("cgc-playingcardcolumn");
+            dragElement = document.createElement("sc-playingcardcolumn");
             dragElement.classList.add("grabbed");
             dragElement.style.zIndex = 1000;
             dragElement.style.pointerEvents = "none";

@@ -4,6 +4,7 @@ import svgo from "gulp-svgo";
 import changed, {compareContents} from "gulp-changed";
 import autoprefixer from "gulp-autoprefixer";
 import FileIndex from "@zidargs/buildtools/FileIndex.js";
+import ImageIndex from "@zidargs/buildtools/ImageIndex.js";
 import LanguageManager from "@zidargs/buildtools/LanguageManager.js";
 import ImportAnalyzer from "@zidargs/buildtools/ImportAnalyzer.js";
 import {readJSONFile} from "@zidargs/buildtools/util/ReadJSONFile.js";
@@ -225,6 +226,7 @@ function copyImg() {
     ];
     let res = gulp.src(FILES);
     res = res.pipe(FileIndex.register(SRC_PATH, OUT_PATH));
+    res = res.pipe(ImageIndex.register(SRC_PATH, OUT_PATH));
     if (!REBUILD) {
         res = res.pipe(changed(OUT_PATH, {hasChanged: compareContents}));
     }
@@ -266,6 +268,8 @@ function copyFonts() {
 }
 
 function finish(done = () => {}) {
+    FileIndex.add(LanguageManager.finish(`${OUT_PATH}/i18n`));
+    ImageIndex.finish(OUT_PATH, "image/playing_cards/back/_index.json", /^\/image\/playing_cards\/back\/.*/);
     ImportAnalyzer.printUnresolvedImports();
     ImportAnalyzer.writeImportFile();
     done();

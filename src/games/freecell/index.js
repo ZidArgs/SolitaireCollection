@@ -6,8 +6,6 @@ import WinCondition from "/src/util/WinCondition.js";
 import PlayingCardColumn from "/src/ui/PlayingCardColumn.js";
 import PlayingCardPlaceholder from "/src/ui/PlayingCardPlaceholder.js";
 import PlayingCardGoal from "/src/ui/PlayingCardGoal.js";
-import PlayingCardDeck from "/src/ui/PlayingCardDeck.js";
-import PlayingCardDrawer from "/src/ui/PlayingCardDrawer.js";
 import "/src/ui/PlayingCard.js";
 import Menu from "/src/ui/Menu.js";
 import Dialog from "/src/ui/Dialog.js";
@@ -38,30 +36,6 @@ const SETTINGS = new Settings([{
         title: "portrait",
         value: "portrait"
     }]
-}, {
-    title: "Cards per Draw",
-    type: "number",
-    default: 3,
-    value: "klondike.draw_cards_count",
-    options: [{
-        title: "1",
-        value: 1
-    }, {
-        title: "3",
-        value: 3
-    }]
-}, {
-    title: "Maximum draw rounds",
-    type: "number",
-    default: 3,
-    value: "klondike.draw_cards_max",
-    options: [{
-        title: "∞",
-        value: 0
-    }, {
-        title: "3",
-        value: 3
-    }]
 }], true);
 const MENU_PAUSE = new Menu({
     title: "PAUSE",
@@ -72,7 +46,7 @@ const MENU_PAUSE = new Menu({
         content: "RESTART",
         handler: async function() {
             if (await Dialog.confirm("Do you want to restart the current game?")) {
-                gameStorage.restart();
+                await gameStorage.restart();
                 return true;
             }
             return false;
@@ -111,22 +85,23 @@ const MENU_WIN = new Menu({
     }]
 });
 
-const GAME_NAME = "klondike";
+const GAME_NAME = "freecell";
 const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
 const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const PLAYGROUND = [
     "col_0", "col_1", "col_2", "col_3",
-    "col_4", "col_5", "col_6"
+    "col_4", "col_5", "col_6", "col_7"
 ];
-const DECK = "deck";
-const DRAWER = "drawer";
+const CELLS = [
+    "ph_0", "ph_1", "ph_2", "ph_3"
+];
 const GOALS = [
     "goal_spades", "goal_hearts", "goal_clubs", "goal_diamonds"
 ];
 const DRAG_DROP = new DragDrop();
 const CARDS = new Map();
-const CARD_DECK = new CardDeck();
+const DECK = new CardDeck();
 let gameStorage = null;
 
 WinCondition.set({
@@ -161,10 +136,16 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
         if (last) {
             if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
                 if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
-                    return true;
+                    return isTurnPossible(source, target, stack);
                 }
             }
-        } else if (VALUES.indexOf(first.value) == VALUES.length - 1) {
+        } else {
+            return isTurnPossible(source, target, stack);
+        }
+        return false;
+    }
+    if (target instanceof PlayingCardPlaceholder) {
+        if (!target.children.length && stack.length == 1) {
             return true;
         }
         return false;
@@ -183,15 +164,6 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
                 }
             }
         }
-        return false;
-    }
-    if (target instanceof PlayingCardPlaceholder) {
-        return false;
-    }
-    if (target instanceof PlayingCardDeck) {
-        return false;
-    }
-    if (target instanceof PlayingCardDrawer) {
         return false;
     }
 };
@@ -219,21 +191,13 @@ async function newGame() {
     for (const i of PLAYGROUND) {
         cols.push(document.getElementById(i));
     }
-    CARD_DECK.collect();
-    CARD_DECK.shuffle();
-    for (let i = 0; i < cols.length; ++i) {
-        for (let j = i; j < cols.length; ++j) {
-            cols[j].append(CARD_DECK.draw());
-        }
-        const last = cols[i].lastElementChild;
-        if (last) {
-            last.revealed = true;
-        }
+    DECK.shuffle();
+    for (let i = 0; i < DECK.length; ++i) {
+        const card = DECK.draw();
+        card.revealed = true;
+        cols[i % cols.length].append(card);
     }
-    while (CARD_DECK.remaining) {
-        document.getElementById(DECK).append(CARD_DECK.draw());
-    }
-    await gameStorage.save({drawn_cards: 1});
+    await gameStorage.save();
 }
 
 function autoStack() {
@@ -242,11 +206,10 @@ function autoStack() {
     for (const i of GOALS) {
         goals.push(document.getElementById(i));
     }
-    for (const i of PLAYGROUND.concat([DRAWER])) {
+    for (const i of PLAYGROUND.concat(CELLS)) {
         const col = document.getElementById(i);
         const first = col.lastElementChild;
         if (first) {
-            first.revealed = true;
             const target = goals[SUITS.indexOf(first.suit)];
             const last = target.lastElementChild;
             if (!last && VALUES.indexOf(first.value) == 0) {
@@ -272,6 +235,24 @@ function autoStack() {
     }
 }
 
+function isTurnPossible(source, target, stack) {
+    let freeCells = 0;
+    let freeCols = 0;
+    for (const i of CELLS) {
+        const el = document.getElementById(i);
+        if (!el.children.length) {
+            freeCells++;
+        }
+    }
+    for (const i of PLAYGROUND) {
+        const el = document.getElementById(i);
+        if (!el.children.length && el != source && el != target) {
+            freeCols++;
+        }
+    }
+    return stack.length <= (2 ** freeCols) * (freeCells + 1);
+}
+
 SETTINGS.addEventListener("submit", (event) =>{
     const orientation = event.data["main.orientation"] ?? "";
     if (orientation != "") {
@@ -283,7 +264,7 @@ SETTINGS.addEventListener("submit", (event) =>{
 
 (async function() {
     const card_theme = await SettingsStorage.get("main.card_theme", "french");
-    const card_back = await SettingsStorage.get("main.card_back", "fiber_red");
+    const card_back = await SettingsStorage.get("main.ard_back", "fiber_red");
     const orientation = await SettingsStorage.get("main.orientation", "");
     if (orientation != "") {
         screen.orientation.lock(orientation);
@@ -292,52 +273,19 @@ SETTINGS.addEventListener("submit", (event) =>{
     }
 
     const pg_els = [];
-    for (const i of PLAYGROUND.concat(GOALS)) {
+    for (const i of PLAYGROUND) {
+        pg_els.push(document.getElementById(i));
+    }
+    for (const i of CELLS) {
+        pg_els.push(document.getElementById(i));
+    }
+    for (const i of GOALS) {
         pg_els.push(document.getElementById(i));
     }
     DRAG_DROP.registerDropTarget(pg_els);
 
     createDeck(card_back, card_theme);
-    gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(GOALS).concat([DECK, DRAWER]), CARDS);
-
-    const deckElement = document.getElementById(DECK);
-    const drawerElement = document.getElementById(DRAWER);
-    deckElement.addEventListener("click", async () => {
-        const maxDrawsCount = await SettingsStorage.get("klondike.draw_cards_max", 3);
-        if (deckElement.children.length) {
-            const cardCount = await SettingsStorage.get("klondike.draw_cards_count", 3);
-            for (let i = 0; i < cardCount; ++i) {
-                const card = deckElement.lastElementChild;
-                if (card) {
-                    card.revealed = true;
-                    drawerElement.append(card);
-                } else {
-                    break;
-                }
-            }
-            autoStack();
-            if (WinCondition.check()) {
-                await gameStorage.reset();
-                MENU_WIN.show();
-            } else {
-                await gameStorage.save();
-            }
-        } else {
-            const drawnCards = await gameStorage.get("drawn_cards");
-            if (maxDrawsCount == 0 || drawnCards < maxDrawsCount) {
-                while (drawerElement.children.length) {
-                    const card = drawerElement.lastElementChild;
-                    card.revealed = false;
-                    deckElement.append(card);
-                }
-                await gameStorage.save({drawn_cards: drawnCards + 1});
-            }
-        }
-    });
-
-    SETTINGS.addEventListener("submit", () => {
-        newGame();
-    });
+    gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(CELLS).concat(GOALS), CARDS);
 
     // buttons
     document.getElementById("menu_button").addEventListener("click", () => {
@@ -353,13 +301,13 @@ SETTINGS.addEventListener("submit", (event) =>{
 function createDeck(card_back, card_theme) {
     for (const suit of SUITS) {
         for (const value of VALUES) {
-            const el = document.createElement("cgc-playingcard");
+            const el = document.createElement("sc-playingcard");
             el.back = card_back;
             el.theme = card_theme;
             el.suit = suit;
             el.value = value;
-            el.revealed = false;
-            CARD_DECK.add(el);
+            el.revealed = true;
+            DECK.add(el);
             CARDS.set(`${suit}_${value}`, el);
             DRAG_DROP.registerDragElement(el);
         }

@@ -37,12 +37,12 @@ export default class PlayingCard extends AbstractGameElement {
 
     getStackUp() {
         const idx = Array.from(this.parentNode.children).indexOf(this);
-        return this.parentElement.querySelectorAll(`cgc-playingcard:nth-child(n+${idx + 1})`);
+        return this.parentElement.querySelectorAll(`sc-playingcard:nth-child(n+${idx + 1})`);
     }
 
     getStackDown() {
         const idx = Array.from(this.parentNode.children).indexOf(this);
-        return this.parentElement.querySelectorAll(`cgc-playingcard:nth-child(-n+${idx + 1})`);
+        return this.parentElement.querySelectorAll(`sc-playingcard:nth-child(-n+${idx + 1})`);
     }
 
     set suit(value) {
@@ -87,7 +87,7 @@ export default class PlayingCard extends AbstractGameElement {
     #updateFace() {
         const faceTheme = playingcardFaceThemeObserver.value;
         if (faceTheme && this.suit && this.value) {
-            const src = `url("/img/playing_cards/front/${faceTheme}/${this.suit}_${this.value}.svg")`;
+            const src = `url("/image/playing_cards/front/${faceTheme}/${this.suit}_${this.value}.svg")`;
             this.#faceEl.style.backgroundImage = src;
         } else {
             this.#faceEl.style.backgroundImage = "";
@@ -140,4 +140,4 @@ export default class PlayingCard extends AbstractGameElement {
 
 }
 
-customElements.define("cgc-playingcard", PlayingCard);
+customElements.define("sc-playingcard", PlayingCard);

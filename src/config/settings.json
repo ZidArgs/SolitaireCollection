@@ -1,0 +1,12 @@
+{
+    "general.orientation": {
+        "category": "general",
+        "type": "SimpleSelect",
+        "default": "rotate",
+        "values": {
+            "rotate": "Rotate",
+            "landscape": "Landscape",
+            "portrait": "Portrait"
+        }
+    }
+}

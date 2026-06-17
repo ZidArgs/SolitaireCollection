@@ -4,6 +4,7 @@
   "author": "Denis Weiß (ZidArgs)",
   "license": "MIT",
   "description": "Collection of solitaire games for the web and mobile",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@bitbucket.org/zidargs/solitairecollection.git"
@@ -12,7 +13,7 @@
   "dependencies": {
     "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.1.5",
     "@emcjs/logic": "https://github.com/ZidArgs/emcJS-Logic.git/#0.1.7",
-    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.0.16",
+    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.0.18",
     "jswebservice": "https://github.com/ZidArgs/JSWebService.git/#3.1.6"
   },
   "devDependencies": {
