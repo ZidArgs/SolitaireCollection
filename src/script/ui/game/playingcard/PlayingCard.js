@@ -109,17 +109,6 @@ export default class PlayingCard extends AbstractGameElement {
         this.#backEl.classList.toggle("fill", !!value);
     }
 
-    toString() {
-        return PlayingCard.getCardId(this.suit, this.value);
-    }
-
-    toJSON() {
-        return {
-            "@name": PlayingCard.getCardId(this.suit, this.value),
-            ...this.serialize()
-        };
-    }
-
     serialize() {
         return {
             suit: this.suit ?? "",
@@ -132,10 +121,6 @@ export default class PlayingCard extends AbstractGameElement {
         this.suit = data.suit ?? "";
         this.value = data.value ?? "";
         this.revealed = data.revealed ?? false;
-    }
-
-    static getCardId(suit, value) {
-        return `PlayingCard[${suit ?? ""}|${value ?? ""}]`;
     }
 
 }

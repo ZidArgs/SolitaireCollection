@@ -30,7 +30,10 @@ export default class GameState {
         this.#gameElementPool = gameElementPool;
         this.#gameElementHolderMap = gameElementHolderMap;
         this.#loadState();
-        this.#timerTimestamp = new Date();
+    }
+
+    isNew() {
+        return this.#savestate == null;
     }
 
     get time() {
@@ -42,17 +45,29 @@ export default class GameState {
         return this.#savestate.current?.data?.[key];
     }
 
-    saveTime() {
-        this.#flushTime();
+    save(data = {}) {
+        if (this.#savestate) {
+            this.#savestate.steps.push(this.#savestate.current);
+            this.#savestate.current = {
+                ...this.#getCurrent(),
+                data: Object.assign({}, this.#savestate.current.data, data)
+            };
+            this.#flushTime();
+        } else {
+            this.#savestate = {
+                timer: 0,
+                current: {
+                    ...this.#getCurrent(),
+                    data: Object.assign({}, data)
+                },
+                steps: []
+            };
+            this.#timerTimestamp = new Date();
+        }
         GameStateStorage.set(this.#name, this.#savestate);
     }
 
-    saveStep(data = {}) {
-        this.#savestate.steps.push(this.#savestate.current);
-        this.#savestate.current = {
-            ...this.#getCurrent(),
-            data: Object.assign({}, this.#savestate.current.data, data)
-        };
+    saveTime() {
         this.#flushTime();
         GameStateStorage.set(this.#name, this.#savestate);
     }
@@ -75,6 +90,7 @@ export default class GameState {
     }
 
     reset() {
+        this.#savestate = null;
         GameStateStorage.set(this.#name, null);
     }
 
@@ -86,10 +102,10 @@ export default class GameState {
 
     #loadState() {
         this.#savestate = GameStateStorage.get(this.#name);
-        if (!this.#savestate) {
-            this.#savestate = GameState.#createState();
+        if (this.#savestate) {
+            this.#applyCurrent();
+            this.#timerTimestamp = new Date();
         }
-        this.#applyCurrent();
     }
 
     #getCurrent() {
@@ -123,18 +139,6 @@ export default class GameState {
                 holder.append(gameElement);
             }
         }
-    }
-
-    static #createState() {
-        return {
-            timer: 0,
-            current: {
-                state: {},
-                pool: {},
-                data: {}
-            },
-            steps: []
-        };
     }
 
 }

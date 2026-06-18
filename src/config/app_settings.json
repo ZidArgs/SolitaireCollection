@@ -2,9 +2,9 @@
     "general.orientation": {
         "category": "general",
         "type": "SimpleSelect",
-        "default": "rotate",
+        "default": "",
         "values": {
-            "rotate": "Rotate",
+            "": "Rotate",
             "landscape": "Landscape",
             "portrait": "Portrait"
         }

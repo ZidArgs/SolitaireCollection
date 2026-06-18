@@ -1,7 +1,10 @@
+@import "/_libs/emcjs/fe/_style/index.css";
+
 * {
     box-sizing: border-box;
     font-family: Arial;
 }
+
 body {
     width: 100dvw;
     height: 100dvh;
@@ -10,6 +13,7 @@ body {
     background: var(--background-color, #00aa33);
     overflow: hidden;
 }
+
 #playground {
     display: flex;
     flex-direction: column;
@@ -18,6 +22,7 @@ body {
     height: 100dvh;
     padding: 2vw;
 }
+
 #top-row {
     display: grid;
     justify-content: center;
@@ -26,6 +31,7 @@ body {
     grid-gap: 2vw;
     height: calc(12vw * var(--card-scale, 1));
 }
+
 #game-board {
     display: grid;
     justify-content: center;
@@ -35,6 +41,7 @@ body {
     flex: 1;
     margin-top: 2vw;
 }
+
 #goal_spades,
 #goal_hearts,
 #goal_clubs,
@@ -44,18 +51,20 @@ body {
     background-position: center;
     background-origin: content-box;
 }
+
 .game-buttons {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
+
 button {
     padding: 1vw;
     margin: .5vw;
     border-radius: 1vw;
-    box-shadow: inset 0px 0px 0px 2px rgba(255,255,255,0.7);
-    color: rgba(255,255,255,0.7);
+    box-shadow: inset 0px 0px 0px 2px rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.7);
     background-color: transparent;
     border: none;
     -webkit-appearance: none;
@@ -63,24 +72,30 @@ button {
     cursor: pointer;
     font-size: 2vw;
 }
+
 button.hide {
     display: none;
 }
+
 button:hover {
-    background-color: rgba(255,255,255,0.2);
+    background-color: rgba(255, 255, 255, 0.2);
 }
+
 button:disabled {
-    box-shadow: inset 0px 0px 0px 2px rgba(255,255,255,0.2);
-    color: rgba(255,255,255,0.2);
+    box-shadow: inset 0px 0px 0px 2px rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.2);
     cursor: default;
     background-color: transparent;
 }
+
 button:focus {
     outline: none;
 }
+
 #top-row button {
     width: 10vw;
 }
+
 #top-row button {
     width: 10vw;
 }

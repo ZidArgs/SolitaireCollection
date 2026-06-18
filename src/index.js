@@ -1,7 +1,12 @@
 import i18n from "@emcjs/core/util/I18n.js";
 import AppSettingsOverlay from "./script/ui/settings/AppSettingsOverlay.js";
 
-await i18n.loadTranslations();
+{ // init base system
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+    }
+    await i18n.loadTranslations();
+}
 
 const appSettingsOverlay = new AppSettingsOverlay();
 
@@ -36,10 +41,6 @@ function openGame(game) {
     document.documentElement.requestFullscreen();
     gameFrame.src = `/games/${game}/`;
     gameFrame.addEventListener("load", mayQuitFrame);
-}
-
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
 }
 
 (async function() {

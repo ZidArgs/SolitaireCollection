@@ -1,56 +1,56 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Freecell</title>
-        <meta charset="UTF-8">
-        <meta name="description" content="Freecell for the web and mobile">
-        <meta name="robots" content="nofollow">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <meta name="theme-color" content="#000000">
-        <link rel="stylesheet" href="/games/freecell/index.css">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicons/default_192.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/96.png">
-        <link rel="icon" type="image/png" sizes="48x48" href="/img/favicons/48.png">
-        <link rel="icon" type="image/svg+xml" href="/img/favicons/logo.svg" sizes="any">
-        <script src="/games/freecell/index.js" type="module"></script>
-        <script type="text/javascript">
-            document.write(`<base href="${document.location.origin}" />`);
-            window.addEventListener('contextmenu', function() {
-                event.preventDefault();
-                return false;
-            });
-        </script>
-    </head>
-    <body>    
-        <div id="playground">
-            <div id="top-row">
-                <cgc-playingcardplaceholder id="ph_0"></cgc-playingcardplaceholder>
-                <cgc-playingcardplaceholder id="ph_1"></cgc-playingcardplaceholder>
-                <cgc-playingcardplaceholder id="ph_2"></cgc-playingcardplaceholder>
-                <cgc-playingcardplaceholder id="ph_3"></cgc-playingcardplaceholder>
-                <div class="game-buttons">
-                    <button id="menu_button">MENU</button>
-                    <button id="undo_button">UNDO</button>
-                </div>
-                <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_spades" theme="french" suit="S"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_hearts" theme="french" suit="H"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_diamonds" theme="french" suit="D"></cgc-playingcardgoal>
+
+<head>
+    <title>Freecell</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Freecell for the web and mobile">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="/games/freecell/index.css">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/default_192.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/96.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/favicons/48.png">
+    <link rel="icon" type="image/svg+xml" href="/img/favicons/logo.svg" sizes="any">
+    <script src="/games/freecell/index.js" type="module"></script>
+    <script type="text/javascript">
+        document.write(`<base href="${document.location.origin}" />`);
+        window.addEventListener('contextmenu', function () {
+            event.preventDefault();
+            return false;
+        });
+    </script>
+</head>
+
+<body>
+    <div id="playground">
+        <div id="top-row">
+            <sc-playingcard-stack id="ph_0" type="placeholder"></sc-playingcard-stack>
+            <sc-playingcard-stack id="ph_1" type="placeholder"></sc-playingcard-stack>
+            <sc-playingcard-stack id="ph_2" type="placeholder"></sc-playingcard-stack>
+            <sc-playingcard-stack id="ph_3" type="placeholder"></sc-playingcard-stack>
+            <div class="game-buttons">
+                <button id="menu_button">MENU</button>
+                <button id="undo_button">UNDO</button>
             </div>
-            <div id="game-board">
-                <cgc-playingcardcolumn id="col_0"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_1"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_2"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_3"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_4"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_5"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_6"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_7"></cgc-playingcardcolumn>
-            </div>
+            <sc-playingcard-stack id="goal_clubs" type="goal" suit="C" image="/image/playing_cards/icons/clubs.svg"></sc-playingcard-stack>
+            <sc-playingcard-stack id="goal_spades" type="goal" suit="S" image="/image/playing_cards/icons/spades.svg"></sc-playingcard-stack>
+            <sc-playingcard-stack id="goal_hearts" type="goal" suit="H" image="/image/playing_cards/icons/hearts.svg"></sc-playingcard-stack>
+            <sc-playingcard-stack id="goal_diamonds" type="goal" suit="D" image="/image/playing_cards/icons/diamonds.svg"></sc-playingcard-stack>
         </div>
-    </body>
+        <div id="game-board">
+            <sc-playingcard-stack id="col_0" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_1" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_2" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_3" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_4" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_5" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_6" type="column"></sc-playingcard-stack>
+            <sc-playingcard-stack id="col_7" type="column"></sc-playingcard-stack>
+        </div>
+    </div>
+</body>
+
 </html>
-
-
-
-

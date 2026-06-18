@@ -1,53 +1,53 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Klondike</title>
-        <meta charset="UTF-8">
-        <meta name="description" content="Klondike for the web and mobile">
-        <meta name="robots" content="nofollow">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-        <meta name="theme-color" content="#000000">
-        <link rel="stylesheet" href="/games/klondike/index.css">
-        <link rel="icon" type="image/png" sizes="192x192"  href="/img/favicons/default_192.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/96.png">
-        <link rel="icon" type="image/png" sizes="48x48" href="/img/favicons/48.png">
-        <link rel="icon" type="image/svg+xml" href="/img/favicons/logo.svg" sizes="any">
-        <script src="/games/klondike/index.js" type="module"></script>
-        <script type="text/javascript">
-            document.write(`<base href="${document.location.origin}" />`);
-            window.addEventListener('contextmenu', function() {
-                event.preventDefault();
-                return false;
-            });
-        </script>
-    </head>
-    <body>    
-        <div id="playground">
-            <div id="top-row">
-                <cgc-playingcarddeck id="deck"></cgc-playingcarddeck>
-                <cgc-playingcarddrawer id="drawer"></cgc-playingcarddrawer>
-                <div class="game-buttons">
-                    <button id="menu_button">MENU</button>
-                    <button id="undo_button">UNDO</button>
-                </div>
-                <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_spades" theme="french" suit="S"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_hearts" theme="french" suit="H"></cgc-playingcardgoal>
-                <cgc-playingcardgoal id="goal_diamonds" theme="french" suit="D"></cgc-playingcardgoal>
+
+<head>
+    <title>Klondike</title>
+    <meta charset="UTF-8">
+    <meta name="description" content="Klondike for the web and mobile">
+    <meta name="robots" content="nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="/games/klondike/index.css">
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/favicons/default_192.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/favicons/96.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/favicons/48.png">
+    <link rel="icon" type="image/svg+xml" href="/img/favicons/logo.svg" sizes="any">
+    <script src="/games/klondike/index.js" type="module"></script>
+    <script type="text/javascript">
+        document.write(`<base href="${document.location.origin}" />`);
+        window.addEventListener('contextmenu', function () {
+            event.preventDefault();
+            return false;
+        });
+    </script>
+</head>
+
+<body>
+    <div id="playground">
+        <div id="top-row">
+            <cgc-playingcarddeck id="deck"></cgc-playingcarddeck>
+            <cgc-playingcarddrawer id="drawer"></cgc-playingcarddrawer>
+            <div class="game-buttons">
+                <button id="menu_button">MENU</button>
+                <button id="undo_button">UNDO</button>
             </div>
-            <div id="game-board">
-                <cgc-playingcardcolumn id="col_0"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_1"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_2"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_3"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_4"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_5"></cgc-playingcardcolumn>
-                <cgc-playingcardcolumn id="col_6"></cgc-playingcardcolumn>
-            </div>
+            <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
+            <cgc-playingcardgoal id="goal_spades" theme="french" suit="S"></cgc-playingcardgoal>
+            <cgc-playingcardgoal id="goal_hearts" theme="french" suit="H"></cgc-playingcardgoal>
+            <cgc-playingcardgoal id="goal_diamonds" theme="french" suit="D"></cgc-playingcardgoal>
         </div>
-    </body>
+        <div id="game-board">
+            <cgc-playingcardcolumn id="col_0"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_1"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_2"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_3"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_4"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_5"></cgc-playingcardcolumn>
+            <cgc-playingcardcolumn id="col_6"></cgc-playingcardcolumn>
+        </div>
+    </div>
+</body>
+
 </html>
-
-
-
-

@@ -1,36 +1,56 @@
 :host {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
     cursor: grab;
     width: calc(8vw * var(--card-scale, 1));
     height: calc(12vw * var(--card-scale, 1));
-    border-style: solid;
-    border-width: 4px;
-    border-color: #ffffff80;
-    border-radius: calc(1vw * var(--card-scale, 1));
     user-select: none;
 }
 
 #body {
-    display: none;
+    position: absolute;
+    display: block;
+    top: 0px;
+    left: 0px;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
     background-origin: content-box;
-    background-color: #ffffff;
+    border-style: solid;
+    border-width: 4px;
+    border-color: #ffffff80;
+    border-radius: calc(1vw * var(--card-scale, 1));
+}
+
+:host(.grabbed) {
+    z-index: 1000;
+    pointer-events: none;
+    touch-action: none;
+
+    ::slotted(sc-playingcard) {
+        cursor: grabbing;
+    }
+}
+
+:host(.grabbed.floating) {
+    position: absolute;
 }
 
 :host(:not([type])) {
-    ::slotted(cgc-playingcard) {
+
+    #body {
         display: none;
+    }
+
+    ::slotted(sc-playingcard) {
+        max-height: 2.5vmax;
     }
 }
 
 :host([type="deck"]) {
-    ::slotted(cgc-playingcard) {
+    ::slotted(sc-playingcard) {
         top: calc(12vw * var(--card-scale, 1) - .1vmax);
         max-height: 0.08vw;
         pointer-events: none;
@@ -38,24 +58,26 @@
 }
 
 :host([type="column"]) {
-    ::slotted(cgc-playingcard) {
+    ::slotted(sc-playingcard) {
         max-height: 2.5vmax;
     }
 }
 
 :host([type="placeholder"]),
 :host([type="goal"]) {
-    ::slotted(cgc-playingcard:not(:last-child)) {
+    ::slotted(sc-playingcard:not(:last-child)) {
         display: none;
     }
 }
 
 :host([type="drawer"]) {
-    ::slotted(cgc-playingcard) {
+    flex-direction: row;
+
+    ::slotted(sc-playingcard) {
         max-width: .15vw;
     }
 
-    ::slotted(cgc-playingcard:nth-last-child(-n + 3)) {
+    ::slotted(sc-playingcard:nth-last-child(-n + 3)) {
         max-width: 2.5vw;
     }
 }

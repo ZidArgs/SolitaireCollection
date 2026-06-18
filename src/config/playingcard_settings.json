@@ -1,0 +1,21 @@
+{
+    "playingcard.faceTheme": {
+        "category": "playingcard",
+        "type": "SimpleSelect",
+        "default": "french",
+        "values": {
+            "french": "French"
+        }
+    },
+    "playingcard.backImage": {
+        "category": "playingcard",
+        "type": "SimpleSelect",
+        "default": "/image/playing_cards/back/fiber_blue.svg",
+        "values": "playingcard_backImages"
+    },
+    "playingcard.backFill": {
+        "category": "playingcard",
+        "type": "SwitchInput",
+        "default": false
+    }
+}

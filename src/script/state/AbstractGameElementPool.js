@@ -18,4 +18,8 @@ export default class AbstractGameElementPool {
         throw new Error("deserialize has not been implemented");
     }
 
+    [Symbol.iterator]() {
+        throw new Error("iterator has not been implemented");
+    }
+
 }

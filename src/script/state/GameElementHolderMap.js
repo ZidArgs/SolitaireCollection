@@ -22,6 +22,10 @@ export default class GameElementHolderMap {
         return this.#gameElementHolders.get(name);
     }
 
+    get holders() {
+        return [...this.#gameElementHolders.values()];
+    }
+
     [Symbol.iterator]() {
         return this.#gameElementHolders[Symbol.iterator]();
     }

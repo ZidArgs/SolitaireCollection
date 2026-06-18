@@ -7,6 +7,8 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
 
     #bodyEl;
 
+    #allowDropFn = () => true;
+
     constructor() {
         super();
         TPL.apply(this.shadowRoot);
@@ -21,6 +23,22 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
 
     get type() {
         return this.getEnumAttribute("type");
+    }
+
+    set suit(value) {
+        this.setAttribute("suit", value);
+    }
+
+    get suit() {
+        return this.getAttribute("suit");
+    }
+
+    set value(value) {
+        this.setAttribute("value", value);
+    }
+
+    get value() {
+        return this.getAttribute("value");
     }
 
     set image(value) {
@@ -52,6 +70,18 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
         } else {
             this.#bodyEl.style.backgroundImage = "";
         }
+    }
+
+    set allowDrop(value) {
+        if (typeof value === "function") {
+            this.#allowDropFn = value;
+        } else {
+            this.#allowDropFn = () => true;
+        }
+    }
+
+    isDropAllowed(...args) {
+        return this.#allowDropFn(this, ...args);
     }
 
 }

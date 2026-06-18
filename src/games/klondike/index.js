@@ -1,3 +1,4 @@
+import i18n from "@emcjs/core/util/I18n.js";
 import IDBStorage from "/src/util/IDBStorage.js";
 import GameStorage from "/src/util/GameStorage.js";
 import DragDrop from "/src/util/DragDrop.js";
@@ -13,8 +14,11 @@ import Menu from "/src/ui/Menu.js";
 import Dialog from "/src/ui/Dialog.js";
 import Settings from "/src/ui/Settings.js";
 
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js");
+{ // init base system
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/sw.js");
+    }
+    await i18n.loadTranslations();
 }
 
 document.body.style.setProperty("--card-scale", "1");

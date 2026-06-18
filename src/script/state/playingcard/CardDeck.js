@@ -29,8 +29,8 @@ export default class CardDeck extends AbstractGameElementPool {
             suit = "",
             value = ""
         } = data ?? {};
-        const cardId = PlayingCard.getCardId(suit, value);
-        this.#cardIds.get(cardId);
+        const cardId = PlayingCard.getIdentifier(suit, value);
+        return this.#cardIds.get(cardId);
     }
 
     collect() {
@@ -74,6 +74,10 @@ export default class CardDeck extends AbstractGameElementPool {
         return false;
     }
 
+    get size() {
+        return this.#cards.size;
+    }
+
     get remaining() {
         return this.#current.length;
     }
@@ -91,6 +95,10 @@ export default class CardDeck extends AbstractGameElementPool {
                 this.#current.push(cardEl);
             }
         }
+    }
+
+    [Symbol.iterator]() {
+        return this.#cards[Symbol.iterator]();
     }
 
     static createPlayingCard(suit, value) {
