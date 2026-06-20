@@ -1,81 +1,77 @@
+import Path from "@emcjs/core/util/file/Path.js";
 import i18n from "@emcjs/core/util/I18n.js";
-import IDBStorage from "/src/util/IDBStorage.js";
-import GameStorage from "/src/util/GameStorage.js";
-import DragDrop from "/src/util/DragDrop.js";
-import CardDeck from "/src/util/CardDeck.js";
-import WinCondition from "/src/util/WinCondition.js";
-import PlayingCardColumn from "/src/ui/PlayingCardColumn.js";
-import PlayingCardPlaceholder from "/src/ui/PlayingCardPlaceholder.js";
-import PlayingCardGoal from "/src/ui/PlayingCardGoal.js";
-import PlayingCardDeck from "/src/ui/PlayingCardDeck.js";
-import PlayingCardDrawer from "/src/ui/PlayingCardDrawer.js";
-import "/src/ui/PlayingCard.js";
-import Menu from "/src/ui/Menu.js";
-import Dialog from "/src/ui/Dialog.js";
-import Settings from "/src/ui/Settings.js";
+import JSONCResource from "@emcjs/core/data/resource/file/JSONCResource.js";
+import GameState from "../../script/savestate/GameState.js";
+import GameSettingsOverlay from "../../script/ui/settings/GameSettingsOverlay.js";
+import SettingsObserver from "../../script/util/observer/SettingsObserver.js";
+import CardDeck52 from "../../script/state/playingcard/CardDeck52.js";
+import GameElementHolderMap from "../../script/state/GameElementHolderMap.js";
+import DragDrop from "../../script/util/DragDrop.js";
+import SortGameWinCondition from "../../script/util/wincondition/SortGameWinCondition.js";
+import "../../script/ui/game/playingcard/PlayingCardStack.js";
+import "../../script/ui/game/playingcard/PlayingCard.js";
+import Menu from "../../script/ui/Menu.js";
+import MenuActionEnum from "../../script/enum/MenuActionEnum.js";
+import ModalDialog from "@emcjs/fe/ui/modal/ModalDialog.js";
+import GameSettingsConfigHandler from "../../script/util/settings/GameSettingsConfigHandler.js";
+import AppSettingsResource from "../../script/resource/AppSettingsResource.js";
+import PlayingcardSettingsResource from "../../script/resource/PlayingcardSettingsResource.js";
+import SettingsStorage from "../../script/storage/SettingsStorage.js";
 
-{ // init base system
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js");
-    }
-    await i18n.loadTranslations();
+const MODULE_PATH = new Path(import.meta.url);
+
+// === INIT BASE ===
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
 }
+await i18n.loadTranslations();
+
+const SETTINGS = await (async () => { // settings
+    const settingsPath = MODULE_PATH.getAbsolute("./settings.json");
+    const gameSettingsResource = await JSONCResource.get(settingsPath);
+    const settings = {
+        ...AppSettingsResource.get(),
+        ...PlayingcardSettingsResource.get(),
+        ...gameSettingsResource.get()
+    };
+    const gameSettingsConfigHandler = new GameSettingsConfigHandler(settings);
+    await SettingsStorage.addCustomDefaultValues(gameSettingsConfigHandler.defaultValues);
+    const gameSettingsOverlay = new GameSettingsOverlay(gameSettingsConfigHandler);
+
+    gameSettingsOverlay.addEventListener("submit", () => {
+        newGame();
+    });
+
+    const orientationObserver = new SettingsObserver("general.orientation");
+    setOrientation(orientationObserver.value);
+    orientationObserver.onChange(() => {
+        setOrientation(orientationObserver.value);
+    });
+
+    function setOrientation(orientation) {
+        if (orientation != "") {
+            screen.orientation.lock(orientation);
+        } else {
+            screen.orientation.unlock();
+        }
+    }
+
+    return gameSettingsOverlay;
+})();
 
 document.body.style.setProperty("--card-scale", "1");
 document.body.style.setProperty("--background-color", "#00aa33");
 
-const SettingsStorage = new IDBStorage("settings");
-
-// create menus
-const SETTINGS = new Settings([{
-    title: "Game Orientation",
-    type: "string",
-    default: "",
-    value: "main.orientation",
-    options: [{
-        title: "rotate",
-        value: ""
-    }, {
-        title: "landscape",
-        value: "landscape"
-    }, {
-        title: "portrait",
-        value: "portrait"
-    }]
-}, {
-    title: "Cards per Draw",
-    type: "number",
-    default: 3,
-    value: "klondike.draw_cards_count",
-    options: [{
-        title: "1",
-        value: 1
-    }, {
-        title: "3",
-        value: 3
-    }]
-}, {
-    title: "Maximum draw rounds",
-    type: "number",
-    default: 3,
-    value: "klondike.draw_cards_max",
-    options: [{
-        title: "∞",
-        value: 0
-    }, {
-        title: "3",
-        value: 3
-    }]
-}], true);
+// === INIT MENUS ===
 const MENU_PAUSE = new Menu({
     title: "PAUSE",
     buttons: [{
         content: "RESUME",
-        action: Menu.CLOSE
+        action: MenuActionEnum.CLOSE
     }, {
         content: "RESTART",
         handler: async function() {
-            if (await Dialog.confirm("Do you want to restart the current game?")) {
+            if (await ModalDialog.confirm("Do you want to restart the current game?")) {
                 gameStorage.restart();
                 return true;
             }
@@ -84,7 +80,7 @@ const MENU_PAUSE = new Menu({
     }, {
         content: "NEW GAME",
         handler: async function() {
-            if (await Dialog.confirm("Do you want to start a new game?")) {
+            if (await ModalDialog.confirm("Do you want to start a new game?")) {
                 await newGame();
                 return true;
             }
@@ -98,7 +94,7 @@ const MENU_PAUSE = new Menu({
         }
     }, {
         content: "QUIT",
-        action: Menu.QUIT_FRAME
+        action: MenuActionEnum.QUIT_FRAME
     }]
 });
 const MENU_WIN = new Menu({
@@ -111,10 +107,11 @@ const MENU_WIN = new Menu({
         }
     }, {
         content: "QUIT",
-        action: Menu.BACK
+        action: MenuActionEnum.BACK
     }]
 });
 
+// === INIT GAME ===
 const GAME_NAME = "klondike";
 const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
@@ -128,17 +125,66 @@ const DRAWER = "drawer";
 const GOALS = [
     "goal_spades", "goal_hearts", "goal_clubs", "goal_diamonds"
 ];
-const DRAG_DROP = new DragDrop();
-const CARDS = new Map();
-const CARD_DECK = new CardDeck();
-let gameStorage = null;
 
-WinCondition.set({
-    goal_spades:   ["S_A", "S_2", "S_3", "S_4", "S_5", "S_6", "S_7", "S_8", "S_9", "S_10", "S_J", "S_Q", "S_K"],
-    goal_hearts:   ["H_A", "H_2", "H_3", "H_4", "H_5", "H_6", "H_7", "H_8", "H_9", "H_10", "H_J", "H_Q", "H_K"],
-    goal_clubs:    ["C_A", "C_2", "C_3", "C_4", "C_5", "C_6", "C_7", "C_8", "C_9", "C_10", "C_J", "C_Q", "C_K"],
-    goal_diamonds: ["D_A", "D_2", "D_3", "D_4", "D_5", "D_6", "D_7", "D_8", "D_9", "D_10", "D_J", "D_Q", "D_K"]
-});
+const DRAG_DROP = new DragDrop();
+const CARD_DECK = new CardDeck52();
+const GAME_ELEMENT_HOLDER_MAP = new GameElementHolderMap();
+for (const i of PLAYGROUND) {
+    const el = document.getElementById(i);
+    el.allowDrop = allowDropOnPlayground;
+    GAME_ELEMENT_HOLDER_MAP.addHolder(i, el);
+}
+for (const i of GOALS) {
+    const el = document.getElementById(i);
+    el.allowDrop = allowDropOnGoal;
+    GAME_ELEMENT_HOLDER_MAP.addHolder(i, el);
+}
+DRAG_DROP.setGameElements(CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
+{
+    const cardDeckEl = document.getElementById(DECK);
+    GAME_ELEMENT_HOLDER_MAP.addHolder(DECK, cardDeckEl);
+    const cardDrawerEl = document.getElementById(DRAWER);
+    GAME_ELEMENT_HOLDER_MAP.addHolder(DRAWER, cardDrawerEl);
+}
+
+const gameStorage = new GameState(GAME_NAME, CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
+const WIN_CONDITION = new SortGameWinCondition();
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_spades"), VALUES.map((value) => ["S", value]));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_hearts"), VALUES.map((value) => ["H", value]));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_clubs"), VALUES.map((value) => ["C", value]));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_diamonds"), VALUES.map((value) => ["D", value]));
+
+function allowDropOnPlayground(target, stack) {
+    const last = target.lastElementChild;
+    const first = stack[0];
+    if (last) {
+        if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
+            if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
+                return true;
+            }
+        }
+    } else if (VALUES.indexOf(first.value) == VALUES.length - 1) {
+        return true;
+    }
+    return false;
+}
+
+function allowDropOnGoal(target, stack) {
+    if (stack.length == 1) {
+        const last = target.lastElementChild;
+        const first = stack[0];
+        if (target.suit == first.suit) {
+            if (last) {
+                if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) - 1) {
+                    return true;
+                }
+            } else if (VALUES.indexOf(first.value) == 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 // on card starts to drag - return if possibe
 DRAG_DROP.onDragCallback = function(source, stack) {
@@ -159,63 +205,19 @@ DRAG_DROP.onDragCallback = function(source, stack) {
 
 // on card starts to drop - return if possibe
 DRAG_DROP.onDropCallback = function(source, target, stack) {
-    if (target instanceof PlayingCardColumn) {
-        const last = target.lastElementChild;
-        const first = stack[0];
-        if (last) {
-            if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
-                if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
-                    return true;
-                }
-            }
-        } else if (VALUES.indexOf(first.value) == VALUES.length - 1) {
-            return true;
-        }
-        return false;
-    }
-    if (target instanceof PlayingCardGoal) {
-        if (stack.length == 1) {
-            const last = target.lastElementChild;
-            const first = stack[0];
-            if (target.suit == first.suit) {
-                if (last) {
-                    if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) - 1) {
-                        return true;
-                    }
-                } else if (VALUES.indexOf(first.value) == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    if (target instanceof PlayingCardPlaceholder) {
-        return false;
-    }
-    if (target instanceof PlayingCardDeck) {
-        return false;
-    }
-    if (target instanceof PlayingCardDrawer) {
-        return false;
-    }
+    return target.isDropAllowed(stack, source);
 };
 
 // on card changed place
 DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
     autoStack();
-    if (WinCondition.check()) {
+    if (WIN_CONDITION.check()) {
         await gameStorage.reset();
         MENU_WIN.show();
     } else {
         await gameStorage.save();
     }
 };
-
-async function startGame() {
-    if (!await gameStorage.load()) {
-        await newGame();
-    }
-}
 
 async function newGame() {
     await gameStorage.reset();
@@ -276,96 +278,14 @@ function autoStack() {
     }
 }
 
-SETTINGS.addEventListener("submit", (event) =>{
-    const orientation = event.data["main.orientation"] ?? "";
-    if (orientation != "") {
-        screen.orientation.lock(orientation);
-    } else {
-        screen.orientation.unlock();
-    }
+// buttons
+document.getElementById("menu_button").addEventListener("click", () => {
+    MENU_PAUSE.show();
+});
+document.getElementById("undo_button").addEventListener("click", async () => {
+    await gameStorage.undo();
 });
 
-(async function() {
-    const card_theme = await SettingsStorage.get("main.card_theme", "french");
-    const card_back = await SettingsStorage.get("main.card_back", "fiber_red");
-    const orientation = await SettingsStorage.get("main.orientation", "");
-    if (orientation != "") {
-        screen.orientation.lock(orientation);
-    } else {
-        screen.orientation.unlock();
-    }
-
-    const pg_els = [];
-    for (const i of PLAYGROUND.concat(GOALS)) {
-        pg_els.push(document.getElementById(i));
-    }
-    DRAG_DROP.registerDropTarget(pg_els);
-
-    createDeck(card_back, card_theme);
-    gameStorage = new GameStorage(GAME_NAME, PLAYGROUND.concat(GOALS).concat([DECK, DRAWER]), CARDS);
-
-    const deckElement = document.getElementById(DECK);
-    const drawerElement = document.getElementById(DRAWER);
-    deckElement.addEventListener("click", async () => {
-        const maxDrawsCount = await SettingsStorage.get("klondike.draw_cards_max", 3);
-        if (deckElement.children.length) {
-            const cardCount = await SettingsStorage.get("klondike.draw_cards_count", 3);
-            for (let i = 0; i < cardCount; ++i) {
-                const card = deckElement.lastElementChild;
-                if (card) {
-                    card.revealed = true;
-                    drawerElement.append(card);
-                } else {
-                    break;
-                }
-            }
-            autoStack();
-            if (WinCondition.check()) {
-                await gameStorage.reset();
-                MENU_WIN.show();
-            } else {
-                await gameStorage.save();
-            }
-        } else {
-            const drawnCards = await gameStorage.get("drawn_cards");
-            if (maxDrawsCount == 0 || drawnCards < maxDrawsCount) {
-                while (drawerElement.children.length) {
-                    const card = drawerElement.lastElementChild;
-                    card.revealed = false;
-                    deckElement.append(card);
-                }
-                await gameStorage.save({drawn_cards: drawnCards + 1});
-            }
-        }
-    });
-
-    SETTINGS.addEventListener("submit", () => {
-        newGame();
-    });
-
-    // buttons
-    document.getElementById("menu_button").addEventListener("click", () => {
-        MENU_PAUSE.show();
-    });
-    document.getElementById("undo_button").addEventListener("click", async () => {
-        await gameStorage.undo();
-    });
-
-    startGame();
-})();
-
-function createDeck(card_back, card_theme) {
-    for (const suit of SUITS) {
-        for (const value of VALUES) {
-            const el = document.createElement("sc-playingcard");
-            el.back = card_back;
-            el.theme = card_theme;
-            el.suit = suit;
-            el.value = value;
-            el.revealed = false;
-            CARD_DECK.add(el);
-            CARDS.set(`${suit}_${value}`, el);
-            DRAG_DROP.registerDragElement(el);
-        }
-    }
+if (gameStorage.isNew()) {
+    newGame();
 }

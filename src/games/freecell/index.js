@@ -20,12 +20,11 @@ import SettingsStorage from "../../script/storage/SettingsStorage.js";
 
 const MODULE_PATH = new Path(import.meta.url);
 
-{ // init base system
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js");
-    }
-    await i18n.loadTranslations();
+// === INIT BASE ===
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
 }
+await i18n.loadTranslations();
 
 const SETTINGS = await (async () => { // settings
     const settingsPath = MODULE_PATH.getAbsolute("./settings.json");
@@ -36,7 +35,12 @@ const SETTINGS = await (async () => { // settings
         ...gameSettingsResource.get()
     };
     const gameSettingsConfigHandler = new GameSettingsConfigHandler(settings);
-    SettingsStorage.addCustomDefaultValues(gameSettingsConfigHandler.defaultValues);
+    await SettingsStorage.addCustomDefaultValues(gameSettingsConfigHandler.defaultValues);
+    const gameSettingsOverlay = new GameSettingsOverlay(gameSettingsConfigHandler);
+
+    gameSettingsOverlay.addEventListener("submit", () => {
+        newGame();
+    });
 
     const orientationObserver = new SettingsObserver("general.orientation");
     setOrientation(orientationObserver.value);
@@ -52,13 +56,13 @@ const SETTINGS = await (async () => { // settings
         }
     }
 
-    return new GameSettingsOverlay(gameSettingsConfigHandler);
+    return gameSettingsOverlay;
 })();
 
 document.body.style.setProperty("--card-scale", "1");
 document.body.style.setProperty("--background-color", "#00aa33");
 
-// create menus
+// === INIT MENUS ===
 const MENU_PAUSE = new Menu({
     title: "PAUSE",
     buttons: [{
@@ -107,6 +111,7 @@ const MENU_WIN = new Menu({
     }]
 });
 
+// === INIT GAME ===
 const GAME_NAME = "freecell";
 const AUTOSTACK_DIFF = 2;
 const SUITS = ["S", "H", "C", "D"];
@@ -123,7 +128,7 @@ const GOALS = [
 ];
 
 const DRAG_DROP = new DragDrop();
-const DECK = new CardDeck52();
+const CARD_DECK = new CardDeck52();
 const GAME_ELEMENT_HOLDER_MAP = new GameElementHolderMap();
 for (const i of PLAYGROUND) {
     const el = document.getElementById(i);
@@ -140,9 +145,9 @@ for (const i of GOALS) {
     el.allowDrop = allowDropOnGoal;
     GAME_ELEMENT_HOLDER_MAP.addHolder(i, el);
 }
-DRAG_DROP.setGameElements(DECK, GAME_ELEMENT_HOLDER_MAP);
+DRAG_DROP.setGameElements(CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
 
-const gameStorage = new GameState(GAME_NAME, DECK, GAME_ELEMENT_HOLDER_MAP);
+const gameStorage = new GameState(GAME_NAME, CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
 const WIN_CONDITION = new SortGameWinCondition();
 WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_spades"), VALUES.map((value) => ["S", value]));
 WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_hearts"), VALUES.map((value) => ["H", value]));
@@ -245,9 +250,10 @@ async function newGame() {
     for (const i of PLAYGROUND) {
         cols.push(GAME_ELEMENT_HOLDER_MAP.getHolder(i));
     }
-    DECK.shuffle();
-    for (let i = 0; i < DECK.size; ++i) {
-        const card = DECK.draw();
+    CARD_DECK.collect();
+    CARD_DECK.shuffle();
+    for (let i = 0; i < CARD_DECK.size; ++i) {
+        const card = CARD_DECK.draw();
         card.revealed = true;
         cols[i % cols.length].append(card);
     }

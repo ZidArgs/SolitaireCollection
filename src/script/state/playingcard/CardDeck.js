@@ -44,8 +44,8 @@ export default class CardDeck extends AbstractGameElementPool {
     }
 
     shuffle() {
+        const old = [...this.#current];
         this.#current = [];
-        const old = [...this.#cards];
         while (old.length > 0) {
             const index = Math.floor(Math.random() * old.length);
             const cardEl = old.splice(index, 1)[0];

@@ -1,8 +1,9 @@
 settings_category[general]=General
 settings_category[playingcard]=Playingcard
+settings_category[klondike]=Klondike
 settings[general.orientation]=Game Orientation
 settings[playingcard.faceTheme]=Playing card front Theme
-settings[playingcard.backimage]=Playing back side Image
+settings[playingcard.backImage]=Playing back side Image
 settings[playingcard.backFill]=Playing back side Image fills full Card
 settings[klondike.draw_cards_count]=Cards per Draw
 settings[klondike.draw_cards_max]=Maximum draw rounds

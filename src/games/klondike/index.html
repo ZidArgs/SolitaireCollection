@@ -27,25 +27,25 @@
 <body>
     <div id="playground">
         <div id="top-row">
-            <cgc-playingcarddeck id="deck"></cgc-playingcarddeck>
-            <cgc-playingcarddrawer id="drawer"></cgc-playingcarddrawer>
+            <sc-playingcard-stack type="deck" id="deck"></sc-playingcard-stack>
+            <sc-playingcard-stack type="drawer" id="drawer"></sc-playingcard-stack>
             <div class="game-buttons">
                 <button id="menu_button">MENU</button>
                 <button id="undo_button">UNDO</button>
             </div>
-            <cgc-playingcardgoal id="goal_clubs" theme="french" suit="C"></cgc-playingcardgoal>
-            <cgc-playingcardgoal id="goal_spades" theme="french" suit="S"></cgc-playingcardgoal>
-            <cgc-playingcardgoal id="goal_hearts" theme="french" suit="H"></cgc-playingcardgoal>
-            <cgc-playingcardgoal id="goal_diamonds" theme="french" suit="D"></cgc-playingcardgoal>
+            <sc-playingcard-stack type="goal" id="goal_clubs" theme="french" suit="C"></sc-playingcard-stack>
+            <sc-playingcard-stack type="goal" id="goal_spades" theme="french" suit="S"></sc-playingcard-stack>
+            <sc-playingcard-stack type="goal" id="goal_hearts" theme="french" suit="H"></sc-playingcard-stack>
+            <sc-playingcard-stack type="goal" id="goal_diamonds" theme="french" suit="D"></sc-playingcard-stack>
         </div>
         <div id="game-board">
-            <cgc-playingcardcolumn id="col_0"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_1"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_2"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_3"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_4"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_5"></cgc-playingcardcolumn>
-            <cgc-playingcardcolumn id="col_6"></cgc-playingcardcolumn>
+            <sc-playingcard-stack type="column" id="col_0"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_1"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_2"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_3"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_4"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_5"></sc-playingcard-stack>
+            <sc-playingcard-stack type="column" id="col_6"></sc-playingcard-stack>
         </div>
     </div>
 </body>

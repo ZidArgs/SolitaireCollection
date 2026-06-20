@@ -8,12 +8,15 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
 
     #customDefaultValues = new Set();
 
+    #defaultValueCache = new Map();
+
     constructor() {
         super("settings");
+        this.#updateDefaultValueCache();
     }
 
     set(key, value) {
-        if (this.#defaultValues.has(key)) {
+        if (this.has(key)) {
             super.set(key, value);
         }
     }
@@ -22,7 +25,7 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
         const res = {};
         for (const key in values) {
             const value = values[key];
-            if (this.#defaultValues.has(key)) {
+            if (this.has(key)) {
                 res[key] = value;
             }
         }
@@ -30,30 +33,30 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
     }
 
     get(key) {
-        if (this.#defaultValues.has(key)) {
-            return super.get(key) ?? this.#defaultValues.get(key);
+        if (this.has(key)) {
+            return super.get(key) ?? this.#defaultValueCache.get(key);
         }
     }
 
     getAll() {
         const res = {};
-        for (const [key, value] of this.#defaultValues) {
+        for (const [key, value] of this.#defaultValueCache) {
             res[key] = super.get(key) ?? value;
         }
         return res;
     }
 
     has(key) {
-        return this.#defaultValues.has(key);
+        return this.#defaultValueCache.has(key);
     }
 
     keys() {
-        return this.#defaultValues.keys();
+        return this.#defaultValueCache.keys();
     }
 
     deserialize(data = {}) {
         const res = {};
-        for (const [key] of this.#defaultValues) {
+        for (const [key] of this.#defaultValueCache) {
             const newValue = data[key];
             if (newValue != null) {
                 res[key] = newValue;
@@ -64,7 +67,7 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
 
     overwrite(data = {}) {
         const res = {};
-        for (const [key] of this.#defaultValues) {
+        for (const [key] of this.#defaultValueCache) {
             if (key in data) {
                 const newValue = data[key];
                 res[key] = newValue;
@@ -73,23 +76,27 @@ class AppSettingsStorage extends ObservableIDBProxyStorage {
         super.overwrite(res);
     }
 
-    addCustomDefaultValues(defVals) {
+    async addCustomDefaultValues(defVals) {
         if (!(defVals instanceof SettingsDefaultValues)) {
             throw new TypeError("defVals must be an instance of SettingsDefaultValues");
         }
         this.#customDefaultValues.add(defVals);
+        this.#updateDefaultValueCache();
+        await this.resync();
     }
 
-    clearCustomDefaultValues() {
+    async clearCustomDefaultValues() {
         this.#customDefaultValues.clear();
+        this.#updateDefaultValueCache();
+        await this.resync();
     }
 
-    get #defaultValues() {
+    #updateDefaultValueCache() {
         const res = [...defaultValues];
         for (const defVals of this.#customDefaultValues) {
             res.splice(-1, 0, ...[...defVals]);
         }
-        return new Map(res);
+        this.#defaultValueCache = new Map(res);
     }
 
 }
