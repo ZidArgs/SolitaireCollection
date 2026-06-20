@@ -9,7 +9,7 @@
     },
     "playingcard.backImage": {
         "category": "playingcard",
-        "type": "SimpleSelect",
+        "type": "ImageSelect",
         "default": "/image/playing_cards/back/fiber_blue.svg",
         "values": "playingcard_backImages"
     },

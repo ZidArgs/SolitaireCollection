@@ -38,8 +38,11 @@ const SETTINGS = await (async () => { // settings
     await SettingsStorage.addCustomDefaultValues(gameSettingsConfigHandler.defaultValues);
     const gameSettingsOverlay = new GameSettingsOverlay(gameSettingsConfigHandler);
 
-    gameSettingsOverlay.addEventListener("submit", () => {
-        newGame();
+    gameSettingsOverlay.addEventListener("submit", (event) => {
+        const {changes} = event;
+        if (Object.keys(changes).some((key) => gameSettingsResource.get(key) != null)) {
+            newGame();
+        }
     });
 
     const orientationObserver = new SettingsObserver("general.orientation");

@@ -1,18 +1,8 @@
 {
-    "general.orientation": {
-        "category": "general",
-        "type": "SimpleSelect",
-        "default": "",
-        "values": {
-            "": "Rotate",
-            "landscape": "Landscape",
-            "portrait": "Portrait"
-        }
-    },
     "klondike.draw_cards_count": {
         "category": "klondike",
         "type": "SimpleSelect",
-        "default": 3,
+        "default": "3",
         "values": {
             "1": "1",
             "3": "3"
@@ -21,7 +11,7 @@
     "klondike.draw_cards_max": {
         "category": "klondike",
         "type": "SimpleSelect",
-        "default": 3,
+        "default": "3",
         "values": {
             "0": "∞",
             "3": "3"
