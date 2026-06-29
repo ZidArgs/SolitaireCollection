@@ -11,9 +11,9 @@
   },
   "homepage": "https://bitbucket.org/zidargs/solitairecollection/src",
   "dependencies": {
-    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.1.8",
-    "@emcjs/logic": "https://github.com/ZidArgs/emcJS-Logic.git/#0.1.9",
-    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.1.1",
+    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.2.0",
+    "@emcjs/logic": "https://github.com/ZidArgs/emcJS-Logic.git/#0.2.0",
+    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.1.4",
     "jswebservice": "https://github.com/ZidArgs/JSWebService.git/#3.1.6"
   },
   "devDependencies": {
