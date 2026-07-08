@@ -4,7 +4,6 @@ import TPL from "./PlayingCard.js.html" with {type: "html"};
 import STYLE from "./PlayingCard.js.css" with {type: "css"};
 
 const playingcardBackImageObserver = new SettingsObserver("playingcard.backImage");
-const playingcardBackFillObserver = new SettingsObserver("playingcard.backFill");
 const playingcardFaceThemeObserver = new SettingsObserver("playingcard.faceTheme");
 
 export default class PlayingCard extends AbstractGameElement {
@@ -13,8 +12,8 @@ export default class PlayingCard extends AbstractGameElement {
 
     #backEl;
 
-    constructor() {
-        super();
+    constructor(suit, value) {
+        super(suit, value);
         TPL.apply(this.shadowRoot);
         STYLE.apply(this.shadowRoot);
         /* --- */
@@ -24,10 +23,6 @@ export default class PlayingCard extends AbstractGameElement {
         this.#updateBack();
         playingcardBackImageObserver.onChange(() => {
             this.#updateBack();
-        });
-        this.#updateFill();
-        playingcardBackFillObserver.onChange(() => {
-            this.#updateFill();
         });
         this.#updateFace();
         playingcardFaceThemeObserver.onChange(() => {
@@ -45,22 +40,6 @@ export default class PlayingCard extends AbstractGameElement {
         return this.parentElement.querySelectorAll(`sc-playingcard:nth-child(-n+${idx + 1})`);
     }
 
-    set suit(value) {
-        this.setAttribute("suit", value);
-    }
-
-    get suit() {
-        return this.getAttribute("suit");
-    }
-
-    set value(value) {
-        this.setAttribute("value", value);
-    }
-
-    get value() {
-        return this.getAttribute("value");
-    }
-
     set revealed(value) {
         this.setBooleanAttribute("revealed", value);
     }
@@ -69,25 +48,10 @@ export default class PlayingCard extends AbstractGameElement {
         return this.getBooleanAttribute("revealed");
     }
 
-    static get observedAttributes() {
-        return ["suit", "value"];
-    }
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue != newValue) {
-            switch (name) {
-                case "suit":
-                case "value": {
-                    this.#updateFace();
-                } break;
-            }
-        }
-    }
-
     #updateFace() {
         const faceTheme = playingcardFaceThemeObserver.value;
         if (faceTheme && this.suit && this.value) {
-            const src = `url("/image/playing_cards/front/${faceTheme}/${this.suit}_${this.value}.svg")`;
+            const src = `url("/image/playing_cards/front/${faceTheme}/${this.suit}_${this.value}.png")`;
             this.#faceEl.style.backgroundImage = src;
         } else {
             this.#faceEl.style.backgroundImage = "";
@@ -104,22 +68,16 @@ export default class PlayingCard extends AbstractGameElement {
         }
     }
 
-    #updateFill() {
-        const value = playingcardBackFillObserver.value;
-        this.#backEl.classList.toggle("fill", !!value);
-    }
-
     serialize() {
         return {
-            suit: this.suit ?? "",
-            value: this.value ?? "",
+            suit: this.suit,
+            value: this.value,
+            instance: this.instance,
             revealed: this.revealed ?? false
         };
     }
 
     deserialize(data) {
-        this.suit = data.suit ?? "";
-        this.value = data.value ?? "";
         this.revealed = data.revealed ?? false;
     }
 

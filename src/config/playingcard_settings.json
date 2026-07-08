@@ -10,12 +10,7 @@
     "playingcard.backImage": {
         "category": "playingcard",
         "type": "ImageSelect",
-        "default": "/image/playing_cards/back/fiber_blue.svg",
+        "default": "/image/playing_cards/back/old_blue.png",
         "values": "playingcard_backImages"
-    },
-    "playingcard.backFill": {
-        "category": "playingcard",
-        "type": "SwitchInput",
-        "default": false
     }
 }

@@ -27,9 +27,10 @@ export default class CardDeck extends AbstractGameElementPool {
     getElement(data) {
         const {
             suit = "",
-            value = ""
+            value = "",
+            instance = ""
         } = data ?? {};
-        const cardId = PlayingCard.getIdentifier(suit, value);
+        const cardId = PlayingCard.getIdentifier(suit, value, instance);
         return this.#cardIds.get(cardId);
     }
 
@@ -102,9 +103,7 @@ export default class CardDeck extends AbstractGameElementPool {
     }
 
     static createPlayingCard(suit, value) {
-        const cardEl = new PlayingCard();
-        cardEl.suit = suit;
-        cardEl.value = value;
+        const cardEl = new PlayingCard(suit, value);
         cardEl.revealed = false;
         return cardEl;
     }

@@ -17,6 +17,7 @@ import GameSettingsConfigHandler from "../../script/util/settings/GameSettingsCo
 import AppSettingsResource from "../../script/resource/AppSettingsResource.js";
 import PlayingcardSettingsResource from "../../script/resource/PlayingcardSettingsResource.js";
 import SettingsStorage from "../../script/storage/SettingsStorage.js";
+import StackDrawer from "../../script/util/StackDrawer.js";
 
 const MODULE_PATH = new Path(import.meta.url);
 
@@ -91,7 +92,7 @@ const MENU_PAUSE = new Menu({
         }
     }, {
         content: "SETTINGS",
-        handler: async function() {
+        handler: function() {
             SETTINGS.show();
             return false;
         }
@@ -104,8 +105,8 @@ const MENU_WIN = new Menu({
     title: "WIN!",
     buttons: [{
         content: "NEW GAME",
-        handler: async function() {
-            await newGame();
+        handler: function() {
+            newGame();
             return true;
         }
     }, {
@@ -117,8 +118,8 @@ const MENU_WIN = new Menu({
 // === INIT GAME ===
 const GAME_NAME = "klondike";
 const AUTOSTACK_DIFF = 2;
-const SUITS = ["S", "H", "C", "D"];
-const VALUES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+const CARD_SUITS = CardDeck52.SUITS;
+const CARD_VALUES = CardDeck52.VALUES;
 const PLAYGROUND = [
     "col_0", "col_1", "col_2", "col_3",
     "col_4", "col_5", "col_6"
@@ -143,30 +144,42 @@ for (const i of GOALS) {
     GAME_ELEMENT_HOLDER_MAP.addHolder(i, el);
 }
 DRAG_DROP.setGameElements(CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
-{
-    const cardDeckEl = document.getElementById(DECK);
-    GAME_ELEMENT_HOLDER_MAP.addHolder(DECK, cardDeckEl);
-    const cardDrawerEl = document.getElementById(DRAWER);
-    GAME_ELEMENT_HOLDER_MAP.addHolder(DRAWER, cardDrawerEl);
-}
+const cardDeckEl = document.getElementById(DECK);
+GAME_ELEMENT_HOLDER_MAP.addHolder(DECK, cardDeckEl);
+const cardDrawerEl = document.getElementById(DRAWER);
+GAME_ELEMENT_HOLDER_MAP.addHolder(DRAWER, cardDrawerEl);
 
 const gameStorage = new GameState(GAME_NAME, CARD_DECK, GAME_ELEMENT_HOLDER_MAP);
 const WIN_CONDITION = new SortGameWinCondition();
-WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_spades"), VALUES.map((value) => ["S", value]));
-WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_hearts"), VALUES.map((value) => ["H", value]));
-WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_clubs"), VALUES.map((value) => ["C", value]));
-WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_diamonds"), VALUES.map((value) => ["D", value]));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_spades"), CARD_VALUES.map((value) => ({value})));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_hearts"), CARD_VALUES.map((value) => ({value})));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_clubs"), CARD_VALUES.map((value) => ({value})));
+WIN_CONDITION.setCondition(GAME_ELEMENT_HOLDER_MAP.getHolder("goal_diamonds"), CARD_VALUES.map((value) => ({value})));
+
+const stackDrawer = new StackDrawer(cardDeckEl, cardDrawerEl);
+stackDrawer.addEventListener("draw", () => {
+    autoStack();
+    if (WIN_CONDITION.check()) {
+        gameStorage.reset();
+        MENU_WIN.show();
+    } else {
+        gameStorage.save();
+    }
+});
+stackDrawer.addEventListener("reset", () => {
+    gameStorage.save({rounds_drawn: stackDrawer.roundsDrawn});
+});
 
 function allowDropOnPlayground(target, stack) {
     const last = target.lastElementChild;
     const first = stack[0];
     if (last) {
-        if (SUITS.indexOf(last.suit) % 2 != SUITS.indexOf(first.suit) % 2) {
-            if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) + 1) {
+        if (CARD_SUITS.indexOf(last.suit) % 2 != CARD_SUITS.indexOf(first.suit) % 2) {
+            if (CARD_VALUES.indexOf(last.value) == CARD_VALUES.indexOf(first.value) + 1) {
                 return true;
             }
         }
-    } else if (VALUES.indexOf(first.value) == VALUES.length - 1) {
+    } else if (CARD_VALUES.indexOf(first.value) == CARD_VALUES.length - 1) {
         return true;
     }
     return false;
@@ -178,10 +191,10 @@ function allowDropOnGoal(target, stack) {
         const first = stack[0];
         if (target.suit == first.suit) {
             if (last) {
-                if (VALUES.indexOf(last.value) == VALUES.indexOf(first.value) - 1) {
+                if (CARD_VALUES.indexOf(last.value) == CARD_VALUES.indexOf(first.value) - 1) {
                     return true;
                 }
-            } else if (VALUES.indexOf(first.value) == 0) {
+            } else if (CARD_VALUES.indexOf(first.value) == 0) {
                 return true;
             }
         }
@@ -195,10 +208,10 @@ DRAG_DROP.onDragCallback = function(source, stack) {
     let last = buffer.pop();
     while (buffer.length) {
         const next = buffer.pop();
-        if (SUITS.indexOf(last.suit) % 2 == SUITS.indexOf(next.suit) % 2) {
+        if (CARD_SUITS.indexOf(last.suit) % 2 == CARD_SUITS.indexOf(next.suit) % 2) {
             return false;
         }
-        if (VALUES.indexOf(last.value) != VALUES.indexOf(next.value) - 1) {
+        if (CARD_VALUES.indexOf(last.value) != CARD_VALUES.indexOf(next.value) - 1) {
             return false;
         }
         last = next;
@@ -212,18 +225,18 @@ DRAG_DROP.onDropCallback = function(source, target, stack) {
 };
 
 // on card changed place
-DRAG_DROP.onDropChangedCallback = async function(/* source, target, stack */) {
+DRAG_DROP.onDropChangedCallback = function(/* source, target, stack */) {
     autoStack();
     if (WIN_CONDITION.check()) {
-        await gameStorage.reset();
+        gameStorage.reset();
         MENU_WIN.show();
     } else {
-        await gameStorage.save();
+        gameStorage.save();
     }
 };
 
-async function newGame() {
-    await gameStorage.reset();
+function newGame() {
+    gameStorage.reset();
     const cols = [];
     for (const i of PLAYGROUND) {
         cols.push(document.getElementById(i));
@@ -242,7 +255,8 @@ async function newGame() {
     while (CARD_DECK.remaining) {
         document.getElementById(DECK).append(CARD_DECK.draw());
     }
-    await gameStorage.save({drawn_cards: 1});
+    gameStorage.save({rounds_drawn: 0});
+    stackDrawer.roundsDrawn = 0;
 }
 
 function autoStack() {
@@ -256,17 +270,17 @@ function autoStack() {
         const first = col.lastElementChild;
         if (first) {
             first.revealed = true;
-            const target = goals[SUITS.indexOf(first.suit)];
+            const target = goals[CARD_SUITS.indexOf(first.suit)];
             const last = target.lastElementChild;
-            if (!last && VALUES.indexOf(first.value) == 0) {
+            if (!last && CARD_VALUES.indexOf(first.value) == 0) {
                 target.append(first);
                 changed = true;
-            } else if (!!last && VALUES.indexOf(last.value) + 1 == VALUES.indexOf(first.value)) {
+            } else if (!!last && CARD_VALUES.indexOf(last.value) + 1 == CARD_VALUES.indexOf(first.value)) {
                 const checkGoals = (goal) => {
                     if (!goal.lastElementChild) {
-                        return VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
+                        return CARD_VALUES.indexOf(first.value) < AUTOSTACK_DIFF;
                     } else {
-                        return VALUES.indexOf(first.value) <= VALUES.indexOf(goal.lastElementChild.value) + AUTOSTACK_DIFF;
+                        return CARD_VALUES.indexOf(first.value) <= CARD_VALUES.indexOf(goal.lastElementChild.value) + AUTOSTACK_DIFF;
                     }
                 };
                 if (goals.every(checkGoals)) {
@@ -285,10 +299,12 @@ function autoStack() {
 document.getElementById("menu_button").addEventListener("click", () => {
     MENU_PAUSE.show();
 });
-document.getElementById("undo_button").addEventListener("click", async () => {
-    await gameStorage.undo();
+document.getElementById("undo_button").addEventListener("click", () => {
+    gameStorage.undo();
 });
 
 if (gameStorage.isNew()) {
     newGame();
+} else {
+    stackDrawer.roundsDrawn = gameStorage.get("rounds_drawn");
 }

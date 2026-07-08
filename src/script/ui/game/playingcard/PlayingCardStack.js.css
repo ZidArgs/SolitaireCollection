@@ -50,10 +50,13 @@
 }
 
 :host([type="deck"]) {
+    transform: rotate(180deg);
+
     ::slotted(sc-playingcard) {
         top: calc(12vw * var(--card-scale, 1) - .1vmax);
         max-height: 0.08vw;
         pointer-events: none;
+        transform: rotate(180deg);
     }
 }
 
@@ -72,6 +75,7 @@
 
 :host([type="drawer"]) {
     flex-direction: row;
+    justify-self: self-start;
 
     ::slotted(sc-playingcard) {
         max-width: .15vw;

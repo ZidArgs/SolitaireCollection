@@ -1,13 +1,11 @@
-import AbstractGameElement from "../../ui/game/AbstractGameElement.js";
-
 export default class SortGameWinCondition {
 
     #conditions = new Map();
 
     setCondition(element, condition) {
         const conditionIdentifiers = [];
-        for (const el of condition) {
-            conditionIdentifiers.push(AbstractGameElement.getIdentifier(...el));
+        for (const props of condition) {
+            conditionIdentifiers.push({...props});
         }
         this.#conditions.set(element, conditionIdentifiers);
     }
@@ -15,15 +13,17 @@ export default class SortGameWinCondition {
     check() {
         for (const [element, check] of this.#conditions) {
             if (check.length) {
-                let el = element.children[0];
-                for (const j of check) {
-                    if (!el) {
+                let gameEl = element.children[0];
+                for (const props of check) {
+                    if (!gameEl) {
                         return false;
                     }
-                    if (j !== el.toString()) {
-                        return false;
+                    for (const name in props) {
+                        if (props[name] !== gameEl[name]) {
+                            return false;
+                        }
                     }
-                    el = el.nextElementSibling;
+                    gameEl = gameEl.nextElementSibling;
                 }
             } else if (element.children.length) {
                 return false;

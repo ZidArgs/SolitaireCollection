@@ -33,14 +33,6 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
         return this.getAttribute("suit");
     }
 
-    set value(value) {
-        this.setAttribute("value", value);
-    }
-
-    get value() {
-        return this.getAttribute("value");
-    }
-
     set image(value) {
         this.setAttribute("image", value);
     }
