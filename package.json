@@ -11,10 +11,10 @@
   },
   "homepage": "https://bitbucket.org/zidargs/solitairecollection/src",
   "dependencies": {
-    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.2.2",
+    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.2.3",
     "@emcjs/logic": "https://github.com/ZidArgs/emcJS-Logic.git/#0.2.0",
-    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.1.6",
-    "jswebservice": "https://github.com/ZidArgs/JSWebService.git/#3.1.6"
+    "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.1.11",
+    "jswebservice": "https://github.com/ZidArgs/JSWebService.git/#3.1.7"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -22,7 +22,7 @@
     "@babel/plugin-syntax-import-assertions": "^7.27.1",
     "@babel/plugin-syntax-top-level-await": "^7.14.5",
     "@stylistic/eslint-plugin": "^5.3.1",
-    "@zidargs/buildtools": "https://github.com/ZidArgs/buildtools.git/#1.2.0",
+    "@zidargs/buildtools": "https://github.com/ZidArgs/buildtools.git/#1.2.1",
     "eslint": "^9.35.0",
     "gulp": "^4.0.2",
     "gulp-autoprefixer": "^7.0.1",
