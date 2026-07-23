@@ -22,7 +22,7 @@ export default class PlayingCardStack extends AbstractGameElementHolder {
     }
 
     get type() {
-        return this.getEnumAttribute("type");
+        return this.getEnumAttribute("type", PlayingCardStackTypeEnum);
     }
 
     set suit(value) {
