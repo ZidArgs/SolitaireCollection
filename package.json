@@ -14,10 +14,10 @@
   },
   "type": "module",
   "dependencies": {
-    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.4.0",
+    "@emcjs/core": "https://github.com/ZidArgs/emcJS-Core.git/#1.4.1",
     "@emcjs/logic": "https://github.com/ZidArgs/emcJS-Logic.git/#0.3.0",
     "@emcjs/fe": "https://github.com/ZidArgs/emcJS-FE.git/#0.2.0",
-    "jswebservice": "https://github.com/ZidArgs/JSWebservice.git/#3.2.0"
+    "jswebservice": "https://github.com/ZidArgs/JSWebservice.git/#3.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
